@@ -2,16 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import Chatbot from './Chatbot';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Function to render the chatbot in the given container
+window.renderChatbot = (containerId) => {
+  const container = document.getElementById(containerId);
+  if (container) {
+    const root = ReactDOM.createRoot(container);
+    root.render(<Chatbot />);
+  } else {
+    console.error(`Container with ID ${containerId} not found.`);
+  }
+};
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// Default rendering for the main app
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}
