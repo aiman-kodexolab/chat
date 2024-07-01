@@ -3,6 +3,8 @@ import "../style.css";
 import NewConversationBtn from "./NewConverationBtn";
 import { GoBack, SendMsg } from "../../../assets";
 import TransitionInput from "../../transitionInput/TransitionInput";
+import { getUserSession } from "../../../API/api";
+import SessionContainer from "./SessionContainer";
 
 export default function ChatbotContent({
   values,
@@ -17,6 +19,49 @@ export default function ChatbotContent({
   goBack,
   touched,
 }) {
+  // useEffect(() => {
+  //   const result = getUserSession("GET", systemId, "");
+  //   console.log("tttttt", result);
+  // }, []);
+
+  const arr = [
+    {
+      is_form_filled: true,
+      _id: "1",
+      status: "closed",
+      user_name: "Dayyan",
+      first_message: "Hi",
+    },
+    {
+      is_form_filled: false,
+      _id: "12",
+      status: "live",
+      user_name: "Muhammad Dayyan",
+      first_message: "sup",
+    },
+    {
+      is_form_filled: true,
+      _id: "13",
+      status: "live",
+      user_name: "Fahad",
+      first_message: "salam",
+    },
+    {
+      is_form_filled: false,
+      _id: "14",
+      status: "favorite",
+      user_name: "Usman Ahmed",
+      first_message: "kello",
+    },
+    {
+      is_form_filled: true,
+      _id: "15",
+      status: "live",
+      user_name: "Ali",
+      first_message: "",
+    },
+  ];
+
   return (
     <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
       {!isFormActive ? (
@@ -27,24 +72,17 @@ export default function ChatbotContent({
               This tab is for checking if the chatbot is perfectly trained.
             </p>
           </div>
+
           <div className="conversations">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga eos
-            ipsum ad, perspiciatis asperiores autem et odit, nulla atque vero
-            fugiat molestiae quae ratione sunt sed accusamus distinctio
-            suscipit! Sunt?Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Expedita ab ratione, deserunt nisi laudantium, et nemo
-            recusandae exercitationem aliquam quasi dolore consequatur a minus!
-            Dolore quo reiciendis itaque harum molestias?Lorem ipsum dolor sit,
-            amet consectetur adipisicing elit. Odio culpa illum incidunt
-            similique! Iure explicabo consectetur tenetur id! Saepe quasi
-            ducimus odio vel reprehenderit consequuntur, quos nulla dolore!
-            Voluptas, dolore!lore Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Enim optio, debitis vel quia, ea cupiditate at
-            minima architecto, voluptas asperiores id dignissimos cumque maxime!
-            Tempora repellendus voluptate quod quos a?Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Amet quod modi soluta. Quas tempora
-            dolores ex et eligendi cumque, cupiditate minus quod doloribus unde
-            animi, aut, nam sunt quidem possimus?
+            {arr.map((item, index) => (
+              <SessionContainer
+                key={index}
+                userName={item?.user_name}
+                firstMessage={item?.first_message}
+                status={item?.status}
+                onClick={() => {}}
+              />
+            ))}
           </div>
           {chat ? (
             <>

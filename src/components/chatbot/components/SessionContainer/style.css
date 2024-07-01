@@ -1,0 +1,48 @@
+.container {
+  background-color: #131313;
+  padding: 5px;
+  border: 1px solid #6c7275;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.heading {
+  font-size: 13px;
+  color: #ffffff;
+  margin-bottom: 3px;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+}
+
+.itemContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.userName {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  color: #6c7275;
+}
+
+.message {
+  font-family: "Inter", sans-serif;
+  font-size: 7px;
+  color: #6c7275;
+}
+
+.status {
+  font-family: "sans-serif";
+  font-weight: 500;
+  font-size: 15px;
+  color: #079485;
+}
+
+.image {
+  width: 28px;
+  cursor: pointer;
+  object-fit: contain;
+}
