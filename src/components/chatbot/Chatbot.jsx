@@ -6,7 +6,7 @@ import "./style.css";
 import ChatHeader from "./components/ChatHeader";
 import ChatbotContent from "./components/ChatbotContent";
 import { useVisitorId } from "../../hooks/useVisitorId";
-import {createSession, getSessions} from "../../API/api";
+import { createSession, getSessions } from "../../API/api";
 import MessagesSession from "./components/MessagesSession";
 import InputField from "./components/InputField";
 import { formatTime } from "../../utils/constant";
@@ -110,7 +110,6 @@ const Chatbot = () => {
   const systemId = useVisitorId();
   const [text, setText] = useState("hello");
   const sessionCreated = formatTime();
-
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
@@ -222,17 +221,18 @@ const Chatbot = () => {
       system_id: systemId,
       created_on: sessionCreated,
       user_id: "6669895769c6544ea16e04cc",
-    }
+    };
     // const result= createSession("POST",data)
     setIsFormActive(true);
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setSubmitAttempted(true);
-    setMessagesSession(true);
-    setIsFormActive(false);
+    // setMessagesSession(true); this state redirects us to the chat screen no matter tha input's are filled or not.
+    // setIsFormActive(false); this state make the form go away no matter tha input's are filled or not.
 
-    if (validate()) {
+    if (!validate()) {
       setMessagesSession(true);
       console.log("Form submitted", values);
       console.log(errors);
@@ -240,15 +240,6 @@ const Chatbot = () => {
       console.log("...", errors);
 
       console.log("Validation failed");
-    }
-  };
-  const handleChange = (field) => (event) => {
-    console.log("handle change");
-    setValues({ ...values, [field]: event.target.value });
-
-    setTouched({ ...touched, [field]: true });
-    if (!submitAttempted) {
-      setSubmitAttempted(true); // Set submitAttempted to true on first interaction with any field
     }
   };
 
@@ -265,8 +256,19 @@ const Chatbot = () => {
     console.log("123-->", newErrors);
     setErrors(newErrors);
     // setTouched(newErrors);
-    return !newErrors.userName && !newErrors.email;
+    return newErrors.userName && newErrors.email;
   };
+
+  const handleChange = (field) => (event) => {
+    console.log("handle change");
+    setValues({ ...values, [field]: event.target.value });
+
+    setTouched({ ...touched, [field]: true });
+    if (!submitAttempted) {
+      setSubmitAttempted(true); // Set submitAttempted to true on first interaction with any field
+    }
+  };
+
   const goBack = () => {
     console.log("go back");
     setIsFormActive(false);
