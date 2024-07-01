@@ -1,0 +1,27 @@
+/* .content-section {
+  background-color: #141718;
+  padding: 15px;
+  border: 1px solid #8a8a8a;
+  border-radius: 20px;
+  width: 49%;
+  margin: 0 auto;
+  margin-bottom: 95px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: flex-end;
+  top: 50px;
+}
+
+.content-section.large {
+  width: 60%;
+}
+
+.content-section.medium {
+  width: 40%;
+}
+
+.content-section.small {
+  width: 30%;
+} */

@@ -1,0 +1,108 @@
+/* .input-container {
+  border-bottom-width: 2px;
+  font-size: 15px;
+  width: 100%;
+  border: none;
+  padding: 5px 0;
+  background-color: transparent;
+  outline: none;
+  position: relative;
+} */
+.input-container {
+  position: relative;
+}
+
+.input-container input[type="text"] {
+  font-size: 15px;
+  width: 100%;
+  border: none;
+  padding: 5px 0;
+  background-color: transparent;
+  outline: none;
+}
+
+/* Prevent autofill background color change */
+.input-container input[type="text"]:-webkit-autofill,
+.input-container input[type="text"]:-webkit-autofill:hover,
+.input-container input[type="text"]:-webkit-autofill:focus,
+.input-container input[type="text"]:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #141718 inset !important;
+  -webkit-text-fill-color: white !important;
+}
+.input-container .label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.input-container input[type="text"]:focus ~ .label,
+.input-container input[type="text"]:valid ~ .label {
+  top: -20px;
+  font-size: 12px;
+}
+
+.input-container .underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transition: all 0.3s ease;
+}
+
+.input-container input[type="text"]:focus ~ .underline,
+.input-container input[type="text"]:valid ~ .underline {
+  transform: scaleX(1);
+}
+z .border-red {
+  border-bottom-color: red;
+}
+
+.border-default {
+  border-bottom-color: #787878;
+}
+
+.input-field {
+  font-family: sans-serif;
+}
+
+.text-red {
+  color: red;
+}
+
+.text-white {
+  color: white;
+}
+
+.placeholder-red::placeholder {
+  color: red;
+}
+
+.text-default {
+  color: #787878;
+}
+
+.text-seaGreen {
+  background: linear-gradient(90deg, #079485, #115588);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.underline {
+  height: 1px; /* Assuming height based on Tailwind's default */
+}
+
+.bg-red {
+  background-color: red;
+}
+
+.bg-default {
+  background-color: #787878;
+}
+.input-container .input[type="text"]:first-child {
+  padding: 20px;
+  color: red;
+}

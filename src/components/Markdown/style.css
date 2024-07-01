@@ -1,0 +1,10 @@
+.content ul,
+.content ol {
+  list-style-type: disc;
+  margin-left: 20px;
+  padding-left: 0;
+}
+
+.content li {
+  margin-bottom: 5px;
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Chatbot from './Chatbot';
+import Chatbot from '../src/components/chatbot/Chatbot.jsx';
 
 // Function to render the chatbot in the given container
 window.renderChatbot = (containerId) => {
