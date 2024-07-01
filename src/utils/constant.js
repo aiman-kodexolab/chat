@@ -34,3 +34,8 @@ export const formatTime = () => {
 
   return `${formattedDate} . ${formattedTime}`;
 };
+
+export const replaceTags = (text) => {
+  const word = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return word;
+};

@@ -5,3 +5,4 @@ export { default as GoBack } from "./GoBack.png";
 export { default as SendMsg } from "./sendmsg.png";
 export { default as DeleteIcon } from "./delete.png";
 export { default as Send } from "./Send.svg";
+export { default as goAhead } from "./goAhead.png";
