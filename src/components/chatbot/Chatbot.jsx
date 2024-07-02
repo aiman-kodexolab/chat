@@ -307,11 +307,64 @@ const Chatbot = () => {
     // setTouched(newErrors);
     return !newErrors.userName && !newErrors.email;
   };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const newErrors = { userName: "", email: "" };
+    let hasErrors = false;
+
+    setSubmitAttempted(true);
+
+    if (!values?.userName) {
+      newErrors.userName = "Name is required";
+      hasErrors = true;
+    }
+
+    if (!values?.email) {
+      newErrors.email = "Email is required";
+      hasErrors = true;
+    } else {
+      const emailFormat = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email);
+      if (emailFormat) {
+        newErrors.email = "Email is invalid";
+        hasErrors = true;
+      }
+    }
+
+    if (hasErrors) {
+      setErrors(newErrors);
+      setTouched(newErrors);
+    } else {
+      setMessagesSession(true);
+      setErrors({
+        userName: "",
+        email: "",
+        phoneNumber: "",
+      });
+      setTouched({
+        userName: "",
+        email: "",
+        phoneNumber: "",
+      });
+    }
+  };
+
   const goBack = () => {
     console.log("go back");
     setIsFormActive(false);
     setGoBackForm(true);
+    setErrors({
+      userName: "",
+      email: "",
+      phoneNumber: "",
+    });
+    setTouched({
+      userName: "",
+      email: "",
+      phoneNumber: "",
+    });
   };
+
   useEffect(() => {
     if (systemId) {
       getAllSessions();
@@ -435,7 +488,7 @@ const Chatbot = () => {
     console.log("helo");
   };
 
-  const chatHistory = async(sessionId) => {
+  const chatHistory = async (sessionId) => {
     const result = await getChatHistory("GET", sessionId);
     setChatArray(result.data);
     console.log("chat history", result);
@@ -460,10 +513,10 @@ const Chatbot = () => {
   };
 
   const resetForm = () => {
-    setValues({userName: "",email: "", phoneNumber: ""});
-    setTouched({userName: "",email: "", phoneNumber: ""});
-    setErrors({userName: "",email: "", phoneNumber: ""});
-  }
+    setValues({ userName: "", email: "", phoneNumber: "" });
+    setTouched({ userName: "", email: "", phoneNumber: "" });
+    setErrors({ userName: "", email: "", phoneNumber: "" });
+  };
 
   return (
     <>
@@ -524,7 +577,7 @@ const Chatbot = () => {
               goBackForm={goBackForm}
               systemId={systemId}
               startSession={startSession}
-              handleSubmit={handleSubmit}
+              handleSubmit={onSubmit}
               handleChange={handleChange}
               goBack={goBack}
               touched={touched}
