@@ -31,7 +31,7 @@
 }
 .input-container .label {
   position: absolute;
-  top: 0;
+  top: 3;
   left: 0;
   transition: all 0.3s ease;
   pointer-events: none;
@@ -57,7 +57,8 @@
 .input-container input[type="text"]:valid ~ .underline {
   transform: scaleX(1);
 }
-z .border-red {
+
+.border-red {
   border-bottom-color: red;
 }
 
@@ -65,8 +66,21 @@ z .border-red {
   border-bottom-color: #787878;
 }
 
+.text {
+  font-size: 12px;
+  font-style: italic;
+  /* margin-top: 14px; */
+  font-family: sans-serif;
+}
+
+/* text-[12px] italic mt-1 font-sans */
+
 .input-field {
   font-family: sans-serif;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
 }
 
 .text-red {
@@ -92,7 +106,8 @@ z .border-red {
 }
 
 .underline {
-  height: 1px; /* Assuming height based on Tailwind's default */
+  height: 1px;
+  margin-bottom: 2px; /* Assuming height based on Tailwind's default */
 }
 
 .bg-red {
