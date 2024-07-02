@@ -48,7 +48,7 @@
   position: relative;
   z-index: 1;
   .window_header {
-    padding: 22px 18px 10px;
+    padding: 35px 18px 10px;
     position: sticky;
     top: 0;
   }
@@ -68,18 +68,23 @@
 .icon_header div {
   display: flex;
   flex-direction: row-reverse;
+  align-items: center;
 }
 .icon_header {
   display: flex;
   justify-content: space-between;
 }
+.hamburger {
+  background: transparent;
+  border: none;
+}
 .hamburger_icon {
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
 }
 .toggle_icon {
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
 }
 .chatbot_content {
   height: 100%;
@@ -187,7 +192,8 @@
 }
 .no_session_box {
   position: absolute;
-  bottom: -17px;
+  /* bottom: -17px; */
+  bottom: 160px;
   text-align: center;
   align-self: center;
   transform: translateX(50%);

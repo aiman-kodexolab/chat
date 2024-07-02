@@ -6,7 +6,13 @@ import "./style.css";
 import ChatHeader from "./components/ChatHeader";
 import ChatbotContent from "./components/ChatbotContent";
 import { useVisitorId } from "../../hooks/useVisitorId";
-import {createSession, getSessions} from "../../API/api";
+import {
+  createSession,
+  deleteChat,
+  getChatHistory,
+  getSessions,
+  sessionDetail,
+} from "../../API/api";
 import MessagesSession from "./components/MessagesSession";
 import InputField from "./components/InputField";
 import { formatTime } from "../../utils/constant";
@@ -35,82 +41,85 @@ const Chatbot = () => {
   });
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [messagesSession, setMessagesSession] = useState(false);
-  const [chatArray, setChatArray] = useState([
-    {
-      id: "66797b9ed072397744561a2a",
-      type: "user",
-      content: "hello",
-      created_on: "24th June 2024 . 6:58 PM",
-    },
-    {
-      id: "66797b9ed072397744561a2a",
-      type: "bot",
-      content:
-        "Hello! How can I assist you with information about Kodexo Labs today? 😊\n\nFeel free to ask more about Kodexo Labs, or visit our website for further details.",
-      created_on: "24th June 2024 . 6:58 PM",
-    },
-    {
-      id: "66797bb3d072397744561a2b",
-      type: "user",
-      content: "what is kodexo ?\n",
-      created_on: "24th June 2024 . 6:59 PM",
-    },
-    {
-      id: "66797bb3d072397744561a2b",
-      type: "bot",
-      content:
-        "Kodexo Labs is an AI software development company based in the USA that specializes in cutting-edge AI software solutions. The company transforms business challenges into intuitive solutions by staying at the forefront of AI advancements. With a dedicated team of tech experts, Kodexo Labs offers services in Generative AI, AI and Machine Learning, Data Engineering, Software Consulting, Staff Augmentation, and Custom Product Development. They focus on delivering beyond expectations and have a systematic development approach to meet the specific needs of their clients.\n\nHow may I assist you more about Kodexo Labs? For more details, contact our website.",
-      created_on: "24th June 2024 . 6:59 PM",
-    },
-    {
-      id: "667992e9c8b7a426c82095c2",
-      type: "user",
-      content: "what is meat n bone ?\n\\",
-      created_on: "24th June 2024 . 8:38 PM",
-    },
-    {
-      id: "667992e9c8b7a426c82095c2",
-      type: "bot",
-      content:
-        "Meat N' Bone is a premium online butcher shop that offers over 400 best-in-class cuts and products, including beef, poultry, pork, lamb, game, seafood, and charcuterie. They deliver nationwide in the US, including Hawaii and Puerto Rico, with options for free shipping and Saturday delivery in most areas. Meat N' Bone prides itself on combining technology, statistics, and high sourcing standards to provide quality meat. They also offer a range of services like catering, custom charcuterie boards, and a rewards program. Additionally, they are one of the largest suppliers of Wagyu steaks in the US and are involved in various promotional activities, including sponsoring a NASCAR car.\n\nFeel free to ask more about Kodexo Labs, or visit our website for further details.",
-      created_on: "24th June 2024 . 8:38 PM",
-    },
-    {
-      id: "66799350c8b7a426c82095c3",
-      type: "user",
-      content: "what they do",
-      created_on: "24th June 2024 . 8:39 PM",
-    },
-    {
-      id: "66799350c8b7a426c82095c3",
-      type: "bot",
-      content:
-        "Kodexo Labs is an AI software development company based in the USA that specializes in transforming business challenges into intuitive solutions through cutting-edge AI advancements. Here's a summary of their services:\n\n1. **Generative AI**: Unlocking the creative power of AI to generate dynamic content that redefines engagement. \n\n2. **AI and Machine Learning**: Providing insights from data to uncover patterns, make data-driven decisions, and automate processes for enhanced efficiency. This includes services like predictive analytics and image recognition.\n\n3. **Data Engineering**: Structuring, integrating, and optimizing data pipelines to make data accessible and actionable for strategic growth.\n\n4. **Software Consulting**: Offering expert guidance to navigate the complex technology landscape, make informed decisions, and maximize tech investments.\n\n5. **Staff Augmentation**: Providing flexibility to quickly scale technical workforce for both short-term projects and long-term initiatives.\n\n6. **Custom Product Development**: Delivering customized software solutions tailored to meet specific business needs, from requirement assessment to testing and quality assurance.\n\nKodexo Labs also has experience in developing specialized applications in various industries, including EdTech, Automotive, Healthcare, Real Estate, FinTech, and On-Demand Apps.\n\nHow can I help you further with information about Kodexo Labs? Check our website for more details.",
-      created_on: "24th June 2024 . 8:39 PM",
-    },
-    {
-      id: "66799372c8b7a426c82095c4",
-      type: "user",
-      content: "no i mean what meat n bone do ?\n",
-      created_on: "24th June 2024 . 8:40 PM",
-    },
-    {
-      id: "66799372c8b7a426c82095c4",
-      type: "bot",
-      content:
-        "Meat N' Bone is a premium online butcher shop that offers a wide range of high-quality meat products and services. Here's what they do:\n\n1. **Product Offering**: They provide over 400 best-in-class cuts and products, including beef, poultry, pork, lamb, game, seafood, charcuterie, and cheese. They also offer sides, beer, wine, sake, and Japanese knives.\n\n2. **Nationwide Delivery**: They deliver everywhere in the US, including Hawaii and Puerto Rico, with options for free shipping and Saturday delivery in most areas.\n\n3. **Specialty Products**: They are one of the largest suppliers of Wagyu steaks in the US, working with high-quality American, Australian, and Japanese Wagyu programs.\n\n4. **Custom Services**: They offer custom charcuterie boards that can be assembled for local delivery or shipped deconstructed with assembly instructions. They also provide catering services.\n\n5. **Technology and Standards**: They mix technology, statistics, and high sourcing standards to ensure quality and efficiency in their operations.\n\n6. **Crowdfunding and Expansion**: They are considering a crowdfunding campaign to scale further, already operating 5 boutiques and having shipped over 250,000 orders nationwide.\n\n7. **Community Engagement**: They have a Facebook group called \"The Butcher's Den\" for customers, VIPs, and friends to share recipes, ideas, and feedback.\n\n8. **Rewards Program**: They offer a rewards program where customers can earn points on every purchase and for referring friends.\n\n9. **Promotions and Sponsorships**: They are involved in promotional activities, such as sponsoring Kaz Grala's Car #15 in the 2024 NASCAR's Cup Series.\n\nIs there anything else you need to know about Kodexo Labs? Visit our website for more information.",
-      created_on: "24th June 2024 . 8:40 PM",
-    },
-  ]);
-
+  // const [chatArray, setChatArray] = useState([
+  //   {
+  //     id: "66797b9ed072397744561a2a",
+  //     type: "user",
+  //     content: "hello",
+  //     created_on: "24th June 2024 . 6:58 PM",
+  //   },
+  //   {
+  //     id: "66797b9ed072397744561a2a",
+  //     type: "bot",
+  //     content:
+  //       "Hello! How can I assist you with information about Kodexo Labs today? 😊\n\nFeel free to ask more about Kodexo Labs, or visit our website for further details.",
+  //     created_on: "24th June 2024 . 6:58 PM",
+  //   },
+  //   {
+  //     id: "66797bb3d072397744561a2b",
+  //     type: "user",
+  //     content: "what is kodexo ?\n",
+  //     created_on: "24th June 2024 . 6:59 PM",
+  //   },
+  //   {
+  //     id: "66797bb3d072397744561a2b",
+  //     type: "bot",
+  //     content:
+  //       "Kodexo Labs is an AI software development company based in the USA that specializes in cutting-edge AI software solutions. The company transforms business challenges into intuitive solutions by staying at the forefront of AI advancements. With a dedicated team of tech experts, Kodexo Labs offers services in Generative AI, AI and Machine Learning, Data Engineering, Software Consulting, Staff Augmentation, and Custom Product Development. They focus on delivering beyond expectations and have a systematic development approach to meet the specific needs of their clients.\n\nHow may I assist you more about Kodexo Labs? For more details, contact our website.",
+  //     created_on: "24th June 2024 . 6:59 PM",
+  //   },
+  //   {
+  //     id: "667992e9c8b7a426c82095c2",
+  //     type: "user",
+  //     content: "what is meat n bone ?\n\\",
+  //     created_on: "24th June 2024 . 8:38 PM",
+  //   },
+  //   {
+  //     id: "667992e9c8b7a426c82095c2",
+  //     type: "bot",
+  //     content:
+  //       "Meat N' Bone is a premium online butcher shop that offers over 400 best-in-class cuts and products, including beef, poultry, pork, lamb, game, seafood, and charcuterie. They deliver nationwide in the US, including Hawaii and Puerto Rico, with options for free shipping and Saturday delivery in most areas. Meat N' Bone prides itself on combining technology, statistics, and high sourcing standards to provide quality meat. They also offer a range of services like catering, custom charcuterie boards, and a rewards program. Additionally, they are one of the largest suppliers of Wagyu steaks in the US and are involved in various promotional activities, including sponsoring a NASCAR car.\n\nFeel free to ask more about Kodexo Labs, or visit our website for further details.",
+  //     created_on: "24th June 2024 . 8:38 PM",
+  //   },
+  //   {
+  //     id: "66799350c8b7a426c82095c3",
+  //     type: "user",
+  //     content: "what they do",
+  //     created_on: "24th June 2024 . 8:39 PM",
+  //   },
+  //   {
+  //     id: "66799350c8b7a426c82095c3",
+  //     type: "bot",
+  //     content:
+  //       "Kodexo Labs is an AI software development company based in the USA that specializes in transforming business challenges into intuitive solutions through cutting-edge AI advancements. Here's a summary of their services:\n\n1. **Generative AI**: Unlocking the creative power of AI to generate dynamic content that redefines engagement. \n\n2. **AI and Machine Learning**: Providing insights from data to uncover patterns, make data-driven decisions, and automate processes for enhanced efficiency. This includes services like predictive analytics and image recognition.\n\n3. **Data Engineering**: Structuring, integrating, and optimizing data pipelines to make data accessible and actionable for strategic growth.\n\n4. **Software Consulting**: Offering expert guidance to navigate the complex technology landscape, make informed decisions, and maximize tech investments.\n\n5. **Staff Augmentation**: Providing flexibility to quickly scale technical workforce for both short-term projects and long-term initiatives.\n\n6. **Custom Product Development**: Delivering customized software solutions tailored to meet specific business needs, from requirement assessment to testing and quality assurance.\n\nKodexo Labs also has experience in developing specialized applications in various industries, including EdTech, Automotive, Healthcare, Real Estate, FinTech, and On-Demand Apps.\n\nHow can I help you further with information about Kodexo Labs? Check our website for more details.",
+  //     created_on: "24th June 2024 . 8:39 PM",
+  //   },
+  //   {
+  //     id: "66799372c8b7a426c82095c4",
+  //     type: "user",
+  //     content: "no i mean what meat n bone do ?\n",
+  //     created_on: "24th June 2024 . 8:40 PM",
+  //   },
+  //   {
+  //     id: "66799372c8b7a426c82095c4",
+  //     type: "bot",
+  //     content:
+  //       "Meat N' Bone is a premium online butcher shop that offers a wide range of high-quality meat products and services. Here's what they do:\n\n1. **Product Offering**: They provide over 400 best-in-class cuts and products, including beef, poultry, pork, lamb, game, seafood, charcuterie, and cheese. They also offer sides, beer, wine, sake, and Japanese knives.\n\n2. **Nationwide Delivery**: They deliver everywhere in the US, including Hawaii and Puerto Rico, with options for free shipping and Saturday delivery in most areas.\n\n3. **Specialty Products**: They are one of the largest suppliers of Wagyu steaks in the US, working with high-quality American, Australian, and Japanese Wagyu programs.\n\n4. **Custom Services**: They offer custom charcuterie boards that can be assembled for local delivery or shipped deconstructed with assembly instructions. They also provide catering services.\n\n5. **Technology and Standards**: They mix technology, statistics, and high sourcing standards to ensure quality and efficiency in their operations.\n\n6. **Crowdfunding and Expansion**: They are considering a crowdfunding campaign to scale further, already operating 5 boutiques and having shipped over 250,000 orders nationwide.\n\n7. **Community Engagement**: They have a Facebook group called \"The Butcher's Den\" for customers, VIPs, and friends to share recipes, ideas, and feedback.\n\n8. **Rewards Program**: They offer a rewards program where customers can earn points on every purchase and for referring friends.\n\n9. **Promotions and Sponsorships**: They are involved in promotional activities, such as sponsoring Kaz Grala's Car #15 in the 2024 NASCAR's Cup Series.\n\nIs there anything else you need to know about Kodexo Labs? Visit our website for more information.",
+  //     created_on: "24th June 2024 . 8:40 PM",
+  //   },
+  // ]);
+  const [chatArray, setChatArray] = useState(null);
   const inputRef = useRef();
   const maxLength = 100;
   const [limit, setLimit] = useState(false);
   const [rows, setRows] = useState(1);
   const systemId = useVisitorId();
+  console.log("---->", systemId);
   const [text, setText] = useState("hello");
+  const [conversationList, setConversationList] = useState(null);
   const sessionCreated = formatTime();
-
+  const [sessionId, setSessionId] = useState("");
+  const [status, setStatus] = useState(true);
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
@@ -217,16 +226,25 @@ const Chatbot = () => {
     // }
   };
 
-  const startSession = () => {
-    const data = {
-      system_id: systemId,
-      created_on: sessionCreated,
-      user_id: "6669895769c6544ea16e04cc",
+  const startSession = async () => {
+    try {
+      const data = {
+        system_id: systemId,
+        created_on: sessionCreated,
+        user_id: "",
+      };
+
+      const result = await createSession("POST", data);
+      console.log("Session creation result:", result);
+
+      // Assuming setIsFormActive is a state updater function from React useState hook
+      setIsFormActive(true); // Activating the form after session creation
+    } catch (error) {
+      console.error("Error starting session:", error);
+      // Handle error as needed
     }
-    // const result= createSession("POST",data)
-    setIsFormActive(true);
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitAttempted(true);
     setMessagesSession(true);
@@ -234,6 +252,20 @@ const Chatbot = () => {
 
     if (validate()) {
       setMessagesSession(true);
+      const data = {
+        user_name: values.userName,
+        email: values.email,
+        phone_number: values.phoneNumber,
+        session_id: sessionId,
+        user_id: "",
+      };
+      console.log(data);
+      const result = await sessionDetail("PUT", data);
+      if (result.status_code === 200) {
+        getAllSessions();
+        resetForm();
+      }
+      console.log("-->", result);
       console.log("Form submitted", values);
       console.log(errors);
     } else {
@@ -250,6 +282,14 @@ const Chatbot = () => {
     if (!submitAttempted) {
       setSubmitAttempted(true); // Set submitAttempted to true on first interaction with any field
     }
+  };
+
+  const handleDeleteChat = async (field) => {
+    const data = {
+      session_id: "6682c4c804ac600d04656597",
+    };
+    const result = await deleteChat("DELETE", data);
+    console.log("ttt---->", result);
   };
 
   const validate = () => {
@@ -273,11 +313,21 @@ const Chatbot = () => {
     setGoBackForm(true);
   };
   useEffect(() => {
-    validate(); // Run checkError whenever values or touched state changes
-  }, [values, touched]);
+    if (systemId) {
+      getAllSessions();
+    }
+  }, [systemId]);
   useEffect(() => {
-    // const result = getSessions("GET", systemId);
+    validate();
+  }, [values, touched]);
 
+  const getAllSessions = async () => {
+    console.log("systemId-->", systemId);
+    const result = await getSessions("GET", systemId);
+    setConversationList(result.data);
+  };
+
+  useEffect(() => {
     const socket = io("d116w9xjnkxxep.cloudfront.net", {
       transports: ["websocket"],
     });
@@ -385,6 +435,36 @@ const Chatbot = () => {
     console.log("helo");
   };
 
+  const chatHistory = async(sessionId) => {
+    const result = await getChatHistory("GET", sessionId);
+    setChatArray(result.data);
+    console.log("chat history", result);
+  };
+  const sessionOnClick = (item) => {
+    console.log(item);
+    if (item?.is_form_filled === true) {
+      setChat(true);
+      setMessagesSession(true);
+      setSessionId(item?._id);
+      chatHistory(item?._id);
+    } else {
+      // setBack(false);
+      setIsFormActive(true);
+      setSessionId(item?._id);
+    }
+    if (item?.status === "closed") {
+      setStatus(false);
+    } else {
+      setStatus(true);
+    }
+  };
+
+  const resetForm = () => {
+    setValues({userName: "",email: "", phoneNumber: ""});
+    setTouched({userName: "",email: "", phoneNumber: ""});
+    setErrors({userName: "",email: "", phoneNumber: ""});
+  }
+
   return (
     <>
       <div className="window_wrap">
@@ -398,39 +478,42 @@ const Chatbot = () => {
           <ChatHeader
             messagesSession={messagesSession}
             messageSessionBack={messageSessionBack}
+            handleDeleteChat={handleDeleteChat}
           />
           {messagesSession ? (
             <>
               <MessagesSession
-                status={true}
+                status={status}
                 chatArray={chatArray}
                 chatLoad={false}
               />
-              <InputField
-                style={{
-                  border: "1px solid",
+              {status ? (
+                <InputField
+                  style={{
+                    border: "1px solid",
 
-                  borderImageSource:
-                    "linear-gradient(90deg, #079485 0%, #115588 100%)",
-                }}
-                disabled={false}
-                sendMessage={sendMessage}
-                className={"hello"}
-                value={messages}
-                setValue={setMessages}
-                waitingMessage={"Waiting for message"}
-                text={text}
-                rows={rows}
-                limit={limit}
-                maxLength={maxLength}
-                inputRef={inputRef}
-                handleInputChange={handleInputChange}
-                handlePaste={handlePaste}
-                handleKeyPress={handleKeyPress}
-                handleSubmitMessage={handleSubmitMessage}
-                hasLineBreaks={hasLineBreaks}
-                updateRows={updateRows}
-              />
+                    borderImageSource:
+                      "linear-gradient(90deg, #079485 0%, #115588 100%)",
+                  }}
+                  disabled={false}
+                  sendMessage={sendMessage}
+                  className={"hello"}
+                  value={messages}
+                  setValue={setMessages}
+                  waitingMessage={"Waiting for message"}
+                  text={text}
+                  rows={rows}
+                  limit={limit}
+                  maxLength={maxLength}
+                  inputRef={inputRef}
+                  handleInputChange={handleInputChange}
+                  handlePaste={handlePaste}
+                  handleKeyPress={handleKeyPress}
+                  handleSubmitMessage={handleSubmitMessage}
+                  hasLineBreaks={hasLineBreaks}
+                  updateRows={updateRows}
+                />
+              ) : null}
             </>
           ) : (
             <ChatbotContent
@@ -445,6 +528,8 @@ const Chatbot = () => {
               handleChange={handleChange}
               goBack={goBack}
               touched={touched}
+              conversationList={conversationList}
+              sessionOnClick={sessionOnClick}
             />
           )}
 

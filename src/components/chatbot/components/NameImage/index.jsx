@@ -26,6 +26,7 @@ function NameImage({
       }}
     >
       <p
+      className="first_text"
         style={{
           fontSize: textSize,
           color: "#ffffff",
@@ -37,6 +38,7 @@ function NameImage({
       </p>
       {last && (
         <p
+        className="last_text"
           style={{
             fontSize: textSize,
             color: "#ffffff",

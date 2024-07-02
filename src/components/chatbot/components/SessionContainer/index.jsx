@@ -4,28 +4,28 @@ import { goAhead } from "../../../../assets";
 import { replaceTags } from "../../../../utils/constant";
 import NameImage from "../NameImage";
 
-function SessionContainer({ onClick, userName, firstMessage, status }) {
+function SessionContainer({ onClick, item }) {
   return (
-    <div onClick={onClick} className="container">
+    <div onClick={() => onClick(item)} className="session_container">
       <h2 className="heading">Conversation</h2>
       <div className="itemContainer">
         <NameImage
           size="25px"
           textSize="12px"
           rounded={true}
-          firstName={userName ? userName[0]?.toUpperCase() : "?"}
+          firstName={item.user_name ? item.user_name[0]?.toUpperCase() : "?"}
         />
         <div style={{ width: "70%" }}>
-          <p className="userName">{userName}</p>
+          <p className="userName">{item.user_name}</p>
           <p
             dangerouslySetInnerHTML={{
-              __html: replaceTags(firstMessage),
+              __html: replaceTags(item?.first_message),
             }}
-            className="message"
+            className="messages"
           />
         </div>
         <div>
-          <p className="status">{status}</p>
+          <p className="status">{item?.status}</p>
 
           <img src={goAhead} alt="" className="image" />
         </div>

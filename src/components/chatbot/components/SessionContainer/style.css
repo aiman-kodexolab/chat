@@ -1,4 +1,4 @@
-.container {
+.session_container {
   background-color: #131313;
   padding: 5px;
   border: 1px solid #6c7275;
@@ -28,7 +28,7 @@
   color: #6c7275;
 }
 
-.message {
+.messages {
   font-family: "Inter", sans-serif;
   font-size: 7px;
   color: #6c7275;

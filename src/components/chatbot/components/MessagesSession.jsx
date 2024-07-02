@@ -14,7 +14,7 @@ const MessagesSession = ({ status, chatArray, chatLoad }) => {
       className={`chat-container ${status ? 'expanded' : 'collapsed'}`}
     >
       {Array.isArray(chatArray) &&
-        chatArray.map((item, index) => {
+        chatArray?.map((item, index) => {
           if (item?.type === "user") {
             return (
               <TextBlock key={index} isUser={true} time={item?.created_on}>

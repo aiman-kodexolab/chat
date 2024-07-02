@@ -2,7 +2,7 @@ import React from "react";
 import "../style.css";
 import { DeleteIcon, GoBack, Hamburger, Widget } from "../../../assets";
 
-export default function ChatHeader({ messagesSession, messageSessionBack }) {
+export default function ChatHeader({ messagesSession, messageSessionBack, handleDeleteChat }) {
   return (
     <>
       <div className="window_header">
@@ -13,15 +13,14 @@ export default function ChatHeader({ messagesSession, messageSessionBack }) {
           </div>
 
           <div>
-          {messagesSession && (
-              <div className="hamburger">
+            {messagesSession && (
+              <button disabled={true} className="hamburger" onClick={handleDeleteChat}>
                 <img className="hamburger_icon" src={DeleteIcon} />
-              </div>
+              </button>
             )}
             <div className="toggle">
               <img className="toggle_icon" src={Hamburger} />
             </div>
-            
           </div>
         </div>
       </div>
