@@ -1,18 +1,16 @@
-import React, { useEffect, useRef } from 'react';
-import '../style.css'; 
-import TextBlock from './TextBlock'; 
+import React, { useEffect, useRef } from "react";
+import "../style.css";
+import TextBlock from "./TextBlock";
 
 const MessagesSession = ({ status, chatArray, chatLoad }) => {
   const endRef = useRef(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatArray]);
 
   return (
-    <div
-      className={`chat-container ${status ? 'expanded' : 'collapsed'}`}
-    >
+    <div className={`chat-container ${status ? "expanded" : "collapsed"}`}>
       {Array.isArray(chatArray) &&
         chatArray?.map((item, index) => {
           if (item?.type === "user") {
@@ -23,14 +21,13 @@ const MessagesSession = ({ status, chatArray, chatLoad }) => {
             );
           } else if (item?.type === "bot") {
             return (
-              <TextBlock key={index} time={item?.created_on}>
+              <TextBlock key={item._id} time={item?.created_on}>
                 {item?.content}
               </TextBlock>
             );
           }
         })}
-      {chatLoad && <div className='loader'></div>}
-
+      {chatLoad && <div className="loader"></div>}
       <div ref={endRef}></div>
     </div>
   );
