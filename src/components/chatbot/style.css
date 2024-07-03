@@ -231,7 +231,10 @@
   width: 25px;
   cursor: pointer;
 }
-
+.grey_back_icon {
+  filter: invert(50%) grayscale(100%);
+  width: 25px;
+}
 .form-instruction {
   color: white;
   font-size: 12px;

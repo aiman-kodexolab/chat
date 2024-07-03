@@ -337,8 +337,10 @@ const Chatbot = () => {
   }, []);
 
   const messageSessionBack = () => {
-    setMessagesSession(false);
-    setChatArray([]);
+    if (!chatLoad) {
+      setMessagesSession(false);
+      setChatArray([]);
+    }
   };
 
   const chatHistory = async (sessionId) => {
@@ -384,6 +386,7 @@ const Chatbot = () => {
             messageSessionBack={messageSessionBack}
             handleDeleteChat={handleDeleteChat}
             isDisabled={chatArray.length}
+            chatLoad={chatLoad}
           />
           {messagesSession ? (
             <>

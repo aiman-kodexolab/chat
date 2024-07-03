@@ -7,13 +7,19 @@ export default function ChatHeader({
   messageSessionBack,
   handleDeleteChat,
   isDisabled,
+  chatLoad,
 }) {
   return (
     <>
       <div className="window_header">
         <div className="icon_header">
           <div className="back" onClick={messageSessionBack}>
-            {messagesSession && <img className="go-back-icon" src={GoBack} />}
+            {messagesSession && (
+              <img
+                className={`${chatLoad ? "grey_back_icon" : "go-back-icon"}`}
+                src={GoBack}
+              />
+            )}
           </div>
 
           <div>
