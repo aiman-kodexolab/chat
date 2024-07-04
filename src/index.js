@@ -11,7 +11,7 @@ window.renderChatbot = (containerId) => {
   if (container) {
     const scriptTag = document.getElementById(containerId);
     const key = scriptTag.getAttribute("data-key");
-    console.log("key", key);
+    console.log("keyyy", key);
     const root = ReactDOM.createRoot(container);
     root.render(<ChatbotButton />);
   } else {
@@ -20,12 +20,12 @@ window.renderChatbot = (containerId) => {
 };
 
 // Default rendering for the main app
-const rootElement = document.getElementById("root");
-if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-}
+// const rootElement = document.getElementById("root");
+// if (rootElement) {
+//   const root = ReactDOM.createRoot(rootElement);
+//   root.render(
+//     <React.StrictMode>
+//       <App />
+//     </React.StrictMode>
+//   );
+// }
