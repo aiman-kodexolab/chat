@@ -7,8 +7,8 @@ import Chatbot from "../src/components/chatbot/Chatbot.jsx";
 // Function to render the chatbot in the given container
 window.renderChatbot = (containerId) => {
   const container = document.getElementById(containerId);
-  // onst scriptTag = document.getElementById('chatbot-script');
-  const key = container.getAttribute("data-key");
+  const scriptTag = document.getElementById('chatbot-script');
+  const key = scriptTag.getAttribute("data-key");
   console.log("key", key);
   if (container) {
     const root = ReactDOM.createRoot(container);
