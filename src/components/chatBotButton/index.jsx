@@ -3,6 +3,7 @@ import Chatbot from "../chatbot/Chatbot.jsx";
 import "./style.css";
 import { Dropdown, Widget } from "../../assets";
 import { useVisitorId } from "../../hooks/useVisitorId.js";
+import { verifyKey } from "../../API/api.js";
 
 const ChatbotButton = ({ key }) => {
   const [isOpen, setIsOpen] = useState(false);
