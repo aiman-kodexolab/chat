@@ -53,7 +53,7 @@ export default function ChatbotContent({
             </>
           ) : (
             <div className="no_session_box">
-              <NewConversationBtn className="no_session" />
+              <NewConversationBtn className="no_session" onClick={startSession}/>
             </div>
           )}
         </div>
