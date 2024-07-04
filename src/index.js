@@ -9,7 +9,7 @@ window.renderChatbot = (containerId) => {
   const container = document.getElementById(containerId);
 
   if (container) {
-    const scriptTag = document.getElementById(containerId);
+    const scriptTag = document.getElementById("chatbot-script");
     const key = scriptTag.getAttribute("data-key");
     console.log("keyyy", key);
     const root = ReactDOM.createRoot(container);
