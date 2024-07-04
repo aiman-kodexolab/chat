@@ -1,5 +1,15 @@
 import apiCall from "../utils/apiCall";
 
+async function verifyKey(method, key) {
+  try {
+    const result = await apiCall(`reference/verify_key?api_key=${key}`, method);
+    console.log("api reference ",result);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function getSessions(method, system_id) {
   try {
     const result = await apiCall(
@@ -50,4 +60,11 @@ async function deleteChat(method, data) {
     throw error;
   }
 }
-export { getSessions, createSession, sessionDetail, deleteChat, getChatHistory };
+export {
+  getSessions,
+  createSession,
+  sessionDetail,
+  deleteChat,
+  getChatHistory,
+  verifyKey
+};

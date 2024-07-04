@@ -3,15 +3,18 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import ChatbotButton from "./components/chatBotButton/index.jsx";
+import { verifyKey } from "./API/api.js";
 
 // Function to render the chatbot in the given container
-window.renderChatbot = (containerId) => {
+window.renderChatbot = async(containerId) => {
   const container = document.getElementById(containerId);
 
   if (container) {
     const scriptTag = document.getElementById("chatbot-script");
     const key = scriptTag.getAttribute("data-key");
     console.log("keyyy", key);
+    const result = await verifyKey("GET",key);
+    console.log("result---->key ", result)
     const root = ReactDOM.createRoot(container);
     root.render(<ChatbotButton />);
   } else {
