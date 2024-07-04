@@ -297,7 +297,7 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
-    const socket = io("127.0.0.1:8000", {
+    const socket = io("web-chatbot-internal.onrender.com", {
       transports: ["websocket"],
     });
     setSocket(socket);
