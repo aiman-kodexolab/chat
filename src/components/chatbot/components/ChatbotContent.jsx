@@ -34,7 +34,7 @@ export default function ChatbotContent({
           </div>
 
           <div className="conversations">
-            {conversationList?.map((item, index) => (
+            {Array.isArray(conversationList) && conversationList?.map((item, index) => (
               <SessionContainer
                 key={index}
                 item={item}
@@ -42,7 +42,7 @@ export default function ChatbotContent({
               />
             ))}
           </div>
-          {conversationList?.length ? (
+          {Array.isArray(conversationList) && conversationList?.length ? (
             <>
               <div className="session_box">
                 <NewConversationBtn
