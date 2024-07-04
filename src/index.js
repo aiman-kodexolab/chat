@@ -13,10 +13,9 @@ window.renderChatbot = async(containerId) => {
     const scriptTag = document.getElementById("chatbot-script");
     const key = scriptTag.getAttribute("data-key");
     console.log("keyyy", key);
-    const result = await verifyKey("GET",key);
-    console.log("result---->key ", result)
+   
     const root = ReactDOM.createRoot(container);
-    root.render(<ChatbotButton />);
+    root.render(<ChatbotButton key={key}/>);
   } else {
     console.error(`Container with ID ${containerId} not found.`);
   }
