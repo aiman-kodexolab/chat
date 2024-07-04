@@ -5,12 +5,20 @@ import { Dropdown, Widget } from "../../assets";
 import { useVisitorId } from "../../hooks/useVisitorId.js";
 import { verifyKey } from "../../API/api.js";
 
-const ChatbotButton = ({ key }) => {
+const ChatbotButton = ({ apiKey }) => {
   const [isOpen, setIsOpen] = useState(false);
-  useEffect(async () => {
-    const result = await verifyKey("GET", key);
-    console.log("result---->key ", result);
-  }, []);
+  useEffect(() => {
+    const checkKey = async () => {
+      try {
+        const result = await verifyKey("GET", apiKey);
+        console.log("result 1---->key ", result);
+      } catch (error) {
+        console.error("Error verifying key:", error);
+      }
+    };
+
+    checkKey();
+  }, [apiKey]);
   const toggleChat = () => {
     setIsOpen(!isOpen);
   };
