@@ -1,9 +1,10 @@
 import apiCall from "../utils/apiCall";
 
-async function verifyKey(method, key) {
+async function verifyKey(method, apiKey) {
   try {
-    const result = await apiCall(`reference/verify_key?api_key=${key}`, method);
-    console.log("api reference ",result);
+    console.log("verifyKey->>",apiKey);
+    const result = await apiCall(`reference/verify_key?api_key=${apiKey}`, method);
+    console.log("api reference ---> ",result);
     return result;
   } catch (error) {
     throw error;

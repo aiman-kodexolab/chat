@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import Chatbot from "../chatbot/Chatbot.jsx";
 import "./style.css";
 import { Dropdown, Widget } from "../../assets";
-import { useVisitorId } from "../../hooks/useVisitorId.js";
 import { verifyKey } from "../../API/api.js";
 
 const ChatbotButton = ({ apiKey }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isApiKeyValid, setIsApiKeyValid] = useState(false);
   useEffect(() => {
     const checkKey = async () => {
       try {
         const result = await verifyKey("GET", apiKey);
+        setIsApiKeyValid(result);
         console.log("result 1---->key ", result);
       } catch (error) {
         console.error("Error verifying key:", error);
@@ -20,13 +21,18 @@ const ChatbotButton = ({ apiKey }) => {
     checkKey();
   }, [apiKey]);
   const toggleChat = () => {
-    setIsOpen(!isOpen);
+    if (isApiKeyValid) {
+      setIsOpen(!isOpen);
+    }
   };
 
   return (
     <div className="chatbot_wrapper">
       {isOpen && <Chatbot />}
-      <div className="circle_button" onClick={toggleChat}>
+      <div
+        className={`${isApiKeyValid ? "circle_button" : "disabled_button"}`}
+        onClick={toggleChat}
+      >
         {isOpen ? (
           <img className="close_icon" src={Dropdown} />
         ) : (
