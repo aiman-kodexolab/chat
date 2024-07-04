@@ -2,17 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import Chatbot from "../src/components/chatbot/Chatbot.jsx";
+import ChatbotButton from "./components/chatBotButton/index.jsx";
 
 // Function to render the chatbot in the given container
 window.renderChatbot = (containerId) => {
   const container = document.getElementById(containerId);
-  const scriptTag = document.getElementById('chatbot-script');
-  const key = scriptTag.getAttribute("data-key");
-  console.log("key", key);
+
   if (container) {
+    const scriptTag = document.getElementById(containerId);
+    const key = scriptTag.getAttribute("data-key");
+    console.log("key", key);
     const root = ReactDOM.createRoot(container);
-    root.render(<Chatbot />);
+    root.render(<ChatbotButton />);
   } else {
     console.error(`Container with ID ${containerId} not found.`);
   }
