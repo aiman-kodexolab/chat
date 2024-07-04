@@ -531,11 +531,11 @@
   border-radius: 50%;
   border-bottom-color: transparent;
   border-left-color: transparent;
-  transform: rotate(135deg);
+  transform: translateX(50%) rotate(135deg);
   position: absolute;
   top: 35%;
   z-index: 2;
-  right: 38%;
+  right: 50%;
 }
 
 .loader {
