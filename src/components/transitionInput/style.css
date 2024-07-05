@@ -29,6 +29,16 @@
   -webkit-box-shadow: 0 0 0 30px #141718 inset !important;
   -webkit-text-fill-color: white !important;
 }
+
+.input-container input[type="text"]:-webkit-autofill,
+.input-container input[type="text"]:-webkit-autofill:hover,
+.input-container input[type="text"]:-webkit-autofill:focus,
+.input-container input[type="text"]:-webkit-autofill:active,
+.theme {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #141718 !important;
+}
+
 .input-container .label {
   position: absolute;
   top: 3;

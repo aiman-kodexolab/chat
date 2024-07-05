@@ -7,17 +7,23 @@ export default function TransitionInput({
   required,
   label,
   error,
+  theme,
 }) {
   console.log("err", error);
   return (
     <div>
       <div
-        className={`input-container ${error ? "border-red" : "border-default"}`}
+        className={`input-container  ${
+          error ? "border-red" : "border-default"
+        }`}
       >
         <input
           type="text"
+          style={{ caretColor: theme ? '#141718' : "white" }}
           id="input"
-          className={`input-field ${error ? "text-red" : "text-white"}`}
+          className={`input-field ${theme && "theme"} ${
+            error ? "text-red" : "text-white"
+          } ${error && theme ? "text-red" : "text-[#141718]"}`}
           value={value}
           onChange={onChange}
         />
