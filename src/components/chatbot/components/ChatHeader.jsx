@@ -1,6 +1,6 @@
 import React from "react";
 import "../style.css";
-import { DeleteIcon, GoBack, Hamburger, Widget } from "../../../assets";
+import { DeleteIcon, GoBack, Hamburger, Widget, darkMode, lightMode } from "../../../assets";
 
 export default function ChatHeader({
   messagesSession,
@@ -8,6 +8,8 @@ export default function ChatHeader({
   handleDeleteChat,
   isDisabled,
   chatLoad,
+  handleToggle,
+  isToggled,
 }) {
   return (
     <>
@@ -16,7 +18,7 @@ export default function ChatHeader({
           <div className="back" onClick={messageSessionBack}>
             {messagesSession && (
               <img
-                className={`${chatLoad ? "grey_back_icon" : "go-back-icon"}`}
+                className={`${!chatLoad ? `go-back-icon ${isToggled ? "light" : ""}` : "grey_back_icon"}`}
                 src={GoBack}
               />
             )}
@@ -30,14 +32,27 @@ export default function ChatHeader({
                 onClick={handleDeleteChat}
               >
                 <img
-                  className={`${isDisabled ? "hamburger_icon" : "grey_image"}`}
+                  className={`${isDisabled ? `delete_chat_icon ${isToggled ? "light" : ""}` : "grey_image"}`}
                   src={DeleteIcon}
                 />
               </button>
             )}
-            <div className="toggle">
-              <img className="toggle_icon" src={Hamburger} />
+            <div
+              className={`toggle-button ${isToggled ? "toggled" : ""}`}
+              onClick={handleToggle}
+            >
+              <div className="toggle-image-container">
+                <div className="wrapper">
+                  <img className="toggle_icon" src={isToggled ? lightMode : darkMode} />
+                </div>
+              </div>
             </div>
+            {/* <div
+              className={`toggle-button ${isToggled ? "toggled" : ""}`}
+              onClick={handleToggle}
+            >
+              <img className="toggle_icon" src={Hamburger} />
+            </div> */}
           </div>
         </div>
       </div>

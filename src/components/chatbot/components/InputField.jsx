@@ -20,7 +20,8 @@ function InputField({
   handleSubmitMessage,
   hasLineBreaks,
   updateRows,
-  inputRef
+  inputRef,
+  isToggled
 }) {
 //   const inputRef = useRef();
 //   const maxLength = 100;
@@ -116,7 +117,7 @@ function InputField({
         </form>
       </div>
       {text ? (
-        <p className="powered-by">
+        <p className={`powered-by ${isToggled ? "light" : ""}`}>
           Powered by
           <span className="ai-text"> AI </span>
           <span className="chatbot-text"> Chatbot</span>

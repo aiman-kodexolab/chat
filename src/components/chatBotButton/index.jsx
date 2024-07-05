@@ -21,7 +21,7 @@ const ChatbotButton = ({ apiKey }) => {
     checkKey();
   }, [apiKey]);
   const toggleChat = () => {
-    if (isApiKeyValid) {
+    if (!isApiKeyValid) {
       setIsOpen(!isOpen);
     }
   };
@@ -30,7 +30,7 @@ const ChatbotButton = ({ apiKey }) => {
     <div className="chatbot_wrapper">
       {isOpen && <Chatbot />}
       <div
-        className={`${isApiKeyValid ? "circle_button" : "disabled_button"}`}
+        className={`${!isApiKeyValid ? "circle_button" : "disabled_button"}`}
         onClick={toggleChat}
       >
         {isOpen ? (

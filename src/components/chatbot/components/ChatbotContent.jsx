@@ -19,7 +19,8 @@ export default function ChatbotContent({
   goBack,
   touched,
   conversationList,
-  sessionOnClick
+  sessionOnClick,
+  isToggled
 }) {
 
   return (
@@ -27,8 +28,8 @@ export default function ChatbotContent({
       {!isFormActive ? (
         <div style={{ position: "relative" }}>
           <div className="content-heading">
-            <p className="chat-heading">Hi there</p>
-            <p className="chat-text">
+            <p className={`chat-heading ${isToggled ? "light" : ""}`}>Hi there</p>
+            <p className={`chat-text ${isToggled ? "light" : ""}`}>
               This tab is for checking if the chatbot is perfectly trained.
             </p>
           </div>
@@ -39,6 +40,7 @@ export default function ChatbotContent({
                 key={index}
                 item={item}
                 onClick={sessionOnClick}
+                isToggled={isToggled}
               />
             ))}
           </div>

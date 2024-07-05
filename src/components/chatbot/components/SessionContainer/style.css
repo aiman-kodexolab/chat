@@ -7,12 +7,25 @@
   cursor: pointer;
 }
 
+.session_container.light {
+  background-color: white;
+  padding: 5px;
+  border: 1px solid #6c7275;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
 .heading {
   font-size: 13px;
   color: #ffffff;
   margin-bottom: 3px;
   font-weight: 500;
   font-family: "Inter", sans-serif;
+}
+
+.heading.light {
+  color: black;
 }
 
 .itemContainer {

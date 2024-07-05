@@ -4,10 +4,10 @@ import { goAhead } from "../../../../assets";
 import { replaceTags } from "../../../../utils/constant";
 import NameImage from "../NameImage";
 
-function SessionContainer({ onClick, item }) {
+function SessionContainer({ onClick, item, isToggled }) {
   return (
-    <div onClick={() => onClick(item)} className="session_container">
-      <h2 className="heading">Conversation</h2>
+    <div onClick={() => onClick(item)} className={`session_container ${isToggled ? "light" : ""}`}>
+      <h2 className={`heading ${isToggled ? "light" : ""}`}>Conversation</h2>
       <div className="itemContainer">
         <NameImage
           size="25px"

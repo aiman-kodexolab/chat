@@ -55,6 +55,7 @@ const Chatbot = () => {
   const [status, setStatus] = useState(true);
   const [email, setEmail] = useState("");
   const [chatLoad, setChatLoad] = useState(false);
+  const [isToggled, setIsToggled] = useState(false);
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
@@ -297,7 +298,7 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
-    const socket = io("web-chatbot-internal.onrender.com", {
+    const socket = io("127.0.0.1:8000", {
       transports: ["websocket"],
     });
     setSocket(socket);
@@ -371,22 +372,28 @@ const Chatbot = () => {
     setErrors({ userName: "", email: "", phoneNumber: "" });
   };
 
+  const handleToggle = () => {
+    setIsToggled(!isToggled);
+  }
+
   return (
     <>
       <div className="window_wrap">
         <div className="header">
           <div className="rotated-half-circle"></div>
-          <div className="avatar_wrap">
+          <div className={`avatar_wrap ${isToggled ? "light" : ""}`}>
             <img src={Widget} />
           </div>
         </div>
-        <div className="window">
+        <div className={`window ${isToggled ? "light" : ""}`}>
           <ChatHeader
             messagesSession={messagesSession}
             messageSessionBack={messageSessionBack}
             handleDeleteChat={handleDeleteChat}
             isDisabled={chatArray.length}
             chatLoad={chatLoad}
+            handleToggle={handleToggle}
+            isToggled={isToggled}
           />
           {messagesSession ? (
             <>
@@ -420,6 +427,7 @@ const Chatbot = () => {
                   handleSubmitMessage={handleSubmitMessage}
                   hasLineBreaks={hasLineBreaks}
                   updateRows={updateRows}
+                  isToggled={isToggled}
                 />
               ) : null}
             </>
@@ -438,6 +446,7 @@ const Chatbot = () => {
               touched={touched}
               conversationList={conversationList}
               sessionOnClick={sessionOnClick}
+              isToggled={isToggled}
             />
           )}
         </div>

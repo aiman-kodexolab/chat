@@ -6,3 +6,5 @@ export { default as SendMsg } from "./sendmsg.png";
 export { default as DeleteIcon } from "./delete.png";
 export { default as Send } from "./Send.svg";
 export { default as goAhead } from "./goAhead.png";
+export { default as lightMode} from "./lightMode.png";
+export { default as darkMode} from "./darkMode.png";
