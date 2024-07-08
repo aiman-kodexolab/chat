@@ -80,21 +80,15 @@ function InputField({
     textarea.style.height = "auto";
 
     const computedStyle = window.getComputedStyle(textarea);
-    console.log(computedStyle.lineHeight);
-    let lineHeight = parseInt(computedStyle.lineHeight, 10);
+    let lineHeight = parseInt(computedStyle.lineHeight, 10) || 20;
 
     if (isNaN(lineHeight)) {
       lineHeight = 20;
     }
-
-    const scrollHeight = textarea.scrollHeight;
-    // console.log(scrollHeight, lineHeight, computedStyle);
-
+    const padding = parseInt(computedStyle.paddingTop, 10) + parseInt(computedStyle.paddingBottom, 10);
+    const scrollHeight = textarea.scrollHeight - padding
     const newRows = Math.ceil(scrollHeight / lineHeight);
-    console.log("New rows:", newRows);
-
     setRows(newRows <= 3 ? newRows : 3);
-
     textarea.style.height = "";
   };
 

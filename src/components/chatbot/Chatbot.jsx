@@ -300,7 +300,7 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
-    const socket = io("127.0.0.1:8000", {
+    const socket = io("d2ge2om10dy7dl.cloudfront.net", {
       transports: ["websocket"],
     });
     setSocket(socket);
