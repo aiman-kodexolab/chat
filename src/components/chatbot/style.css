@@ -261,8 +261,7 @@
 }
 .no_session_box {
   position: absolute;
-  /* bottom: -17px; */
-  bottom: 160px;
+  bottom: 100px;
   text-align: center;
   align-self: center;
   transform: translate(50%, -122%);
