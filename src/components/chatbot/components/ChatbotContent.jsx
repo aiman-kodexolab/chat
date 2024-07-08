@@ -20,29 +20,31 @@ export default function ChatbotContent({
   touched,
   conversationList,
   sessionOnClick,
-  isToggled
+  isToggled,
 }) {
-
   return (
     <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
       {!isFormActive ? (
         <div style={{ position: "relative" }}>
           <div className="content-heading">
-            <p className={`chat-heading ${isToggled ? "light" : ""}`}>Hi there</p>
+            <p className={`chat-heading ${isToggled ? "light" : ""}`}>
+              Hi there
+            </p>
             <p className={`chat-text ${isToggled ? "light" : ""}`}>
               This tab is for checking if the chatbot is perfectly trained.
             </p>
           </div>
 
           <div className="conversations">
-            {Array.isArray(conversationList) && conversationList?.map((item, index) => (
-              <SessionContainer
-                key={index}
-                item={item}
-                onClick={sessionOnClick}
-                isToggled={isToggled}
-              />
-            ))}
+            {Array.isArray(conversationList) &&
+              conversationList?.map((item, index) => (
+                <SessionContainer
+                  key={index}
+                  item={item}
+                  onClick={sessionOnClick}
+                  isToggled={isToggled}
+                />
+              ))}
           </div>
           {Array.isArray(conversationList) && conversationList?.length ? (
             <>
@@ -55,7 +57,10 @@ export default function ChatbotContent({
             </>
           ) : (
             <div className="no_session_box">
-              <NewConversationBtn className="no_session" onClick={startSession}/>
+              <NewConversationBtn
+                className="no_session"
+                onClick={startSession}
+              />
             </div>
           )}
         </div>
@@ -81,6 +86,7 @@ export default function ChatbotContent({
                   required
                   value={values?.userName}
                   onChange={handleChange("userName")}
+                  theme={isToggled}
                   error={
                     touched?.userName && errors?.userName
                       ? errors?.userName
@@ -91,18 +97,15 @@ export default function ChatbotContent({
                   label="Your Email"
                   required
                   value={values?.email}
+                  theme={isToggled}
                   onChange={handleChange("email")}
                   error={touched?.email && errors?.email ? errors?.email : null}
                 />
                 <TransitionInput
                   label="Your Phone Number"
                   value={values.phone_number}
+                  theme={isToggled}
                   onChange={handleChange("phone_number")}
-                  // error={
-                  //   touched?.phone_number && errors?.phone_number
-                  //     ? errors?.phone_number
-                  //     : null
-                  // }
                 />
               </div>
               <div className="form-footer">

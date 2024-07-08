@@ -62,6 +62,9 @@
 }
 .window.light {
   background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 .line_break {
   height: 1px;
@@ -116,7 +119,10 @@
   background-color: #232627;
 }
 .toggle-button.toggled {
-  background-color: #ffffff;
+  background-color: #ffffff06;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .toggle-image-container {
@@ -146,7 +152,7 @@
   margin: 20px;
   border-radius: 9px;
   overflow: auto;
-  border: 1px solid;
+  border: 2px solid;
   border-color: #079485;
 }
 .form_content {
@@ -260,7 +266,7 @@
   text-align: center;
   align-self: center;
   transform: translate(50%, -122%);
-  top: 50%;
+  top: 60%;
 }
 .session_box {
   display: flex;
@@ -520,6 +526,9 @@
   font-weight: medium;
   border: none;
   outline: none;
+}
+.input-textarea .theme{
+  color:#141718
 }
 
 .input-textarea::placeholder {

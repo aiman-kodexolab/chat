@@ -72,6 +72,8 @@ const Chatbot = () => {
     updateRows(e.target);
   };
 
+
+
   const handlePaste = (event) => {
     const pasteData = event.clipboardData.getData("text");
     const existingData = messages || "";
@@ -374,7 +376,7 @@ const Chatbot = () => {
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
-  }
+  };
 
   return (
     <>
@@ -406,7 +408,6 @@ const Chatbot = () => {
                 <InputField
                   style={{
                     border: "1px solid",
-
                     borderImageSource:
                       "linear-gradient(90deg, #079485 0%, #115588 100%)",
                   }}
@@ -417,17 +418,18 @@ const Chatbot = () => {
                   setValue={setMessages}
                   waitingMessage={"Waiting for message"}
                   text={text}
-                  rows={rows}
-                  limit={limit}
-                  maxLength={maxLength}
-                  inputRef={inputRef}
-                  handleInputChange={handleInputChange}
-                  handlePaste={handlePaste}
-                  handleKeyPress={handleKeyPress}
-                  handleSubmitMessage={handleSubmitMessage}
-                  hasLineBreaks={hasLineBreaks}
-                  updateRows={updateRows}
+                  // rows={rows}
+                  // limit={limit}
+                  // maxLength={maxLength}
+                  // inputRef={inputRef}
+                  // handleInputChange={handleInputChange}
+                  // handlePaste={handlePaste}
+                  // handleKeyPress={handleKeyPress}
+                  // handleSubmit={handleSubmitMessage}
+                  // hasLineBreaks={hasLineBreaks}
+                  // updateRows={updateRows}
                   isToggled={isToggled}
+                  theme={isToggled}
                 />
               ) : null}
             </>

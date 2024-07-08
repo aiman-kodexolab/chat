@@ -11,93 +11,106 @@ function InputField({
   waitingMessage,
   text,
   setValue,
-  rows,
-  maxLength,
-  limit,
-  handleInputChange,
-  handlePaste,
-  handleKeyPress,
-  handleSubmitMessage,
-  hasLineBreaks,
-  updateRows,
-  inputRef,
-  isToggled
+  theme,
+  isToggled,
 }) {
-//   const inputRef = useRef();
-//   const maxLength = 100;
-//   const [limit, setLimit] = useState(false);
-//   const [rows, setRows] = useState(1);
+  const inputRef = useRef();
+  const maxLength = 100;
+  const [limit, setLimit] = useState(false);
+  const [rows, setRows] = useState(1);
 
-//   const handleInputChange = (e) => {
-//     const inputValue = e.target.value;
-//     if (!text) {
-//       if (inputValue?.length <= maxLength) {
-//         setValue(inputValue);
-//         setLimit(false);
-//       } else {
-//         setLimit(true);
-//       }
-//     } else {
-//       setValue(inputValue);
-//     }
-//     updateRows(e.target);
-//   };
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    if (!text) {
+      if (inputValue?.length <= maxLength) {
+        setValue(inputValue);
+        setLimit(false);
+      } else {
+        setLimit(true);
+      }
+    } else {
+      setValue(inputValue);
+    }
+    updateRows(e.target);
+  };
 
-//   const handlePaste = (event) => {
-//     const pasteData = event.clipboardData.getData("text");
-//     const existingData = value || "";
-//     const newText = existingData + pasteData;
-//     setLimit(false);
-//     if (hasLineBreaks(pasteData)) {
-//       setRows(3);
-//     }
-//     if (newText.length > maxLength) {
-//       event.preventDefault();
-//       const truncatedText = newText.substring(0, maxLength);
-//       setValue(truncatedText);
-//       setLimit(true);
-//     } else {
-//       updateRows({ value: newText });
-//     }
-//   };
+  const handlePaste = (event) => {
+    const pasteData = event.clipboardData.getData("text");
+    const existingData = value || "";
+    const newText = existingData + pasteData;
+    setLimit(false);
+    if (hasLineBreaks(pasteData)) {
+      setRows(3);
+    }
+    if (newText.length > maxLength) {
+      event.preventDefault();
+      const truncatedText = newText.substring(0, maxLength);
+      setValue(truncatedText);
+      setLimit(true);
+    } else {
+      updateRows({ value: newText });
+    }
+  };
 
-//   const handleKeyPress = (event) => {
-//     if (event.key === "Enter" && !event.shiftKey) {
-//       event.preventDefault();
-//       handleSubmitMessage(event);
-//     }
-//   };
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit(event);
+    }
+  };
 
-//   const handleSubmitMessage = (event) => {
-//     sendMessage(event);
-//     setRows(1);
-//     setLimit(false);
-//   };
+  const handleSubmit = (event) => {
+    sendMessage(event);
+    setRows(1);
+    setLimit(false);
+  };
 
-//   function hasLineBreaks(text) {
-//     const lineBreakPattern = /\r?\n/;
-//     return lineBreakPattern.test(text);
-//   }
+  function hasLineBreaks(text) {
+    const lineBreakPattern = /\r?\n/;
+    return lineBreakPattern.test(text);
+  }
 
-//   const updateRows = (textarea) => {
-//     if (textarea.value.length === 0) {
-//       setRows(1);
-//       return;
-//     }
-//     textarea.style.height = "auto";
-//     const rowHeight = parseInt(window.getComputedStyle(textarea).lineHeight, 10);
-//     const newRows = Math.floor(textarea.scrollHeight / rowHeight);
-//     setRows(newRows <= 3 ? newRows : 3);
-//     textarea.style.height = "";
-//   };
+  const updateRows = (textarea) => {
+    if (!textarea) return;
+    if (textarea.value.length === 0) {
+      setRows(1);
+      return;
+    }
+
+    textarea.style.height = "auto";
+
+    const computedStyle = window.getComputedStyle(textarea);
+    console.log(computedStyle.lineHeight);
+    let lineHeight = parseInt(computedStyle.lineHeight, 10);
+
+    if (isNaN(lineHeight)) {
+      lineHeight = 20;
+    }
+
+    const scrollHeight = textarea.scrollHeight;
+    // console.log(scrollHeight, lineHeight, computedStyle);
+
+    const newRows = Math.ceil(scrollHeight / lineHeight);
+    console.log("New rows:", newRows);
+
+    setRows(newRows <= 3 ? newRows : 3);
+
+    textarea.style.height = "";
+  };
 
   return (
     <div className="input-container">
-      <div style={style} className={`input-wrapper ${limit ? "limit-reached" : ""} ${className}`}>
-        <form onSubmit={handleSubmitMessage} className="input-form">
+      <div
+        style={style}
+        className={`input-wrapper ${limit ? "limit-reached" : ""} ${className}`}
+      >
+        <form onSubmit={handleSubmit} className="input-form">
           <textarea
             ref={inputRef}
-            className={`input-textarea ${limit ? "text-limit" : ""}`}
+            style={{ caretColor: theme ? "#141718" : "white" }}
+            className={`input-textarea ${theme && "theme"} ${
+              limit ? "text-limit" : ""
+            }`}
             placeholder={disabled ? waitingMessage : "Type a message"}
             value={value}
             onChange={handleInputChange}
