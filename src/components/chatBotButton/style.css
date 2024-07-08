@@ -39,6 +39,12 @@
   width: 65px;
   height: 65px;
 }
+.open_icon.disabled {
+  object-fit: cover;
+  width: 65px;
+  height: 65px;
+  filter: invert(50%) grayscale(100%);
+}
 .close_icon {
   width: 65px;
   height: 65px;
