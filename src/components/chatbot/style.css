@@ -524,6 +524,7 @@
   border: none;
   outline: none;
   padding: 0px;
+  transition: none;
 }
 .input-textarea .theme{
   color:#141718
