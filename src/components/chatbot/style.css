@@ -121,7 +121,7 @@
   justify-content: center;
   cursor: pointer;
   position: relative;
-  overflow: hidden;
+  overflow: hidden !important;
   background-color: #232627;
   padding: 13px 0;
 }
@@ -190,7 +190,7 @@
   font-family: Inter, sans-serif;
   width: 100%;
   font-weight: bold;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 .chat-heading.light {
   color: black;
@@ -220,7 +220,7 @@
   font-weight: 500;
   letter-spacing: 0px;
   text-transform: none;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .start_session {
@@ -354,7 +354,7 @@
   font-weight: 500;
   letter-spacing: 0px;
   text-transform: none;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 /* conversation */
 .conversations {

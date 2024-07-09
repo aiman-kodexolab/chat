@@ -10,7 +10,7 @@
 }
 
 .content-messages p {
-  overflow: hidden;
+  overflow: hidden !important;
   line-height: 1rem;
   font-family: Poppins, sans-serif;
 }
