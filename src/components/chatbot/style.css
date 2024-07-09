@@ -88,6 +88,10 @@
   background: transparent;
   border: none;
   padding: 0px;
+  cursor: pointer;
+}
+.hamburger:hover {
+  background: transparent;
 }
 .grey_image {
   filter: invert(50%) grayscale(100%);
