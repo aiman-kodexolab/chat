@@ -143,7 +143,7 @@
 }
 
 .toggle-button.toggled .toggle-image-container {
-  transform: translateX(38%);
+  transform: translateX(33%);
 }
 
 .toggle-button .toggle-image-container {
@@ -217,7 +217,7 @@
   font-family: "Poppins, sans-serif";
   color: white;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 0px;
   text-transform: none;
 }
 
@@ -369,7 +369,7 @@
 }
 
 .chat-container.expanded {
-  height: 40vh;
+  height: 270px;
 }
 
 .chat-container.collapsed {
@@ -541,6 +541,7 @@
   background-color: transparent;
   border-style: none;
   border-color: none;
+  color: white
 }
 
 .message-submit-button {
