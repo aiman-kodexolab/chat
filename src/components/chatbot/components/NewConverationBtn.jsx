@@ -14,7 +14,7 @@ const NewConversationBtn = ({ onClick, isLoading, buttonSize, className, style }
       {/* ) : ( */}
         <>
           <img src={SendMsg} alt="" className="send-msg-icon" style={{width: '15px', height: '15px'}} />
-          <p className="new-conversation-text" style={{fontFamily: 'sans-serif', color: 'white', fontWeight: 500, fontSize: '0.85rem'}}>
+          <p className="new-conversation-text">
             New Conversation
           </p>
         </>
