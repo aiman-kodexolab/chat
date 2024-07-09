@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "../style.css";
 import TextBlock from "./TextBlock";
 
-const MessagesSession = ({ status, chatArray, chatLoad }) => {
+const MessagesSession = ({ status, chatArray, chatLoad, isToggled }) => {
   const endRef = useRef(null);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const MessagesSession = ({ status, chatArray, chatLoad }) => {
             );
           }
         })}
-      {chatLoad && <div className="loader"></div>}
+      {chatLoad && <div className={`loader ${isToggled ? "light" : ""}`}></div>}
       <div ref={endRef}></div>
     </div>
   );

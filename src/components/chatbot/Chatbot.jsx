@@ -341,6 +341,7 @@ const Chatbot = () => {
   const messageSessionBack = () => {
     if (!chatLoad) {
       setMessagesSession(false);
+      setMessages("");
       setChatArray([]);
     }
   };
@@ -402,6 +403,7 @@ const Chatbot = () => {
                 status={status}
                 chatArray={chatArray}
                 chatLoad={chatLoad}
+                isToggled={isToggled}
               />
               {status ? (
                 <InputField

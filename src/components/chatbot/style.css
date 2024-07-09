@@ -187,7 +187,7 @@
 .chat-heading {
   color: white;
   font-size: 15px;
-  font-family: "Inter", sans-serif;
+  font-family: Inter, sans-serif;
   width: 100%;
   font-weight: bold;
   overflow: hidden;
@@ -199,7 +199,7 @@
 .chat-text {
   color: white;
   font-size: 13px;
-  font-family: "Inter", sans-serif;
+  font-family: Inter, sans-serif;
   width: 100%;
   font-weight: bold;
 }
@@ -215,7 +215,7 @@
 
 .new-conversation-text {
   font-size: 14px;
-  font-family: "Poppins, sans-serif";
+  font-family: Poppins, sans-serif;
   color: white;
   font-weight: 500;
   letter-spacing: 0px;
@@ -287,8 +287,8 @@
 .form-header {
   display: flex;
   padding: 12px 9px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
   background: linear-gradient(90deg, #079485 0%, #115588 100%);
   justify-content: center;
   align-items: center;
@@ -310,7 +310,7 @@
 .form-instruction {
   color: white;
   font-size: 12px;
-  font-family: "Inter", sans-serif;
+  font-family: Inter, sans-serif;
   font-weight: normal;
   width: 91%;
   margin-left: 10px;
@@ -349,7 +349,7 @@
 
 .submit-text {
   font-size: 14px;
-  font-family: "Poppins, sans-serif";
+  font-family: Poppins, sans-serif;
   color: white;
   font-weight: 500;
   letter-spacing: 0px;
@@ -394,7 +394,7 @@
 }
 
 .text-block .header-text p {
-  font-family: "Inter", sans-serif;
+  font-family: Inter, sans-serif;
   font-size: 15px;
 }
 
@@ -531,7 +531,10 @@
   padding: 0px;
   transition: none;
 }
-.input-textarea .theme {
+.input-textarea.theme {
+  color: #141718;
+}
+.input-textarea.theme:focus {
   color: #141718;
 }
 
@@ -577,10 +580,10 @@
 
 .powered-by {
   padding-bottom: 10px;
-  font-family: sans-serif;
   font-size: 10px;
   text-align: center;
   color: white;
+  font-family: Poppins, sans-serif;
 }
 .powered-by.light {
   color: black;
@@ -646,4 +649,68 @@
   80% {
     background-position: 0% 50%, 50% 50%, 100% 100%;
   }
+}
+.loader.light {
+  width: 33px;
+  aspect-ratio: 3;
+  --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 50%;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+  20% {
+    background-position: 0% 0%, 50% 50%, 100% 50%;
+  }
+  40% {
+    background-position: 0% 100%, 50% 0%, 100% 50%;
+  }
+  60% {
+    background-position: 0% 50%, 50% 100%, 100% 0%;
+  }
+  80% {
+    background-position: 0% 50%, 50% 50%, 100% 100%;
+  }
+}
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #0cf0c0;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #079485;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #BDBDBD;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  caret-color: white;
+}
+input:-webkit-autofill:not(:focus) {
+  background-color: transparent !important;
 }

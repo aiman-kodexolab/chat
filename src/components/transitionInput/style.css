@@ -12,21 +12,20 @@
 }
 
 /* Prevent autofill background color change */
-.input-container input[type="text"]:-webkit-autofill,
-.input-container input[type="text"]:-webkit-autofill:hover,
-.input-container input[type="text"]:-webkit-autofill:focus,
-.input-container input[type="text"]:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #141718 inset !important;
+.input-field input[type="text"]:-webkit-autofill,
+.input-field input[type="text"]:-webkit-autofill:hover,
+.input-field input[type="text"]:-webkit-autofill:focus,
+.input-field input[type="text"]:-webkit-autofill:active {
   -webkit-text-fill-color: white !important;
 }
 
-.input-container input[type="text"]:-webkit-autofill,
-.input-container input[type="text"]:-webkit-autofill:hover,
-.input-container input[type="text"]:-webkit-autofill:focus,
-.input-container input[type="text"]:-webkit-autofill:active,
-.theme {
-  -webkit-box-shadow: 0 0 0 30px white inset !important;
-  -webkit-text-fill-color: #141718 !important;
+.input-field input[type="text"]:-webkit-autofill,
+.input-field input[type="text"]:-webkit-autofill:hover,
+.input-field input[type="text"]:-webkit-autofill:focus,
+.input-field input[type="text"]:-webkit-autofill:active,
+.input-field.theme {
+  -webkit-text-fill-color: black !important;
+  box-shadow: inset 0 0 20px 20px white;
 }
 
 .input-container .label {
