@@ -179,8 +179,7 @@ const Chatbot = () => {
 
     setTouched({ ...touched, [field]: true });
     if (!submitAttempted) {
-      setSubmitAttempted(true); // Set submitAttempted to true on first interaction with any field
-    }
+      setSubmitAttempted(true);    }
   };
 
   const handleDeleteChat = async (field) => {

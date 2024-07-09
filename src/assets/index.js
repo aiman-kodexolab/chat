@@ -1,10 +1,33 @@
-export { default as Widget } from "./Widget.png";
-export { default as Dropdown } from "./dropdown.png";
-export { default as Hamburger } from "./more.png";
-export { default as GoBack } from "./GoBack.png";
-export { default as SendMsg } from "./sendmsg.png";
-export { default as DeleteIcon } from "./delete.png";
-export { default as Send } from "./Send.svg";
-export { default as goAhead } from "./goAhead.png";
-export { default as lightMode} from "./lightMode.png";
-export { default as darkMode} from "./darkMode.png";
+const darkMode =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/darkMode.png";
+const Widget =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/Widget.png";
+const Dropdown =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/dropdown.png";
+const Hamburger =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/more.png";
+const GoBack =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/GoBack.png";
+const SendMsg =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/sendmsg.png";
+const DeleteIcon =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/delete.png";
+const Send =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/Send.svg";
+const goAhead =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/goAhead.png";
+const lightMode =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/lightMode.png";
+
+export {
+  darkMode,
+  Widget,
+  Dropdown,
+  Hamburger,
+  GoBack,
+  SendMsg,
+  DeleteIcon,
+  Send,
+  goAhead,
+  lightMode,
+};
