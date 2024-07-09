@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import ChatbotButton from "./components/chatBotButton/index.jsx";
-import { verifyKey } from "./API/api.js";
 
 // Function to render the chatbot in the given container
 window.renderChatbot = async (containerId) => {

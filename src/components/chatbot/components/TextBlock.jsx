@@ -9,7 +9,7 @@ function TextBlock({ isUser, name, children, time }) {
 
   const renderContent = (content) => {
     if (isUser) {
-      return <div dangerouslySetInnerHTML={{ __html: replaceTags(content) }} />;
+      return <div dangerouslySetInnerHTML={{ __html: replaceTags(content) }} style={{lineHeight: "1rem"}}/>;
     } else {
       return <Markdown markdown={content} />;
     }

@@ -12,7 +12,7 @@ async function verifyKey(method, apiKey) {
 async function getSessions(method, system_id) {
   try {
     const result = await apiCall(
-      `session/get_user_sessions?system_id=${system_id}&user_id=`,
+      `session/get_user_sessions?system_id=${system_id}`,
       method
     );
     return result;

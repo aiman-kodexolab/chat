@@ -39,12 +39,14 @@
   font-family: "Inter", sans-serif;
   font-size: 13px;
   color: #6c7275;
+  overflow: hidden;
 }
 
 .messages {
   font-family: "Inter", sans-serif;
   font-size: 7px;
   color: #6c7275;
+  overflow: hidden;
 }
 
 .status {

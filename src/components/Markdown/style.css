@@ -8,3 +8,8 @@
 .content li {
   margin-bottom: 5px;
 }
+
+.content p {
+  overflow: hidden;
+  line-height: 1rem;
+}

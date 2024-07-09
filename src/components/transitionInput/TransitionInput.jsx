@@ -9,7 +9,6 @@ export default function TransitionInput({
   error,
   theme,
 }) {
-  console.log("err", error);
   return (
     <div>
       <div
