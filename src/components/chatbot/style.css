@@ -123,7 +123,7 @@
   position: relative;
   overflow: hidden;
   background-color: #232627;
-  padding: 0px;
+  padding: 13px 0;
 }
 .toggle-button.toggled {
   background-color: #ffffff06;
@@ -190,6 +190,7 @@
   font-family: "Inter", sans-serif;
   width: 100%;
   font-weight: bold;
+  overflow: hidden;
 }
 .chat-heading.light {
   color: black;
@@ -313,6 +314,7 @@
   font-weight: normal;
   width: 91%;
   margin-left: 10px;
+  line-height: 1rem;
 }
 
 .form-body {
