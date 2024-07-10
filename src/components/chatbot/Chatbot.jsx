@@ -412,23 +412,13 @@ const Chatbot = () => {
                     borderImageSource:
                       "linear-gradient(90deg, #079485 0%, #115588 100%)",
                   }}
-                  disabled={false}
+                  disabled={chatLoad}
                   sendMessage={sendMessage}
                   className={"hello"}
                   value={messages}
                   setValue={setMessages}
                   waitingMessage={"Waiting for message"}
                   text={text}
-                  // rows={rows}
-                  // limit={limit}
-                  // maxLength={maxLength}
-                  // inputRef={inputRef}
-                  // handleInputChange={handleInputChange}
-                  // handlePaste={handlePaste}
-                  // handleKeyPress={handleKeyPress}
-                  // handleSubmit={handleSubmitMessage}
-                  // hasLineBreaks={hasLineBreaks}
-                  // updateRows={updateRows}
                   isToggled={isToggled}
                   theme={isToggled}
                 />

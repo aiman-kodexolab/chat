@@ -116,7 +116,7 @@ function InputField({
           ></textarea>
           <button
             type="submit"
-            // disabled={disabled || !value?.trim()}
+            disabled={disabled || !value?.trim()}
             className="message-submit-button"
           >
             <img src={Send} alt="" className="message-send-icon" />
