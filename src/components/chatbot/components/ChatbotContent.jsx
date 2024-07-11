@@ -21,6 +21,9 @@ export default function ChatbotContent({
   conversationList,
   sessionOnClick,
   isToggled,
+  isFormLoading,
+  isFormSubmitLoading,
+  isConversationListLoading,
 }) {
   return (
     <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
@@ -52,14 +55,24 @@ export default function ChatbotContent({
                 <NewConversationBtn
                   className="start_session"
                   onClick={startSession}
+                  isFormLoading={isFormLoading}
+                  isConversationListLoading={isConversationListLoading}
                 />
               </div>
             </>
           ) : (
-            <div className="no_session_box">
+            <div
+              className={`no_session_box ${
+                isFormLoading || isConversationListLoading
+                  ? "adjust_loader"
+                  : ""
+              }`}
+            >
               <NewConversationBtn
                 className="no_session"
                 onClick={startSession}
+                isFormLoading={isFormLoading}
+                isConversationListLoading={isConversationListLoading}
               />
             </div>
           )}
@@ -111,11 +124,17 @@ export default function ChatbotContent({
               <div className="form-footer">
                 <button
                   type="submit"
-                  // disabled={loading}
+                  disabled={isFormSubmitLoading}
                   className="submit-button"
                 >
-                  <img src={SendMsg} alt="" className="send-icon" />
-                  <p className="submit-text">New Chat</p>
+                  {isFormSubmitLoading ? (
+                    <div className="new-conversation-loader"></div>
+                  ) : (
+                    <>
+                      <img src={SendMsg} alt="" className="send-icon" />
+                      <p className="submit-text">New Chat</p>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

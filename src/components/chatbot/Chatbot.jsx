@@ -56,6 +56,10 @@ const Chatbot = () => {
   const [email, setEmail] = useState("");
   const [chatLoad, setChatLoad] = useState(false);
   const [isToggled, setIsToggled] = useState(false);
+  const [isFormLoading, setIsFormLoading] = useState(false);
+  const [isFormSubmitLoading, setIsFormSubmitLoading] = useState(false);
+  const [isConversationListLoading, setIsConversationListLoading] =
+    useState(false);
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
@@ -71,8 +75,6 @@ const Chatbot = () => {
     }
     updateRows(e.target);
   };
-
-
 
   const handlePaste = (event) => {
     const pasteData = event.clipboardData.getData("text");
@@ -161,14 +163,17 @@ const Chatbot = () => {
 
   const startSession = async () => {
     try {
+      setIsFormLoading(true);
       const data = {
         system_id: systemId,
         created_on: sessionCreated,
         user_id: "",
       };
       const result = await createSession("POST", data);
+      setIsFormLoading(false);
       setSessionId(result?.data?.session_id);
       setIsFormActive(true);
+      getAllSessions();
     } catch (error) {
       console.error("Error starting session:", error);
     }
@@ -179,7 +184,8 @@ const Chatbot = () => {
 
     setTouched({ ...touched, [field]: true });
     if (!submitAttempted) {
-      setSubmitAttempted(true);    }
+      setSubmitAttempted(true);
+    }
   };
 
   const handleDeleteChat = async (field) => {
@@ -232,6 +238,7 @@ const Chatbot = () => {
       setErrors(newErrors);
       setTouched(newErrors);
     } else {
+      setIsFormSubmitLoading(true);
       const data = {
         user_name: values.userName,
         email: values.email,
@@ -242,6 +249,7 @@ const Chatbot = () => {
 
       const result = await sessionDetail("PUT", data);
       if (result.status_code === 200) {
+        setIsFormSubmitLoading(false);
         setEmail(values.email);
         chatHistory(sessionId);
         getAllSessions();
@@ -294,8 +302,10 @@ const Chatbot = () => {
   }, [values, touched]);
 
   const getAllSessions = async () => {
+    setIsConversationListLoading(true);
     const result = await getSessions("GET", systemId);
     setConversationList(result.data);
+    setIsConversationListLoading(false);
   };
 
   useEffect(() => {
@@ -440,6 +450,9 @@ const Chatbot = () => {
               conversationList={conversationList}
               sessionOnClick={sessionOnClick}
               isToggled={isToggled}
+              isFormLoading={isFormLoading}
+              isFormSubmitLoading={isFormSubmitLoading}
+              isConversationListLoading={isConversationListLoading}
             />
           )}
         </div>
