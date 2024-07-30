@@ -1,44 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Chatbot from "../chatbot/Chatbot.jsx";
 import "./style.css";
 import { Dropdown, Widget } from "../../assets";
-import { verifyKey } from "../../API/api.js";
+import { useVerifyKeyQuery } from "../../redux/api.js";
 
-const ChatbotButton = ({ apiKey }) => {
+const ChatbotButton = ({
+  apiKey = "cb-O316m_Qy5ejm9Yv4lJxXKlpWAT-BLWkjLxtYadeZoGYvdVEz",
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isApiKeyValid, setIsApiKeyValid] = useState(false);
-  useEffect(() => {
-    const checkKey = async () => {
-      try {
-        const result = await verifyKey("GET", apiKey);
-        setIsApiKeyValid(result);
-      } catch (error) {
-        console.error("Error verifying key:", error);
-      }
-    };
-
-    checkKey();
-  }, [apiKey]);
-  const toggleChat = () => {
-    if (isApiKeyValid) {
-      setIsOpen(!isOpen);
+  const { data } = useVerifyKeyQuery(
+    { apiKey },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !apiKey,
     }
+  );
+
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <div className="chatbot_wrapper">
-      {isOpen && <Chatbot />}
-      <div
-        className={`${isApiKeyValid ? "circle_button" : "disabled_button"}`}
-        onClick={toggleChat}
-      >
-        {isOpen ? (
-          <img className="close_icon" src={Dropdown} />
-        ) : (
-          <img className="open_icon" src={Widget} />
-        )}
-      </div>
-    </div>
+    <>
+      {data && (
+        <div className="chatbot_wrapper">
+          {isOpen && <Chatbot />}
+          <div className={"circle_button"} onClick={toggleChat}>
+            {isOpen ? (
+              <img className="close_icon" src={Dropdown} />
+            ) : (
+              <img className="open_icon" src={Widget} />
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

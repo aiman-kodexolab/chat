@@ -10,12 +10,13 @@ import {
   createSession,
   deleteChat,
   getChatHistory,
-  getSessions,
+  // getSessions,
   sessionDetail,
 } from "../../API/api";
 import MessagesSession from "./components/MessagesSession";
 import InputField from "./components/InputField";
 import { formatTime } from "../../utils/constant";
+import { useGetSessionsQuery } from "../../redux/api";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState("");
@@ -75,6 +76,22 @@ const Chatbot = () => {
     }
     updateRows(e.target);
   };
+
+  const {
+    data,
+    isLoading: loader,
+    refetch,
+  } = useGetSessionsQuery(
+    {
+      system_id: systemId,
+    },
+    {
+      skip: !systemId,
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  console.log("datata", data?.data);
 
   const handlePaste = (event) => {
     const pasteData = event.clipboardData.getData("text");
@@ -272,6 +289,7 @@ const Chatbot = () => {
 
   const goBack = () => {
     console.log("go back");
+    refetch();
     setIsFormActive(false);
     setGoBackForm(true);
     setValues({
@@ -303,8 +321,8 @@ const Chatbot = () => {
 
   const getAllSessions = async () => {
     setIsConversationListLoading(true);
-    const result = await getSessions("GET", systemId);
-    setConversationList(result.data);
+    // const result = await getSessions("GET", systemId);
+    // setConversationList(result.data);
     setIsConversationListLoading(false);
   };
 
@@ -349,6 +367,7 @@ const Chatbot = () => {
   }, []);
 
   const messageSessionBack = () => {
+    refetch()
     if (!chatLoad) {
       setMessagesSession(false);
       setMessages("");
@@ -360,6 +379,7 @@ const Chatbot = () => {
     const result = await getChatHistory("GET", sessionId);
     setChatArray(result.data);
   };
+
   const sessionOnClick = (item) => {
     if (item?.is_form_filled === true) {
       setChat(true);
@@ -447,7 +467,7 @@ const Chatbot = () => {
               handleChange={handleChange}
               goBack={goBack}
               touched={touched}
-              conversationList={conversationList}
+              conversationList={data?.data}
               sessionOnClick={sessionOnClick}
               isToggled={isToggled}
               isFormLoading={isFormLoading}
