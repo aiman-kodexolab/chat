@@ -8,20 +8,17 @@ const NewConversationBtn = ({
   buttonSize,
   className,
   style,
-  isConversationListLoading,
 }) => (
   <button
     className={`${className} ${
-      (isFormLoading || isConversationListLoading) && className === "no_session"
-        ? "adjust_loader"
-        : ""
+      isFormLoading && className === "no_session" ? "adjust_loader" : ""
     }`}
     onClick={onClick}
-    disabled={isFormLoading || isConversationListLoading}
+    disabled={isFormLoading}
     style={style}
   >
     <>
-      {isConversationListLoading || isFormLoading ? (
+      {isFormLoading ? (
         <div className="new-conversation-loader"></div>
       ) : (
         <>

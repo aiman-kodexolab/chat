@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import "../style.css";
 import TextBlock from "./TextBlock";
 
-const MessagesSession = ({ status, chatArray, chatLoad, isToggled }) => {
-  const endRef = useRef(null);
-
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatArray]);
-
+const MessagesSession = ({
+  status,
+  endRef,
+  chatArray,
+  chatLoad,
+  isToggled,
+}) => {
   return (
     <div className={`chat-container ${status ? "expanded" : "collapsed"}`}>
       {Array.isArray(chatArray) &&

@@ -1,22 +1,26 @@
-import React, { useRef } from "react";
-import { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Widget } from "../../assets";
 import "./style.css";
 import ChatHeader from "./components/ChatHeader";
 import ChatbotContent from "./components/ChatbotContent";
 import { useVisitorId } from "../../hooks/useVisitorId";
-import {
-  createSession,
-  deleteChat,
-  getChatHistory,
-  // getSessions,
-  sessionDetail,
-} from "../../API/api";
+import // createSession,
+// deleteChat,
+// getChatHistory,
+// getSessions,
+// sessionDetail,
+"../../API/api";
 import MessagesSession from "./components/MessagesSession";
 import InputField from "./components/InputField";
-import { formatTime } from "../../utils/constant";
-import { useGetSessionsQuery } from "../../redux/api";
+import { formatTime, socketUrl } from "../../utils/constant";
+import {
+  useCreateSessionMutation,
+  useDeleteChatMutation,
+  useGetChatHistoryQuery,
+  useGetSessionsQuery,
+  useSessionDetailsMutation,
+} from "../../redux/api";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState("");
@@ -44,13 +48,10 @@ const Chatbot = () => {
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [messagesSession, setMessagesSession] = useState(false);
   const [chatArray, setChatArray] = useState([]);
-  const inputRef = useRef();
+  const endRef = useRef();
   const maxLength = 100;
-  const [limit, setLimit] = useState(false);
-  const [rows, setRows] = useState(1);
   const systemId = useVisitorId();
   const [text, setText] = useState("hello");
-  const [conversationList, setConversationList] = useState([]);
   const sessionCreated = formatTime();
   const [sessionId, setSessionId] = useState("");
   const [status, setStatus] = useState(true);
@@ -59,27 +60,17 @@ const Chatbot = () => {
   const [isToggled, setIsToggled] = useState(false);
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [isFormSubmitLoading, setIsFormSubmitLoading] = useState(false);
-  const [isConversationListLoading, setIsConversationListLoading] =
-    useState(false);
+  // const [isConversationListLoading, setIsConversationListLoading] =useState(false);
+  const userObj =
+    localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
 
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    if (!text) {
-      if (inputValue?.length <= maxLength) {
-        setMessages(inputValue);
-        setLimit(false);
-      } else {
-        setLimit(true);
-      }
-    } else {
-      setMessages(inputValue);
-    }
-    updateRows(e.target);
-  };
-
+  //APIs
+  const [createSession, { isLoading }] = useCreateSessionMutation();
+  const [deleteChat, { isLoading: deleteChatLoader }] = useDeleteChatMutation();
+  const [sessionDetail, { isLoading: loading }] = useSessionDetailsMutation();
   const {
     data,
-    isLoading: loader,
+    isLoading: getSessionLoader,
     refetch,
   } = useGetSessionsQuery(
     {
@@ -90,22 +81,72 @@ const Chatbot = () => {
       refetchOnMountOrArgChange: true,
     }
   );
+  const { isLoading: chatHistoryLoader, data: chatData } =
+    useGetChatHistoryQuery(
+      {
+        session_id: sessionId,
+      },
+      {
+        skip: !sessionId,
+        refetchOnMountOrArgChange: true,
+      }
+    );
 
-  console.log("datata", data?.data);
+  //APIs
+
+  //Functions
+  function scrollToEnd() {
+    endRef?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
+
+  //Functions
+
+  //useEffects
+  useEffect(scrollToEnd, [chatArray]);
+
+  useEffect(() => {
+    if (chatData?.data) {
+      setChatArray(chatData?.data);
+    }
+    scrollToEnd();
+    return () => {
+      setChatArray([]);
+    };
+  }, [chatData]);
+
+  useEffect(() => {
+    if (userObj) {
+      setValues(userObj);
+    }
+  }, [sessionId]);
+
+  //useEffects
+
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    if (!text) {
+      if (inputValue?.length <= maxLength) {
+        setMessages(inputValue);
+      } else {
+      }
+    } else {
+      setMessages(inputValue);
+    }
+    updateRows(e.target);
+  };
 
   const handlePaste = (event) => {
     const pasteData = event.clipboardData.getData("text");
     const existingData = messages || "";
     const newText = existingData + pasteData;
-    setLimit(false);
     if (hasLineBreaks(pasteData)) {
-      setRows(3);
     }
     if (newText.length > maxLength) {
       event.preventDefault();
       const truncatedText = newText.substring(0, maxLength);
       setMessages(truncatedText);
-      setLimit(true);
     } else {
       updateRows({ value: newText });
     }
@@ -120,8 +161,6 @@ const Chatbot = () => {
 
   const handleSubmitMessage = (event) => {
     sendMessage(event);
-    setRows(1);
-    setLimit(false);
   };
 
   function hasLineBreaks(text) {
@@ -131,7 +170,6 @@ const Chatbot = () => {
 
   const updateRows = (textarea) => {
     if (textarea.value.length === 0) {
-      setRows(1);
       return;
     }
     textarea.style.height = "auto";
@@ -140,9 +178,9 @@ const Chatbot = () => {
       10
     );
     const newRows = Math.floor(textarea.scrollHeight / rowHeight);
-    setRows(newRows <= 3 ? newRows : 3);
     textarea.style.height = "";
   };
+
   const sendMessage = (e) => {
     e.preventDefault();
 
@@ -180,17 +218,32 @@ const Chatbot = () => {
 
   const startSession = async () => {
     try {
+      const response = await createSession({
+        system_id: systemId,
+        created_on: sessionCreated,
+        user_id: "",
+      });
+      console.log("rere", response?.data?.data);
+      setSessionId(response?.data?.data?.session_id);
+      setIsFormActive(true);
+    } catch (e) {
+      console.log("Error starting session:", e);
+    }
+  };
+
+  const startSessions = async () => {
+    try {
       setIsFormLoading(true);
       const data = {
         system_id: systemId,
         created_on: sessionCreated,
         user_id: "",
       };
-      const result = await createSession("POST", data);
+      // const result = await createSession("POST", data);
       setIsFormLoading(false);
-      setSessionId(result?.data?.session_id);
+      // setSessionId(result?.data?.session_id);
       setIsFormActive(true);
-      getAllSessions();
+      // getAllSessions();
     } catch (error) {
       console.error("Error starting session:", error);
     }
@@ -206,12 +259,18 @@ const Chatbot = () => {
   };
 
   const handleDeleteChat = async (field) => {
-    const data = {
-      session_id: sessionId,
-    };
-    await deleteChat("DELETE", data);
-    getAllSessions();
-    setChatArray([]);
+    try {
+      const response = await deleteChat({
+        session_id: sessionId,
+      });
+      setChatArray([]);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+    // await deleteChat("DELETE", data);
+    // getAllSessions();
+    // setChatArray([]);
   };
 
   const validate = () => {
@@ -230,6 +289,14 @@ const Chatbot = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    const userData = {
+      userName: values.userName,
+      email: values.email,
+      phoneNumber: values.phoneNumber,
+    };
+    const userString = JSON.stringify(userData);
+    localStorage.setItem("user", userString);
+
     const newErrors = { userName: "", email: "" };
     let hasErrors = false;
 
@@ -256,6 +323,7 @@ const Chatbot = () => {
       setTouched(newErrors);
     } else {
       setIsFormSubmitLoading(true);
+
       const data = {
         user_name: values.userName,
         email: values.email,
@@ -264,12 +332,19 @@ const Chatbot = () => {
         user_id: "",
       };
 
-      const result = await sessionDetail("PUT", data);
-      if (result.status_code === 200) {
+      const result = await sessionDetail(data);
+      if (result.data.status_code === 200) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            userName: values.userName,
+            email: values.email,
+            phoneNumber: values.phoneNumber,
+          })
+        );
         setIsFormSubmitLoading(false);
         setEmail(values.email);
-        chatHistory(sessionId);
-        getAllSessions();
+        // getAllSessions();
         resetForm();
         setMessagesSession(true);
         setIsFormActive(false);
@@ -309,25 +384,26 @@ const Chatbot = () => {
     });
   };
 
-  useEffect(() => {
-    if (systemId) {
-      getAllSessions();
-    }
-  }, [systemId]);
+  // useEffect(() => {
+  //   if (systemId) {
+  //     getAllSessions();
+  //   }
+  // }, [systemId]);
+
+  // useEffect(() => {
+  //   validate();
+  // }, [values, touched]);
+
+  // const getAllSessions = async () => {
+  //   setIsConversationListLoading(true);
+
+  //   setIsConversationListLoading(false);
+  // };
+
+  //"d2ge2om10dy7dl.cloudfront.net"
 
   useEffect(() => {
-    validate();
-  }, [values, touched]);
-
-  const getAllSessions = async () => {
-    setIsConversationListLoading(true);
-    // const result = await getSessions("GET", systemId);
-    // setConversationList(result.data);
-    setIsConversationListLoading(false);
-  };
-
-  useEffect(() => {
-    const socket = io("d2ge2om10dy7dl.cloudfront.net", {
+    const socket = io(socketUrl, {
       transports: ["websocket"],
     });
     setSocket(socket);
@@ -367,7 +443,7 @@ const Chatbot = () => {
   }, []);
 
   const messageSessionBack = () => {
-    refetch()
+    refetch();
     if (!chatLoad) {
       setMessagesSession(false);
       setMessages("");
@@ -375,17 +451,11 @@ const Chatbot = () => {
     }
   };
 
-  const chatHistory = async (sessionId) => {
-    const result = await getChatHistory("GET", sessionId);
-    setChatArray(result.data);
-  };
-
   const sessionOnClick = (item) => {
     if (item?.is_form_filled === true) {
       setChat(true);
       setMessagesSession(true);
       setSessionId(item?._id);
-      chatHistory(item?._id);
       setEmail(item?.email);
     } else {
       setIsFormActive(true);
@@ -434,6 +504,7 @@ const Chatbot = () => {
                 chatArray={chatArray}
                 chatLoad={chatLoad}
                 isToggled={isToggled}
+                endRef={endRef}
               />
               {status ? (
                 <InputField
@@ -470,9 +541,8 @@ const Chatbot = () => {
               conversationList={data?.data}
               sessionOnClick={sessionOnClick}
               isToggled={isToggled}
-              isFormLoading={isFormLoading}
+              isFormLoading={isLoading}
               isFormSubmitLoading={isFormSubmitLoading}
-              isConversationListLoading={isConversationListLoading}
             />
           )}
         </div>
