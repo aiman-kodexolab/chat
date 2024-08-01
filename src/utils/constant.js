@@ -35,9 +35,9 @@ export const formatTime = () => {
   return `${formattedDate} . ${formattedTime}`;
 };
 
-export const apiUrl = process.env.REACT_APP_API_URL;
+export const apiUrl = process.env.REACT_APP_API_URL || "";
 
-export const socketUrl = process.env.REACT_APP_SOCKET_URL
+export const socketUrl = process.env.REACT_APP_SOCKET_URL || "";
 
 export const replaceTags = (text) => {
   const word = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");

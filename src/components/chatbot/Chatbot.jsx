@@ -5,12 +5,12 @@ import "./style.css";
 import ChatHeader from "./components/ChatHeader";
 import ChatbotContent from "./components/ChatbotContent";
 import { useVisitorId } from "../../hooks/useVisitorId";
-import // createSession,
+// import  createSession,
 // deleteChat,
-// getChatHistory,
+//  getChatHistory,
 // getSessions,
 // sessionDetail,
-"../../API/api";
+// "../../API/api";
 import MessagesSession from "./components/MessagesSession";
 import InputField from "./components/InputField";
 import { formatTime, socketUrl } from "../../utils/constant";
@@ -18,14 +18,15 @@ import {
   useCreateSessionMutation,
   useDeleteChatMutation,
   useGetChatHistoryQuery,
+  useGetProfileQuery,
   useGetSessionsQuery,
   useSessionDetailsMutation,
 } from "../../redux/api";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState("");
-  const [input, setInput] = useState("");
-  const [sendData, setSendData] = useState({});
+  // const [input, setInput] = useState("");
+  // const [sendData, setSendData] = useState({});
   const [chat, setChat] = useState(true);
   const [isFormActive, setIsFormActive] = useState(false);
   const [goBackForm, setGoBackForm] = useState(false);
@@ -49,7 +50,7 @@ const Chatbot = () => {
   const [messagesSession, setMessagesSession] = useState(false);
   const [chatArray, setChatArray] = useState([]);
   const endRef = useRef();
-  const maxLength = 100;
+  // const maxLength = 100;
   const systemId = useVisitorId();
   const [text, setText] = useState("hello");
   const sessionCreated = formatTime();
@@ -63,6 +64,9 @@ const Chatbot = () => {
   // const [isConversationListLoading, setIsConversationListLoading] =useState(false);
   const userObj =
     localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
+  const currentSession =
+    localStorage.getItem("currentSession") &&
+    JSON.parse(localStorage.getItem("currentSession"));
 
   //APIs
   const [createSession, { isLoading }] = useCreateSessionMutation();
@@ -81,6 +85,7 @@ const Chatbot = () => {
       refetchOnMountOrArgChange: true,
     }
   );
+  const { data: profileData, isLoading: profileLoader } = useGetProfileQuery();
   const { isLoading: chatHistoryLoader, data: chatData } =
     useGetChatHistoryQuery(
       {
@@ -91,7 +96,6 @@ const Chatbot = () => {
         refetchOnMountOrArgChange: true,
       }
     );
-
   //APIs
 
   //Functions
@@ -122,64 +126,75 @@ const Chatbot = () => {
     }
   }, [sessionId]);
 
+  useEffect(() => {
+    if (currentSession?.is_form_filled) {
+      setSessionId(currentSession?._id);
+      setMessagesSession(true);
+    }
+  }, [currentSession]);
+
+  useEffect(() => {
+    validate();
+  }, [values, touched]);
+
   //useEffects
 
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    if (!text) {
-      if (inputValue?.length <= maxLength) {
-        setMessages(inputValue);
-      } else {
-      }
-    } else {
-      setMessages(inputValue);
-    }
-    updateRows(e.target);
-  };
+  // const handleInputChange = (e) => {
+  //   const inputValue = e.target.value;
+  //   if (!text) {
+  //     if (inputValue?.length <= maxLength) {
+  //       setMessages(inputValue);
+  //     } else {
+  //     }
+  //   } else {
+  //     setMessages(inputValue);
+  //   }
+  //   updateRows(e.target);
+  // };
 
-  const handlePaste = (event) => {
-    const pasteData = event.clipboardData.getData("text");
-    const existingData = messages || "";
-    const newText = existingData + pasteData;
-    if (hasLineBreaks(pasteData)) {
-    }
-    if (newText.length > maxLength) {
-      event.preventDefault();
-      const truncatedText = newText.substring(0, maxLength);
-      setMessages(truncatedText);
-    } else {
-      updateRows({ value: newText });
-    }
-  };
+  // const handlePaste = (event) => {
+  //   const pasteData = event.clipboardData.getData("text");
+  //   const existingData = messages || "";
+  //   const newText = existingData + pasteData;
+  //   if (hasLineBreaks(pasteData)) {
+  //   }
+  //   if (newText.length > maxLength) {
+  //     event.preventDefault();
+  //     const truncatedText = newText.substring(0, maxLength);
+  //     setMessages(truncatedText);
+  //   } else {
+  //     updateRows({ value: newText });
+  //   }
+  // };
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      handleSubmitMessage(event);
-    }
-  };
+  // const handleKeyPress = (event) => {
+  //   if (event.key === "Enter" && !event.shiftKey) {
+  //     event.preventDefault();
+  //      handleSubmitMessage(event);
+  //   }
+  // };
 
-  const handleSubmitMessage = (event) => {
-    sendMessage(event);
-  };
+  // const handleSubmitMessage = (event) => {
+  //   sendMessage(event);
+  // };
 
-  function hasLineBreaks(text) {
-    const lineBreakPattern = /\r?\n/;
-    return lineBreakPattern.test(text);
-  }
+  // function hasLineBreaks(text) {
+  //   const lineBreakPattern = /\r?\n/;
+  //   return lineBreakPattern.test(text);
+  // }
 
-  const updateRows = (textarea) => {
-    if (textarea.value.length === 0) {
-      return;
-    }
-    textarea.style.height = "auto";
-    const rowHeight = parseInt(
-      window.getComputedStyle(textarea).lineHeight,
-      10
-    );
-    const newRows = Math.floor(textarea.scrollHeight / rowHeight);
-    textarea.style.height = "";
-  };
+  // const updateRows = (textarea) => {
+  //   if (textarea.value.length === 0) {
+  //     return;
+  //   }
+  //   textarea.style.height = "auto";
+  //   const rowHeight = parseInt(
+  //     window.getComputedStyle(textarea).lineHeight,
+  //     10
+  //   );
+  //   const newRows = Math.floor(textarea.scrollHeight / rowHeight);
+  //   textarea.style.height = "";
+  // };
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -187,7 +202,7 @@ const Chatbot = () => {
     if (!messages?.trim()) {
       return;
     }
-    // setChatLoad(true);
+
     setChatArray((prevChat) => [
       ...prevChat,
       {
@@ -197,6 +212,7 @@ const Chatbot = () => {
         created_on: sessionCreated,
       },
     ]);
+
     if (messages !== "") {
       const sanitizedMessage = messages
         .replace(/</g, "&lt;")
@@ -231,23 +247,23 @@ const Chatbot = () => {
     }
   };
 
-  const startSessions = async () => {
-    try {
-      setIsFormLoading(true);
-      const data = {
-        system_id: systemId,
-        created_on: sessionCreated,
-        user_id: "",
-      };
-      // const result = await createSession("POST", data);
-      setIsFormLoading(false);
-      // setSessionId(result?.data?.session_id);
-      setIsFormActive(true);
-      // getAllSessions();
-    } catch (error) {
-      console.error("Error starting session:", error);
-    }
-  };
+  // const startSessions = async () => {
+  //   try {
+  //     setIsFormLoading(true);
+  //     const data = {
+  //       system_id: systemId,
+  //       created_on: sessionCreated,
+  //       user_id: "",
+  //     };
+  //     // const result = await createSession("POST", data);
+  //     setIsFormLoading(false);
+  //     // setSessionId(result?.data?.session_id);
+  //     setIsFormActive(true);
+  //     // getAllSessions();
+  //   } catch (error) {
+  //     console.error("Error starting session:", error);
+  //   }
+  // };
 
   const handleChange = (field) => (event) => {
     setValues({ ...values, [field]: event.target.value });
@@ -363,7 +379,6 @@ const Chatbot = () => {
   };
 
   const goBack = () => {
-    console.log("go back");
     refetch();
     setIsFormActive(false);
     setGoBackForm(true);
@@ -389,10 +404,6 @@ const Chatbot = () => {
   //     getAllSessions();
   //   }
   // }, [systemId]);
-
-  // useEffect(() => {
-  //   validate();
-  // }, [values, touched]);
 
   // const getAllSessions = async () => {
   //   setIsConversationListLoading(true);
@@ -444,14 +455,20 @@ const Chatbot = () => {
 
   const messageSessionBack = () => {
     refetch();
-    if (!chatLoad) {
+    console.log("go-back");
+    localStorage.removeItem("currentSession");
+    if (!chatHistoryLoader) {
       setMessagesSession(false);
       setMessages("");
       setChatArray([]);
     }
   };
 
-  const sessionOnClick = (item) => {
+  const onSessionClick = (item) => {
+    console.log("onSessionClick", item);
+
+    localStorage.setItem("currentSession", JSON.stringify(item));
+
     if (item?.is_form_filled === true) {
       setChat(true);
       setMessagesSession(true);
@@ -493,11 +510,11 @@ const Chatbot = () => {
             messageSessionBack={messageSessionBack}
             handleDeleteChat={handleDeleteChat}
             isDisabled={chatArray.length}
-            chatLoad={chatLoad}
+            chatLoad={chatHistoryLoader}
             handleToggle={handleToggle}
             isToggled={isToggled}
           />
-          {messagesSession ? (
+          {messagesSession || currentSession?.is_form_filled ? (
             <>
               <MessagesSession
                 status={status}
@@ -513,7 +530,7 @@ const Chatbot = () => {
                     borderImageSource:
                       "linear-gradient(90deg, #079485 0%, #115588 100%)",
                   }}
-                  disabled={chatLoad}
+                  disabled={chatHistoryLoader}
                   sendMessage={sendMessage}
                   className={"hello"}
                   value={messages}
@@ -538,8 +555,10 @@ const Chatbot = () => {
               handleChange={handleChange}
               goBack={goBack}
               touched={touched}
-              conversationList={data?.data}
-              sessionOnClick={sessionOnClick}
+              conversationList={
+                currentSession?.is_form_filled ? currentSession : data?.data
+              }
+              onSessionClick={onSessionClick}
               isToggled={isToggled}
               isFormLoading={isLoading}
               isFormSubmitLoading={isFormSubmitLoading}

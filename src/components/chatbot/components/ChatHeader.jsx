@@ -1,6 +1,13 @@
 import React from "react";
 import "../style.css";
-import { DeleteIcon, GoBack, Hamburger, Widget, darkMode, lightMode } from "../../../assets";
+import {
+  DeleteIcon,
+  GoBack,
+  // Hamburger,
+  // Widget,
+  darkMode,
+  lightMode,
+} from "../../../assets";
 
 export default function ChatHeader({
   messagesSession,
@@ -15,10 +22,17 @@ export default function ChatHeader({
     <>
       <div className="window_header">
         <div className="icon_header">
-          <div className="back" onClick={messageSessionBack}>
+          <div
+            className="back"
+            onClick={messageSessionBack}
+          >
             {messagesSession && (
               <img
-                className={`${!chatLoad ? `go-back-icon ${isToggled ? "light" : ""}` : "grey_back_icon"}`}
+                className={`${
+                  !chatLoad
+                    ? `go-back-icon ${isToggled ? "light" : ""}`
+                    : "grey_back_icon"
+                }`}
                 src={GoBack}
               />
             )}
@@ -32,7 +46,11 @@ export default function ChatHeader({
                 onClick={handleDeleteChat}
               >
                 <img
-                  className={`${isDisabled ? `delete_chat_icon ${isToggled ? "light" : ""}` : "grey_image"}`}
+                  className={`${
+                    isDisabled
+                      ? `delete_chat_icon ${isToggled ? "light" : ""}`
+                      : "grey_image"
+                  }`}
                   src={DeleteIcon}
                 />
               </button>
@@ -43,7 +61,10 @@ export default function ChatHeader({
             >
               <div className="toggle-image-container">
                 <div className="wrapper">
-                  <img className="toggle_icon" src={isToggled ? lightMode : darkMode} />
+                  <img
+                    className="toggle_icon"
+                    src={isToggled ? lightMode : darkMode}
+                  />
                 </div>
               </div>
             </div>

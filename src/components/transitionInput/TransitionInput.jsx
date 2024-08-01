@@ -18,7 +18,7 @@ export default function TransitionInput({
       >
         <input
           type="text"
-          style={{ caretColor: theme ? '#141718' : "white" }}
+          style={{ caretColor: theme ? "#141718" : "white" }}
           id="input"
           className={`input-field ${theme ? "theme" : ""} ${
             error ? "text-red" : "text-white"

@@ -53,6 +53,13 @@ export const api = createApi({
         body: body,
       }),
     }),
+
+    getProfile: builder.query({
+      query: () => ({
+        url: "/profile/get_business_profile",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -63,4 +70,5 @@ export const {
   useCreateSessionMutation,
   useSessionDetailsMutation,
   useDeleteChatMutation,
+  useGetProfileQuery
 } = api;

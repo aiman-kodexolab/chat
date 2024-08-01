@@ -85,8 +85,10 @@ function InputField({
     if (isNaN(lineHeight)) {
       lineHeight = 20;
     }
-    const padding = parseInt(computedStyle.paddingTop, 10) + parseInt(computedStyle.paddingBottom, 10);
-    const scrollHeight = textarea.scrollHeight - padding
+    const padding =
+      parseInt(computedStyle.paddingTop, 10) +
+      parseInt(computedStyle.paddingBottom, 10);
+    const scrollHeight = textarea.scrollHeight - padding;
     const newRows = Math.ceil(scrollHeight / lineHeight);
     setRows(newRows <= 3 ? newRows : 3);
     textarea.style.height = "";

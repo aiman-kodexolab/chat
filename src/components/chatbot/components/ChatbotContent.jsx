@@ -15,7 +15,7 @@ export default function ChatbotContent({
   goBack,
   touched,
   conversationList,
-  sessionOnClick,
+  onSessionClick,
   isToggled,
   isFormLoading,
   isFormSubmitLoading,
@@ -39,7 +39,7 @@ export default function ChatbotContent({
                 <SessionContainer
                   key={index}
                   item={item}
-                  onClick={sessionOnClick}
+                  onClick={onSessionClick}
                   isToggled={isToggled}
                 />
               ))}
