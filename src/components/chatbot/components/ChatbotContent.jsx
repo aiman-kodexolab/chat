@@ -133,6 +133,14 @@ export default function ChatbotContent({
                     <>
                       <img src={SendMsg} alt="" className={"send-icon"} />
                       <p className={"submit-text"}>New Chat</p>
+                  className="submit-button"
+                >
+                  {isFormSubmitLoading ? (
+                    <div className="new-conversation-loader"></div>
+                  ) : (
+                    <>
+                      <img src={SendMsg} alt="" className="send-icon" />
+                      <p className="submit-text">New Chat</p>
                     </>
                   )}
                 </button>
