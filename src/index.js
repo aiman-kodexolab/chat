@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import ChatbotButton from "./components/chatBotButton/index.jsx";
 import App from "./App.js"
+import MyWidgetElement from "./class.js";
 
 // Function to render the chatbot in the given container
 window.renderChatbot = async (containerId) => {
@@ -12,7 +13,7 @@ window.renderChatbot = async (containerId) => {
     const scriptTag = document.getElementById("chatbot-script");
     const apiKey = scriptTag.getAttribute("data-key");
     const root = ReactDOM.createRoot(container);
-    root.render(<ChatbotButton apiKey={apiKey} />);
+    root.render(<MyWidgetElement apiKey={apiKey} />);
   } else {
     console.error(`Container with ID ${containerId} not found.`);
   }

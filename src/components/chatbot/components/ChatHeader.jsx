@@ -13,9 +13,9 @@ export default function ChatHeader({
 }) {
   return (
     <>
-      <div className="window_header">
-        <div className="icon_header">
-          <div className="back" onClick={messageSessionBack}>
+      <div className={"window_header"}>
+        <div className={"icon_header"}>
+          <div className={"back"} onClick={messageSessionBack}>
             {messagesSession && (
               <img
                 className={`${!chatLoad ? `go-back-icon ${isToggled ? "light" : ""}` : "grey_back_icon"}`}
@@ -28,7 +28,7 @@ export default function ChatHeader({
             {messagesSession && (
               <button
                 disabled={isDisabled ? false : true}
-                className="hamburger"
+                className={"hamburger"}
                 onClick={handleDeleteChat}
               >
                 <img
@@ -41,9 +41,9 @@ export default function ChatHeader({
               className={`toggle-button ${isToggled ? "toggled" : ""}`}
               onClick={handleToggle}
             >
-              <div className="toggle-image-container">
-                <div className="wrapper">
-                  <img className="toggle_icon" src={isToggled ? lightMode : darkMode} />
+              <div className={"toggle-image-container"}>
+                <div className={"wrapper"}>
+                  <img className={"toggle_icon"} src={isToggled ? lightMode : darkMode} />
                 </div>
               </div>
             </div>
@@ -51,12 +51,12 @@ export default function ChatHeader({
               className={`toggle-button ${isToggled ? "toggled" : ""}`}
               onClick={handleToggle}
             >
-              <img className="toggle_icon" src={Hamburger} />
+              <img className={"toggle_icon" src={Hamburger} />
             </div> */}
           </div>
         </div>
       </div>
-      <hr className="line_break"></hr>
+      <hr className={"line_break"}></hr>
     </>
   );
 }
