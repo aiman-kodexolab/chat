@@ -3,8 +3,8 @@ import "./style.css";
 
 export default function Layout({ children }) {
   return (
-    <div className="layout">
-      <div className="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum cupiditate qui 
+    <div className={"layout"}>
+      <div className={"content"}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum cupiditate qui 
       eaque dolorum consequatur cumque iusto, modi quo, in, hic nulla odio illum blanditiis. 
       Impedit perspiciatis molestiae iure laboriosam dignissimos.Lorem ipsum dolor sit amet consectetur 
       adipisicing elit. Cum cupiditate qui eaque dolorum consequatur cumque iusto, modi quo, in, hic nulla 
@@ -27,7 +27,7 @@ export default function Layout({ children }) {
        dignissimos
        <div style={{height:'1500px'}}></div>
        </div>
-      <div className="chat-container">{children}</div>
+      <div className={"chat-container"}>{children}</div>
     </div>
   );
 }

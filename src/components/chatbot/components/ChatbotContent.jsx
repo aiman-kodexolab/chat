@@ -29,7 +29,7 @@ export default function ChatbotContent({
     <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
       {!isFormActive ? (
         <div style={{ position: "relative" }}>
-          <div className="content-heading">
+          <div className={"content-heading"}>
             <p className={`chat-heading ${isToggled ? "light" : ""}`}>
               Hi there
             </p>
@@ -38,7 +38,7 @@ export default function ChatbotContent({
             </p>
           </div>
 
-          <div className="conversations">
+          <div className={"conversations"}>
             {Array.isArray(conversationList) &&
               conversationList?.map((item, index) => (
                 <SessionContainer
@@ -51,9 +51,9 @@ export default function ChatbotContent({
           </div>
           {Array.isArray(conversationList) && conversationList?.length ? (
             <>
-              <div className="session_box">
+              <div className={"session_box"}>
                 <NewConversationBtn
-                  className="start_session"
+                  className={"start_session"}
                   onClick={startSession}
                   isFormLoading={isFormLoading}
                   isConversationListLoading={isConversationListLoading}
@@ -69,7 +69,7 @@ export default function ChatbotContent({
               }`}
             >
               <NewConversationBtn
-                className="no_session"
+                className={"no_session"}
                 onClick={startSession}
                 isFormLoading={isFormLoading}
                 isConversationListLoading={isConversationListLoading}
@@ -79,21 +79,21 @@ export default function ChatbotContent({
         </div>
       ) : (
         <>
-          <div className="form-container">
-            <div className="form-header">
+          <div className={"form-container"}>
+            <div className={"form-header"}>
               <img
                 src={GoBack}
                 alt=""
-                className="go-back-icon"
+                className={"go-back-icon"}
                 onClick={goBack}
               />
-              <p className="form-instruction">
+              <p className={"form-instruction"}>
                 Please provide your email address and phone number here in case
                 the live chat gets disconnected.
               </p>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="form-body">
+              <div className={"form-body"}>
                 <TransitionInput
                   label="Your Name"
                   required
@@ -121,10 +121,18 @@ export default function ChatbotContent({
                   onChange={handleChange("phone_number")}
                 />
               </div>
-              <div className="form-footer">
+              <div className={"form-footer"}>
                 <button
                   type="submit"
                   disabled={isFormSubmitLoading}
+                  className={"submit-button"}
+                >
+                  {isFormSubmitLoading ? (
+                    <div className={"new-conversation-loader"}></div>
+                  ) : (
+                    <>
+                      <img src={SendMsg} alt="" className={"send-icon"} />
+                      <p className={"submit-text"}>New Chat</p>
                   className="submit-button"
                 >
                   {isFormSubmitLoading ? (

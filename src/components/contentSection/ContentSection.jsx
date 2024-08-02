@@ -9,7 +9,7 @@ function ContentSection({ children, height, width, style }) {
         height: height,
         ...style,
       }}
-      className="content-section"
+      className={"content-section"}
     >
       {children}
     </div>

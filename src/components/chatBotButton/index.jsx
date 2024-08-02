@@ -26,16 +26,16 @@ const ChatbotButton = ({ apiKey }) => {
   };
 
   return (
-    <div className="chatbot_wrapper">
+    <div className={"chatbot_wrapper"}>
       {isOpen && <Chatbot />}
       <div
         className={`${isApiKeyValid ? "circle_button" : "disabled_button"}`}
         onClick={toggleChat}
       >
         {isOpen ? (
-          <img className="close_icon" src={Dropdown} />
+          <img className={"close_icon"} src={Dropdown} />
         ) : (
-          <img className="open_icon" src={Widget} />
+          <img className={"open_icon"} src={Widget} />
         )}
       </div>
     </div>

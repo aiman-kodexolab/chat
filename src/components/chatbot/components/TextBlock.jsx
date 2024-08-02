@@ -17,16 +17,16 @@ function TextBlock({ isUser, name, children, time }) {
 
   return (
     <div className={`text-block ${isUser ? 'user' : 'bot'}`}>
-      <div className="message" style={{ whiteSpace: isUser && "pre-wrap" }}>
+      <div className={"message"} style={{ whiteSpace: isUser && "pre-wrap" }}>
         {renderContent(children)}
       </div>
       <div className={`header-text ${isUser ? 'header-user' : 'header-bot'}`}>
         {/* <p className={isUser ? "font-semibold" : "font-bold"}>
           {isUser ? (name ? name : "You") : (
-            <span className="bot-name">Bot Builder</span>
+            <span className={"bot-name"}>Bot Builder</span>
           )}
         </p> */}
-        <p className="time">{time}</p>
+        <p className={"time"}>{time}</p>
       </div>
     </div>
   );

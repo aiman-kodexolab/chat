@@ -390,9 +390,9 @@ const Chatbot = () => {
 
   return (
     <>
-      <div className="window_wrap">
-        <div className="header">
-          <div className="rotated-half-circle"></div>
+      <div className={"window_wrap"}>
+        <div className={"header"}>
+          <div className={"rotated-half-circle"}></div>
           <div className={`avatar_wrap ${isToggled ? "light" : ""}`}>
             <img src={Widget} />
           </div>

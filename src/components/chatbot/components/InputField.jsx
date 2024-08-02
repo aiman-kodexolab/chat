@@ -93,12 +93,12 @@ function InputField({
   };
 
   return (
-    <div className="input-container">
+    <div className={"input-container"}>
       <div
         style={style}
         className={`input-wrapper ${limit ? "limit-reached" : ""} ${className}`}
       >
-        <form onSubmit={handleSubmit} className="input-form">
+        <form onSubmit={handleSubmit} className={"input-form"}>
           <textarea
             ref={inputRef}
             style={{ caretColor: theme ? "#141718" : "white" }}
@@ -117,17 +117,17 @@ function InputField({
           <button
             type="submit"
             disabled={disabled || !value?.trim()}
-            className="message-submit-button"
+            className={"message-submit-button"}
           >
-            <img src={Send} alt="" className="message-send-icon" />
+            <img src={Send} alt="" className={"message-send-icon"} />
           </button>
         </form>
       </div>
       {text ? (
         <p className={`powered-by ${isToggled ? "light" : ""}`}>
           Powered by
-          <span className="ai-text"> AI </span>
-          <span className="chatbot-text"> Chatbot</span>
+          <span className={"ai-text"}> AI </span>
+          <span className={"chatbot-text"}> Chatbot</span>
         </p>
       ) : (
         <div className={`char-counter ${limit ? "text-limit" : ""}`}>
