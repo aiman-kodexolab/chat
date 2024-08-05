@@ -242,8 +242,8 @@ code {
   padding-left: 6px;
   padding-right: 6px;
   border-radius: 6px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 8px;
+  padding-bottom: 8px;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -261,8 +261,8 @@ code {
   padding-left: 6px;
   padding-right: 6px;
   border-radius: 6px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 8px;
+  padding-bottom: 8px;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -328,7 +328,7 @@ code {
   font-weight: normal;
   width: 91%;
   margin-left: 10px;
-  line-height: 1rem;
+  line-height: 16px;
 }
 
 .form-body {
@@ -526,7 +526,7 @@ code {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0.5rem 0;
+  margin: 8px 0;
   border: 1px solid;
   padding: 6px;
   border-color: #079485;
@@ -544,7 +544,7 @@ code {
   outline: none;
   padding: 0px;
   transition: none;
-  line-height: 1rem;
+  line-height: 16px;
   resize: none;
 }
 .input-textarea.theme {
@@ -555,7 +555,7 @@ code {
 }
 
 .input-textarea::placeholder {
-  color: #708090; /* slate gray */
+  color: #708090;
 }
 
 .input-textarea.text-limit {
@@ -965,18 +965,18 @@ input:-webkit-autofill:not(:focus) {
   margin-left: 20px;
   padding-left: 0;
   font-family: Poppins, sans-serif;
-  line-height: 1rem;
+  line-height: 16px;
 }
 
 .content-messages li {
   margin-bottom: 5px;
   font-family: Poppins, sans-serif;
-  line-height: 1rem;
+  line-height: 16px;
 }
 
 .content-messages p {
   overflow: hidden !important;
-  line-height: 1rem;
+  line-height: 16px;
   font-family: Poppins, sans-serif;
 }
 
