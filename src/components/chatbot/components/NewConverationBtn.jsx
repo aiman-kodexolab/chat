@@ -22,17 +22,12 @@ const NewConversationBtn = ({
   >
     <>
       {isConversationListLoading || isFormLoading ? (
-        <div className={"new-conversation-loader"}></div>
         <div className="new-conversation-loader"></div>
       ) : (
         <>
           <img
             src={SendMsg}
             alt=""
-            className={"send-msg-icon"}
-            style={{ width: "15px", height: "15px" }}
-          />
-          <p className={"new-conversation-text"}>New Conversation</p>
             className="send-msg-icon"
             style={{ width: "15px", height: "15px" }}
           />
