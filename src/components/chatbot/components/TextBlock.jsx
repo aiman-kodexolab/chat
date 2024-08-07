@@ -1,31 +1,28 @@
 import React from "react";
 import Markdown from "../../Markdown";
-import '../style.css';
+import "../style.css";
+import { replaceTags } from "../../../utils/constant";
 
-function TextBlock({ isUser, name, children, time }) {
-  const replaceTags = (text) => {
-    return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  };
-
+function TextBlock({ isUser, children, time }) {
   const renderContent = (content) => {
     if (isUser) {
-      return <div dangerouslySetInnerHTML={{ __html: replaceTags(content) }} style={{lineHeight: "16px", fontFamily: "Poppins, sans-serif"}}/>;
+      return (
+        <div
+          dangerouslySetInnerHTML={{ __html: replaceTags(content) }}
+          style={{ lineHeight: "16px", fontFamily: "Poppins, sans-serif" }}
+        />
+      );
     } else {
       return <Markdown markdown={content} />;
     }
   };
 
   return (
-    <div className={`text-block ${isUser ? 'user' : 'bot'}`}>
+    <div className={`text-block ${isUser ? "user" : "bot"}`}>
       <div className={"message"} style={{ whiteSpace: isUser && "pre-wrap" }}>
         {renderContent(children)}
       </div>
-      <div className={`header-text ${isUser ? 'header-user' : 'header-bot'}`}>
-        {/* <p className={isUser ? "font-semibold" : "font-bold"}>
-          {isUser ? (name ? name : "You") : (
-            <span className={"bot-name"}>Bot Builder</span>
-          )}
-        </p> */}
+      <div className={`header-text ${isUser ? "header-user" : "header-bot"}`}>
         <p className={"time"}>{time}</p>
       </div>
     </div>

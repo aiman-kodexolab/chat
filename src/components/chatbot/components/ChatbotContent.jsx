@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../style.css";
 import NewConversationBtn from "./NewConverationBtn";
 import { GoBack, SendMsg } from "../../../assets";
 import TransitionInput from "../../transitionInput/TransitionInput";
-import { getUserSession } from "../../../API/api";
 import SessionContainer from "./SessionContainer";
 
 export default function ChatbotContent({
   values,
-  chat,
   isFormActive,
-  goBackForm,
   errors,
-  systemId,
   startSession,
   handleSubmit,
   handleChange,
   goBack,
   touched,
   conversationList,
-  sessionOnClick,
+  onSessionClick,
   isToggled,
   isFormLoading,
   isFormSubmitLoading,
-  isConversationListLoading,
 }) {
   return (
     <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
@@ -44,7 +39,7 @@ export default function ChatbotContent({
                 <SessionContainer
                   key={index}
                   item={item}
-                  onClick={sessionOnClick}
+                  onClick={onSessionClick}
                   isToggled={isToggled}
                 />
               ))}
@@ -56,23 +51,19 @@ export default function ChatbotContent({
                   className="start_session"
                   onClick={startSession}
                   isFormLoading={isFormLoading}
-                  isConversationListLoading={isConversationListLoading}
                 />
               </div>
             </>
           ) : (
             <div
               className={`no_session_box ${
-                isFormLoading || isConversationListLoading
-                  ? "adjust_loader"
-                  : ""
+                isFormLoading ? "adjust_loader" : ""
               }`}
             >
               <NewConversationBtn
                 className="no_session"
                 onClick={startSession}
                 isFormLoading={isFormLoading}
-                isConversationListLoading={isConversationListLoading}
               />
             </div>
           )}
