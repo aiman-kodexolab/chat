@@ -1,13 +1,20 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
+const Dotenv = require("dotenv-webpack");
+const dotenv = require("dotenv");
+
+dotenv.config({
+  path: path.resolve(__dirname, ".env"),
+});
 
 module.exports = {
-  entry: './src/index.js',
+  entry: "./src/index.js",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'chatbot.bundle.js',
-    library: 'Chatbot',
-    libraryTarget: 'umd',
+    path: path.resolve(__dirname, "dist"),
+    filename: "chatbot.bundle.js",
+    library: "Chatbot",
+    libraryTarget: "umd",
   },
   module: {
     rules: [
@@ -15,32 +22,31 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
+            presets: ["@babel/preset-env", "@babel/preset-react"],
           },
         },
       },
       {
         test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader, 
-          'css-loader',                
-          'postcss-loader',            
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: ['file-loader'],
+        use: ["file-loader"],
       },
     ],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'widgetStyles.css',
+      filename: "widgetStyles.css",
+    }),
+    new Dotenv({
+      path: path.resolve(__dirname, ".env"),
     }),
   ],
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: [".js", ".jsx"],
   },
 };
