@@ -8,6 +8,8 @@ dotenv.config({
   path: path.resolve(__dirname, ".env"),
 });
 
+console.log("Loaded API URL:", process.env.REACT_APP_API_URL); // Check if the variable is loaded
+
 module.exports = {
   entry: "./src/index.js",
   output: {
