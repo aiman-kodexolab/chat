@@ -9,7 +9,6 @@ import { formatTime } from "../../utils/constant";
 import {
   useCreateSessionMutation,
   useDeleteChatMutation,
-  useGetProfileQuery,
   useGetSessionsQuery,
   useSessionDetailsMutation,
 } from "../../redux/api";
@@ -66,23 +65,7 @@ const Chatbot = () => {
   );
   //APIs
 
-  useEffect(() => {
-    if (userObj) {
-      setValues(userObj);
-    }
-  }, [sessionId]);
-
-  useEffect(() => {
-    if (currentSession?.is_form_filled) {
-      setSessionId(currentSession?._id);
-      setMessagesSession(true);
-    }
-  }, [currentSession]);
-
-  useEffect(() => {
-    validate();
-  }, [values, touched]);
-
+  //Functions
   const startSession = async () => {
     try {
       const response = await createSession({
@@ -105,7 +88,7 @@ const Chatbot = () => {
     }
   };
 
-  const handleDeleteChat = async (field) => {
+  const handleDeleteChat = async () => {
     try {
       setChatArray([]);
       const response = await deleteChat({
@@ -176,6 +159,13 @@ const Chatbot = () => {
 
       const result = await sessionDetail(data);
       if (result?.data?.status_code === 200) {
+        const userSession = {
+          is_form_filled: result?.data?.data?.is_form_filled,
+          _id: result?.data?.data?._id,
+          status: result?.data?.data?.status,
+        };
+        localStorage.setItem("currentSession", JSON.stringify(userSession));
+
         localStorage.setItem(
           "user",
           JSON.stringify({
@@ -237,11 +227,17 @@ const Chatbot = () => {
   };
 
   const onSessionClick = (item) => {
+    const userSession = {
+      is_form_filled: item?.is_form_filled,
+      _id: item?._id,
+      status: item?.status,
+    };
     if (item?.is_form_filled) {
       setChat(true);
       setMessagesSession(true);
       setSessionId(item?._id);
       setEmail(item?.email);
+      localStorage.setItem("currentSession", JSON.stringify(userSession));
     } else {
       setIsFormActive(true);
       setSessionId(item?._id);
@@ -251,7 +247,6 @@ const Chatbot = () => {
     } else {
       setStatus(true);
     }
-    localStorage.setItem("currentSession", JSON.stringify(item));
   };
 
   const resetForm = () => {
@@ -263,6 +258,27 @@ const Chatbot = () => {
   const handleToggle = () => {
     setIsToggled(!isToggled);
   };
+
+  //Functions
+
+  //useEffetcs
+  useEffect(() => {
+    if (userObj) {
+      setValues(userObj);
+    }
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (currentSession?.is_form_filled) {
+      setSessionId(currentSession?._id);
+      setMessagesSession(true);
+    }
+  }, [currentSession]);
+
+  useEffect(() => {
+    validate();
+  }, [values, touched]);
+  //useEffetcs
 
   return (
     <>
