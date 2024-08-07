@@ -6,10 +6,9 @@ function InputField({
   style,
   disabled,
   sendMessage,
-  className,
+  className = "",
   value,
   waitingMessage,
-  text,
   setValue,
   theme,
   isToggled,
@@ -21,16 +20,13 @@ function InputField({
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
-    if (!text) {
-      if (inputValue?.length <= maxLength) {
-        setValue(inputValue);
-        setLimit(false);
-      } else {
-        setLimit(true);
-      }
-    } else {
+    if (inputValue?.length <= maxLength) {
       setValue(inputValue);
+      setLimit(false);
+    } else {
+      setLimit(true);
     }
+    setValue(inputValue);
     updateRows(e.target);
   };
 
@@ -85,8 +81,10 @@ function InputField({
     if (isNaN(lineHeight)) {
       lineHeight = 20;
     }
-    const padding = parseInt(computedStyle.paddingTop, 10) + parseInt(computedStyle.paddingBottom, 10);
-    const scrollHeight = textarea.scrollHeight - padding
+    const padding =
+      parseInt(computedStyle.paddingTop, 10) +
+      parseInt(computedStyle.paddingBottom, 10);
+    const scrollHeight = textarea.scrollHeight - padding;
     const newRows = Math.ceil(scrollHeight / lineHeight);
     setRows(newRows <= 3 ? newRows : 3);
     textarea.style.height = "";
@@ -109,7 +107,7 @@ function InputField({
             value={value}
             onChange={handleInputChange}
             disabled={disabled}
-            onPaste={text ? undefined : handlePaste}
+            onPaste={handlePaste}
             onKeyDown={handleKeyPress}
             rows={rows}
             type="text"
@@ -123,17 +121,14 @@ function InputField({
           </button>
         </form>
       </div>
-      {text ? (
-        <p className={`powered-by ${isToggled ? "light" : ""}`}>
-          Powered by
-          <span className={"ai-text"}> AI </span>
-          <span className={"chatbot-text"}> Chatbot</span>
-        </p>
-      ) : (
-        <div className={`char-counter ${limit ? "text-limit" : ""}`}>
-          {maxLength - (value?.length || 0)}/{maxLength}
-        </div>
-      )}
+      <p className={`powered-by ${isToggled ? "light" : ""}`}>
+        Powered by
+        <span className={"ai-text"}> AI </span>
+        <span className={"chatbot-text"}> Chatbot</span>
+      </p>
+      {/* <div className={`char-counter ${limit ? "text-limit" : ""}`}>
+        {maxLength - (value?.length || 0)}/{maxLength}
+      </div> */}
     </div>
   );
 }

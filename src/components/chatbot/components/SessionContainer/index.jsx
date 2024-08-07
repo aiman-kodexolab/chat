@@ -6,7 +6,10 @@ import NameImage from "../NameImage";
 
 function SessionContainer({ onClick, item, isToggled }) {
   return (
-    <div onClick={() => onClick(item)} className={`session_container ${isToggled ? "light" : ""}`}>
+    <div
+      onClick={() => onClick(item)}
+      className={`session_container ${isToggled ? "light" : ""}`}
+    >
       <h2 className={`heading ${isToggled ? "light" : ""}`}>Conversation</h2>
       <div className={"itemContainer"}>
         <NameImage
