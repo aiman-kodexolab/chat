@@ -55,7 +55,6 @@ const Chatbot = () => {
   //APIs
   const [createSession, { isLoading }] = useCreateSessionMutation();
   const [deleteChat] = useDeleteChatMutation();
-  const [sessionDetail] = useSessionDetailsMutation();
   const { data, refetch } = useGetSessionsQuery(
     {
       system_id: systemId,
@@ -66,6 +65,9 @@ const Chatbot = () => {
       refetchOnFocus: true,
     }
   );
+  const [sessionDetail, { isLoading: sessionLoader }] =
+    useSessionDetailsMutation();
+
   //APIs
 
   //Functions
@@ -80,6 +82,27 @@ const Chatbot = () => {
       setIsFormActive(true);
     } catch (e) {
       console.log("Error starting session:", e);
+    }
+  };
+
+  const sessionDetails = async () => {
+    try {
+      const apiBody = {
+        user_name: values.userName,
+        email: values.email,
+        phone_number: values.phoneNumber,
+        session_id: sessionId,
+        user_id: "",
+      };
+      const result = await sessionDetail(apiBody);
+      const userSession = {
+        is_form_filled: result?.data?.data?.is_form_filled,
+        session_id: result?.data?.data?._id,
+        status: result?.data?.data?.status,
+      };
+      localStorage.setItem("currentSession", JSON.stringify(userSession));
+    } catch (e) {
+      console.log("This error", e);
     }
   };
 
@@ -152,23 +175,7 @@ const Chatbot = () => {
       setTouched(newErrors);
     } else {
       setIsFormSubmitLoading(true);
-      // const data = {
-      //   user_name: values.userName,
-      //   email: values.email,
-      //   phone_number: values.phoneNumber,
-      //   session_id: sessionId,
-      //   user_id: "",
-      // };
-
-      // const result = await sessionDetail(data);
-      // if (result?.data?.status_code === 200) {
-      // const userSession = {
-      //   is_form_filled: result?.data?.data?.is_form_filled,
-      //   session_id: result?.data?.data?._id,
-      //   status: result?.data?.data?.status,
-      // };
-      // localStorage.setItem("currentSession", JSON.stringify(userSession));
-
+      sessionDetails();
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -317,6 +324,7 @@ const Chatbot = () => {
               chatLoad={chatLoad}
               setChatLoad={setChatLoad}
               isToggled={isToggled}
+              sessionLoader={sessionLoader}
             />
           ) : (
             <ChatbotContent

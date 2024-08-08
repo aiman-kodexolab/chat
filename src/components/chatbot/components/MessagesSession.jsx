@@ -5,6 +5,7 @@ import InputField from "./InputField";
 import { useGetChatHistoryQuery } from "../../../redux/api";
 import { formatTime, socketUrl } from "../../../utils/constant";
 import { io } from "socket.io-client";
+import { ShimmerDiv } from "shimmer-effects-react";
 
 const MessagesSession = ({
   status,
@@ -16,6 +17,7 @@ const MessagesSession = ({
   sessionCreated,
   chatArray,
   setChatArray,
+  sessionLoader,
 }) => {
   const [messages, setMessages] = useState("");
   const [socket, setSocket] = useState(null);
@@ -129,7 +131,31 @@ const MessagesSession = ({
   return (
     <>
       <div className={`chat-container ${status ? "expanded" : "collapsed"}`}>
-        {Array.isArray(chatArray) &&
+        <ShimmerDiv
+          loading={chatHistoryLoader || sessionLoader}
+          mode="dark"
+          height={60}
+          width={"85%"}
+          rounded={0.3}
+        />
+
+        <ShimmerDiv
+          mode="dark"
+          height={50}
+          width={"85%"}
+          rounded={0.3}
+          className="shimmer"
+          loading={chatHistoryLoader || sessionLoader}
+        />
+
+        <ShimmerDiv
+          loading={chatHistoryLoader || sessionLoader}
+          mode="dark"
+          height={100}
+          width={"85%"}
+          rounded={0.3}
+        />
+          {Array.isArray(chatArray) &&
           chatArray?.map((item, index) => {
             if (item?.type === "user") {
               return (
@@ -152,7 +178,7 @@ const MessagesSession = ({
       </div>
       <InputField
         style={inputFieldStyle}
-        disabled={chatHistoryLoader || chatLoad}
+        disabled={chatHistoryLoader || chatLoad || sessionLoader}
         sendMessage={sendMessage}
         value={messages}
         setValue={setMessages}
