@@ -34,6 +34,7 @@ const Chatbot = () => {
   });
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [messagesSession, setMessagesSession] = useState(false);
+  const isLight = localStorage.getItem("isLight");
   const [chatArray, setChatArray] = useState([]);
   const systemId = useVisitorId();
   const sessionCreated = formatTime();
@@ -41,7 +42,9 @@ const Chatbot = () => {
   const [status, setStatus] = useState(true);
   const [email, setEmail] = useState("");
   const [chatLoad, setChatLoad] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
+  const [isToggled, setIsToggled] = useState(
+    isLight === "false" ? false : true
+  );
   const [isFormSubmitLoading, setIsFormSubmitLoading] = useState(false);
   const userObj =
     localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
@@ -149,37 +152,37 @@ const Chatbot = () => {
       setTouched(newErrors);
     } else {
       setIsFormSubmitLoading(true);
-      const data = {
-        user_name: values.userName,
-        email: values.email,
-        phone_number: values.phoneNumber,
-        session_id: sessionId,
-        user_id: "",
-      };
+      // const data = {
+      //   user_name: values.userName,
+      //   email: values.email,
+      //   phone_number: values.phoneNumber,
+      //   session_id: sessionId,
+      //   user_id: "",
+      // };
 
-      const result = await sessionDetail(data);
-      if (result?.data?.status_code === 200) {
-        const userSession = {
-          is_form_filled: result?.data?.data?.is_form_filled,
-          _id: result?.data?.data?._id,
-          status: result?.data?.data?.status,
-        };
-        localStorage.setItem("currentSession", JSON.stringify(userSession));
+      // const result = await sessionDetail(data);
+      // if (result?.data?.status_code === 200) {
+      // const userSession = {
+      //   is_form_filled: result?.data?.data?.is_form_filled,
+      //   session_id: result?.data?.data?._id,
+      //   status: result?.data?.data?.status,
+      // };
+      // localStorage.setItem("currentSession", JSON.stringify(userSession));
 
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            userName: values.userName,
-            email: values.email,
-            phoneNumber: values.phoneNumber,
-          })
-        );
-        setIsFormSubmitLoading(false);
-        setEmail(values.email);
-        resetForm();
-        setMessagesSession(true);
-        setIsFormActive(false);
-      }
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userName: values.userName,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+        })
+      );
+      setIsFormSubmitLoading(false);
+      setEmail(values.email);
+      resetForm();
+      setMessagesSession(true);
+      setIsFormActive(false);
+      // }
       setErrors({
         userName: "",
         email: "",
@@ -263,6 +266,10 @@ const Chatbot = () => {
 
   //useEffetcs
   useEffect(() => {
+    localStorage.setItem("isLight", isToggled);
+  }, [isToggled]);
+
+  useEffect(() => {
     if (userObj) {
       setValues(userObj);
     }
@@ -324,9 +331,7 @@ const Chatbot = () => {
               handleChange={handleChange}
               goBack={goBack}
               touched={touched}
-              conversationList={
-                currentSession?.is_form_filled ? currentSession : data?.data
-              }
+              conversationList={data?.data}
               onSessionClick={onSessionClick}
               isToggled={isToggled}
               isFormLoading={isLoading}

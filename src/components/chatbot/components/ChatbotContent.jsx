@@ -118,14 +118,8 @@ export default function ChatbotContent({
                   disabled={isFormSubmitLoading}
                   className="submit-button"
                 >
-                  {isFormSubmitLoading ? (
-                    <div className="new-conversation-loader"></div>
-                  ) : (
-                    <>
-                      <img src={SendMsg} alt="" className="send-icon" />
-                      <p className="submit-text">New Chat</p>
-                    </>
-                  )}
+                  <img src={SendMsg} alt="" className="send-icon" />
+                  <p className="submit-text">New Chat</p>
                 </button>
               </div>
             </form>

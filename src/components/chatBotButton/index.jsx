@@ -4,7 +4,13 @@ import "./style.css";
 import { Dropdown, Widget } from "../../assets";
 import { useVerifyKeyQuery } from "../../redux/api.js";
 
-const ChatbotButton = ({ apiKey }) => {
+const ChatbotButton = ({
+  apiKey = "test-d2tBulR15jGZWIbZt0nivAP1nfSVnDtgPuk1zore_IXx6i9r",
+}) => {
+  if (!localStorage.getItem("isLight")) {
+    localStorage.setItem("isLight", "false");
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const { data } = useVerifyKeyQuery(
     { apiKey },
