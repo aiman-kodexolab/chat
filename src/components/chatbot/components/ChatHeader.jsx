@@ -1,13 +1,6 @@
 import React from "react";
 import "../style.css";
-import {
-  DeleteIcon,
-  GoBack,
-  // Hamburger,
-  // Widget,
-  darkMode,
-  lightMode,
-} from "../../../assets";
+import { DeleteIcon, GoBack, darkMode, lightMode } from "../../../assets";
 
 export default function ChatHeader({
   messagesSession,
@@ -34,7 +27,7 @@ export default function ChatHeader({
                     ? `go-back-icon ${isToggled ? "light" : ""}`
                     : "grey_back_icon"
                 }`}
-                src={GoBack}
+                src={GoBack} alt=""
               />
             )}
           </button>
@@ -52,7 +45,7 @@ export default function ChatHeader({
                       ? `delete_chat_icon ${isToggled ? "light" : ""}`
                       : "grey_image"
                   }`}
-                  src={DeleteIcon}
+                  src={DeleteIcon} alt=""
                 />
               </button>
             )}
@@ -64,17 +57,11 @@ export default function ChatHeader({
                 <div className="wrapper">
                   <img
                     className="toggle_icon"
-                    src={isToggled ? lightMode : darkMode}
+                    src={isToggled ? lightMode : darkMode} alt=""
                   />
                 </div>
               </div>
             </div>
-            {/* <div
-              className={`toggle-button ${isToggled ? "toggled" : ""}`}
-              onClick={handleToggle}
-            >
-              <img className={"toggle_icon" src={Hamburger} />
-            </div> */}
           </div>
         </div>
       </div>

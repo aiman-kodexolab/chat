@@ -110,6 +110,11 @@ export default function ChatbotContent({
                   value={values.phone_number}
                   theme={isToggled}
                   onChange={handleChange("phone_number")}
+                  error={
+                    touched?.phone_number && errors?.phone_number
+                      ? errors?.phone_number
+                      : null
+                  }
                 />
               </div>
               <div className="form-footer">
@@ -118,14 +123,8 @@ export default function ChatbotContent({
                   disabled={isFormSubmitLoading}
                   className="submit-button"
                 >
-                  {isFormSubmitLoading ? (
-                    <div className="new-conversation-loader"></div>
-                  ) : (
-                    <>
-                      <img src={SendMsg} alt="" className="send-icon" />
-                      <p className="submit-text">New Chat</p>
-                    </>
-                  )}
+                  <img src={SendMsg} alt="" className="send-icon" />
+                  <p className="submit-text">New Chat</p>
                 </button>
               </div>
             </form>
