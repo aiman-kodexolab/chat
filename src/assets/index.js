@@ -19,6 +19,9 @@ const goAhead =
 const lightMode =
   "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/lightMode.png";
 
+const notification =
+  "https://internal-chatbot-media.s3.us-west-1.amazonaws.com/notification.wav";
+
 export {
   darkMode,
   Widget,
@@ -30,4 +33,5 @@ export {
   Send,
   goAhead,
   lightMode,
+  notification
 };

@@ -1,4 +1,4 @@
-import notification from "../assets/notification.wav";
+import { notification } from "../assets";
 
 export const formatTime = () => {
   const now = new Date();
