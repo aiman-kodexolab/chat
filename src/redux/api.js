@@ -59,8 +59,8 @@ export const api = createApi({
     }),
 
     getProfile: builder.query({
-      query: () => ({
-        url: "/profile/get_business_profile",
+      query: ({ apiKey }) => ({
+        url: `/profile/get_business_by_api_key?api_key=${apiKey}`,
         method: "GET",
       }),
     }),

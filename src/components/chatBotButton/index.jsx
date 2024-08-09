@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chatbot from "../chatbot/Chatbot.jsx";
 import "./style.css";
 import { Dropdown, Widget } from "../../assets";
-import { useVerifyKeyQuery } from "../../redux/api.js";
+import { useGetProfileQuery, useVerifyKeyQuery } from "../../redux/api.js";
+import { useDispatch } from "react-redux";
+import { setChat } from "../../redux/state.js";
 
-const ChatbotButton = ({
-  apiKey = "test-d2tBulR15jGZWIbZt0nivAP1nfSVnDtgPuk1zore_IXx6i9r",
-}) => {
+const ChatbotButton = ({ apiKey }) => {
   if (!localStorage.getItem("isLight")) {
     localStorage.setItem("isLight", "false");
   }
+
+  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
   const { data } = useVerifyKeyQuery(
@@ -19,6 +21,19 @@ const ChatbotButton = ({
       skip: !apiKey,
     }
   );
+  const { data: clientBusinessData } = useGetProfileQuery(
+    { apiKey },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !apiKey,
+    }
+  );
+
+  useEffect(() => {
+    if (clientBusinessData?.data) {
+      dispatch(setChat(clientBusinessData?.data.chat_customization));
+    }
+  }, [clientBusinessData?.data]);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
@@ -31,9 +46,9 @@ const ChatbotButton = ({
           {isOpen && <Chatbot />}
           <div className={"circle_button"} onClick={toggleChat}>
             {isOpen ? (
-              <img className="close_icon" src={Dropdown} />
+              <img className="close_icon" alt="" src={Dropdown} />
             ) : (
-              <img className="open_icon" src={Widget} />
+              <img className="open_icon" alt="" src={Widget} />
             )}
           </div>
         </div>

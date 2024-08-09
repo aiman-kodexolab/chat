@@ -6,6 +6,7 @@ import { useGetChatHistoryQuery } from "../../../redux/api";
 import { formatTime, socketUrl } from "../../../utils/constant";
 import { io } from "socket.io-client";
 import { ShimmerDiv } from "shimmer-effects-react";
+import { useSelector } from "react-redux";
 
 const MessagesSession = ({
   status,
@@ -22,6 +23,8 @@ const MessagesSession = ({
   const [messages, setMessages] = useState("");
   const [socket, setSocket] = useState(null);
   const endRef = useRef();
+  const botTime = formatTime();
+  const customizedChatData = useSelector((state) => state.state.chatData);
   const inputFieldStyle = {
     border: "1px solid",
     borderImageSource: "linear-gradient(90deg, #079485 0%, #115588 100%)",
@@ -51,8 +54,6 @@ const MessagesSession = ({
     socket.on("done", (msg) => {
       if (msg?.chat_completed && msg?.sentence) {
         if (!msg?.fine_tuning) {
-          const botTime = formatTime();
-
           setChatArray((prevDataSets) => [
             ...prevDataSets,
             {
@@ -87,8 +88,16 @@ const MessagesSession = ({
     );
 
   useEffect(() => {
-    if (chatData?.data) {
-      setChatArray(chatData.data);
+    if (chatData?.data && !chatHistoryLoader) {
+      setChatArray([
+        {
+          type: "bot",
+          content:
+            customizedChatData && customizedChatData?.current_welcome_message,
+          created_on: botTime,
+        },
+        ...chatData.data,
+      ]);
     }
   }, [chatData?.data]);
 
@@ -132,7 +141,7 @@ const MessagesSession = ({
     <>
       <div className={`chat-container ${status ? "expanded" : "collapsed"}`}>
         <ShimmerDiv
-          loading={chatHistoryLoader || sessionLoader}
+          loading={chatHistoryLoader}
           mode="dark"
           height={60}
           width={"85%"}
@@ -145,17 +154,17 @@ const MessagesSession = ({
           width={"85%"}
           rounded={0.3}
           className="shimmer"
-          loading={chatHistoryLoader || sessionLoader}
+          loading={chatHistoryLoader}
         />
 
         <ShimmerDiv
-          loading={chatHistoryLoader || sessionLoader}
+          loading={chatHistoryLoader}
           mode="dark"
           height={100}
           width={"85%"}
           rounded={0.3}
         />
-          {Array.isArray(chatArray) &&
+        {Array.isArray(chatArray) &&
           chatArray?.map((item, index) => {
             if (item?.type === "user") {
               return (

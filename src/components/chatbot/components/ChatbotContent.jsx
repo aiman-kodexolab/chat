@@ -110,6 +110,11 @@ export default function ChatbotContent({
                   value={values.phone_number}
                   theme={isToggled}
                   onChange={handleChange("phone_number")}
+                  error={
+                    touched?.phone_number && errors?.phone_number
+                      ? errors?.phone_number
+                      : null
+                  }
                 />
               </div>
               <div className="form-footer">

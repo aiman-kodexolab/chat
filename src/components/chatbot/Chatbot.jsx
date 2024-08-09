@@ -5,7 +5,12 @@ import ChatHeader from "./components/ChatHeader";
 import ChatbotContent from "./components/ChatbotContent";
 import { useVisitorId } from "../../hooks/useVisitorId";
 import MessagesSession from "./components/MessagesSession";
-import { formatTime } from "../../utils/constant";
+import {
+  emailRegex,
+  formatTime,
+  phoneRegex,
+  playNotificationSound,
+} from "../../utils/constant";
 import {
   useCreateSessionMutation,
   useDeleteChatMutation,
@@ -20,17 +25,17 @@ const Chatbot = () => {
   const [values, setValues] = useState({
     userName: "",
     email: "",
-    phoneNumber: "",
+    phone_number: "",
   });
   const [errors, setErrors] = useState({
     userName: "",
     email: "",
-    phoneNumber: "",
+    phone_number: "",
   });
   const [touched, setTouched] = useState({
     userName: false,
     email: false,
-    phoneNumber: false,
+    phone_number: false,
   });
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [messagesSession, setMessagesSession] = useState(false);
@@ -90,7 +95,7 @@ const Chatbot = () => {
       const apiBody = {
         user_name: values.userName,
         email: values.email,
-        phone_number: values.phoneNumber,
+        phone_number: values.phone_number,
         session_id: sessionId,
         user_id: "",
       };
@@ -126,17 +131,20 @@ const Chatbot = () => {
   };
 
   const validate = () => {
-    const newErrors = { userName: "", email: "" };
+    const newErrors = { userName: "", email: "", phone_number: "" };
     if (!values.userName) {
       newErrors.userName = "Name is required";
     }
     if (!values.email) {
       newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    } else if (!emailRegex.test(values.email)) {
       newErrors.email = "Email is invalid";
     }
+    if (values.phone_number && !phoneRegex.test(values.phone_number)) {
+      newErrors.phone_number = "Phone number is invalid";
+    }
     setErrors(newErrors);
-    return !newErrors.userName && !newErrors.email;
+    return !newErrors.userName && !newErrors.email && !newErrors.phone_number;
   };
 
   const onSubmit = async (event) => {
@@ -144,12 +152,12 @@ const Chatbot = () => {
     const userData = {
       userName: values.userName,
       email: values.email,
-      phoneNumber: values.phoneNumber,
+      phone_number: values.phone_number,
     };
     const userString = JSON.stringify(userData);
     localStorage.setItem("user", userString);
 
-    const newErrors = { userName: "", email: "" };
+    const newErrors = { userName: "", email: "", phone_number: "" };
     let hasErrors = false;
 
     setSubmitAttempted(true);
@@ -163,11 +171,15 @@ const Chatbot = () => {
       newErrors.email = "Email is required";
       hasErrors = true;
     } else {
-      const emailFormat = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email);
+      const emailFormat = !emailRegex.test(values.email);
       if (emailFormat) {
         newErrors.email = "Email is invalid";
         hasErrors = true;
       }
+    }
+    if (values.phone_number && !phoneRegex.test(values.phone_number)) {
+      newErrors.phone_number = "Phone number is invalid";
+      hasErrors = true;
     }
 
     if (hasErrors) {
@@ -181,24 +193,24 @@ const Chatbot = () => {
         JSON.stringify({
           userName: values.userName,
           email: values.email,
-          phoneNumber: values.phoneNumber,
+          phone_number: values.phone_number,
         })
       );
       setIsFormSubmitLoading(false);
       setEmail(values.email);
       resetForm();
       setMessagesSession(true);
+      playNotificationSound();
       setIsFormActive(false);
-      // }
       setErrors({
         userName: "",
         email: "",
-        phoneNumber: "",
+        phone_number: "",
       });
       setTouched({
         userName: "",
         email: "",
-        phoneNumber: "",
+        phone_number: "",
       });
     }
   };
@@ -211,17 +223,17 @@ const Chatbot = () => {
       setValues({
         userName: "",
         email: "",
-        phoneNumber: "",
+        phone_number: "",
       });
       setErrors({
         userName: "",
         email: "",
-        phoneNumber: "",
+        phone_number: "",
       });
       setTouched({
         userName: "",
         email: "",
-        phoneNumber: "",
+        phone_number: "",
       });
     }
   };
@@ -245,6 +257,7 @@ const Chatbot = () => {
     if (item?.is_form_filled) {
       setChat(true);
       setMessagesSession(true);
+      playNotificationSound();
       setSessionId(item?._id);
       setEmail(item?.email);
       localStorage.setItem("currentSession", JSON.stringify(userSession));
@@ -260,9 +273,9 @@ const Chatbot = () => {
   };
 
   const resetForm = () => {
-    setValues({ userName: "", email: "", phoneNumber: "" });
-    setTouched({ userName: "", email: "", phoneNumber: "" });
-    setErrors({ userName: "", email: "", phoneNumber: "" });
+    setValues({ userName: "", email: "", phone_number: "" });
+    setTouched({ userName: "", email: "", phone_number: "" });
+    setErrors({ userName: "", email: "", phone_number: "" });
   };
 
   const handleToggle = () => {
@@ -300,7 +313,7 @@ const Chatbot = () => {
         <div className={"header"}>
           <div className={"rotated-half-circle"}></div>
           <div className={`avatar_wrap ${isToggled ? "light" : ""}`}>
-            <img src={Widget} />
+            <img src={Widget} alt="" />
           </div>
         </div>
         <div className={`window ${isToggled ? "light" : ""}`}>
@@ -329,11 +342,8 @@ const Chatbot = () => {
           ) : (
             <ChatbotContent
               values={values}
-              errors={errors}
-              chat={chat}
               isFormActive={isFormActive}
-              goBackForm={goBackForm}
-              systemId={systemId}
+              errors={errors}
               startSession={startSession}
               handleSubmit={onSubmit}
               handleChange={handleChange}

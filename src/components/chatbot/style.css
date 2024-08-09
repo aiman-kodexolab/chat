@@ -460,7 +460,7 @@
   width: fit-content;
   margin-right: auto;
   background: rgba(40, 48, 63, 0.7);
-  border-radius: 15px 15px 0px 15px;
+  border-radius: 15px 15px 15px 0px;
 }
 
 .bot-name {
