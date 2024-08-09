@@ -200,7 +200,7 @@ const Chatbot = () => {
       setEmail(values.email);
       resetForm();
       setMessagesSession(true);
-      playNotificationSound();
+      await playNotificationSound();
       setIsFormActive(false);
       setErrors({
         userName: "",
@@ -248,7 +248,7 @@ const Chatbot = () => {
     refetch();
   };
 
-  const onSessionClick = (item) => {
+  const onSessionClick = async (item) => {
     const userSession = {
       is_form_filled: item?.is_form_filled,
       _id: item?._id,
@@ -257,7 +257,7 @@ const Chatbot = () => {
     if (item?.is_form_filled) {
       setChat(true);
       setMessagesSession(true);
-      playNotificationSound();
+      await playNotificationSound();
       setSessionId(item?._id);
       setEmail(item?.email);
       localStorage.setItem("currentSession", JSON.stringify(userSession));

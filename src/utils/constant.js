@@ -37,9 +37,13 @@ export const formatTime = () => {
   return `${formattedDate} . ${formattedTime}`;
 };
 
-export function playNotificationSound() {
-  const audio = new Audio(notification);
-  audio.play();
+export async function playNotificationSound() {
+  try {
+    const audio = new Audio(notification);
+    await audio.play();
+  } catch (e) {
+    console.log("eee", e);
+  }
 }
 
 export const apiUrl = "https://chatbot-api.kodexolabs.ai/";
