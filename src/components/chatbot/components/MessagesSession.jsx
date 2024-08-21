@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Dropdown } from "../../../assets";
 
 const MessagesSession = ({
   status,
@@ -22,8 +23,11 @@ const MessagesSession = ({
   sessionLoader,
 }) => {
   const [messages, setMessages] = useState("");
-  const [socket, setSocket] = useState(null);
+  const [messageLength, setMessageLength] = useState(0);
+  const [socket, setSocket] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
   const endRef = useRef();
+  const containerRef = useRef();
   const botTime = formatTime();
   const customizedChatData = useSelector((state) => state.state.chatData);
   const inputFieldStyle = {
@@ -37,7 +41,27 @@ const MessagesSession = ({
     });
   }
 
-  useEffect(scrollToEnd, [chatArray]);
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+      if (scrollHeight - (scrollTop + clientHeight) < 200) {
+        setScrolled(false);
+        setMessageLength(0);
+      } else {
+        setScrolled(true);
+      }
+    };
+
+    containerRef?.current?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      containerRef?.current?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    scrollToEnd();
+  }, [chatArray]);
 
   useEffect(() => {
     const socket = io(socketUrl, {
@@ -64,6 +88,9 @@ const MessagesSession = ({
             },
           ]);
           setChatLoad(false);
+          if (scrolled) {
+            setMessageLength((prevLength) => prevLength + 1);
+          }
         }
       }
     });
@@ -139,8 +166,11 @@ const MessagesSession = ({
   };
 
   return (
-    <>
-      <div className={`chat-container ${status ? "expanded" : "collapsed"}`}>
+    <div style={{ position: "relative" }}>
+      <div
+        ref={containerRef}
+        className={`chat-container ${status ? "expanded" : "collapsed"}`}
+      >
         {chatHistoryLoader && (
           <Skeleton
             height={40}
@@ -177,7 +207,6 @@ const MessagesSession = ({
             duration={3}
           />
         )}
-
         {Array.isArray(chatArray) &&
           chatArray?.map((item, index) => {
             if (item?.type === "user") {
@@ -209,7 +238,17 @@ const MessagesSession = ({
         isToggled={isToggled}
         theme={isToggled}
       />
-    </>
+      {scrolled && (
+        <>
+          {messageLength > 0 && (
+            <div className="unread_message">{messageLength}</div>
+          )}
+          <div className="scroll_container" onClick={scrollToEnd}>
+            <img className="scroll" alt="" src={Dropdown} />
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
