@@ -5,8 +5,9 @@ import InputField from "./InputField";
 import { useGetChatHistoryQuery } from "../../../redux/api";
 import { formatTime, socketUrl } from "../../../utils/constant";
 import { io } from "socket.io-client";
-import { ShimmerDiv } from "shimmer-effects-react";
 import { useSelector } from "react-redux";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const MessagesSession = ({
   status,
@@ -140,30 +141,43 @@ const MessagesSession = ({
   return (
     <>
       <div className={`chat-container ${status ? "expanded" : "collapsed"}`}>
-        <ShimmerDiv
-          loading={chatHistoryLoader}
-          mode="dark"
-          height={60}
-          width={"85%"}
-          rounded={0.3}
-        />
+        {chatHistoryLoader && (
+          <Skeleton
+            height={40}
+            width={"85%"}
+            baseColor="#01BFB726"
+            highlightColor="#10ddd3"
+            duration={3}
+          />
+        )}
+        {chatHistoryLoader && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: 5,
+              marginBottom: 5,
+            }}
+          >
+            <Skeleton
+              height={70}
+              containerClassName="width-80"
+              baseColor="#01BFB726"
+              highlightColor="#10ddd3"
+              duration={3}
+            />
+          </div>
+        )}
+        {chatHistoryLoader && (
+          <Skeleton
+            height={70}
+            width={"85%"}
+            baseColor="#01BFB726"
+            highlightColor="#10ddd3"
+            duration={3}
+          />
+        )}
 
-        <ShimmerDiv
-          mode="dark"
-          height={50}
-          width={"85%"}
-          rounded={0.3}
-          className="shimmer"
-          loading={chatHistoryLoader}
-        />
-
-        <ShimmerDiv
-          loading={chatHistoryLoader}
-          mode="dark"
-          height={100}
-          width={"85%"}
-          rounded={0.3}
-        />
         {Array.isArray(chatArray) &&
           chatArray?.map((item, index) => {
             if (item?.type === "user") {
