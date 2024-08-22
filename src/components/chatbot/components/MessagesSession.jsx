@@ -24,7 +24,7 @@ const MessagesSession = ({
 }) => {
   const [messages, setMessages] = useState("");
   const [messageLength, setMessageLength] = useState(0);
-  const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState();
   const [scrolled, setScrolled] = useState(false);
   const endRef = useRef();
   const containerRef = useRef();
@@ -48,6 +48,7 @@ const MessagesSession = ({
     endRef?.current?.scrollIntoView({
       behavior: "smooth",
     });
+    setMessageLength(0);
   }
 
   const debouncedScrollToEnd = debounce(scrollToEnd, 100);
@@ -72,7 +73,6 @@ const MessagesSession = ({
   useEffect(() => {
     if (!scrolled) {
       debouncedScrollToEnd();
-      setMessageLength(0);
     }
   }, [chatArray, scrolled]);
 

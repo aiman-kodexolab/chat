@@ -6,7 +6,9 @@ import { useGetProfileQuery, useVerifyKeyQuery } from "../../redux/api.js";
 import { useDispatch } from "react-redux";
 import { setChat } from "../../redux/state.js";
 
-const ChatbotButton = ({ apiKey }) => {
+const ChatbotButton = ({
+  apiKey = "test-d2tBulR15jGZWIbZt0nivAP1nfSVnDtgPuk1zore_IXx6i9r",
+}) => {
   if (!localStorage.getItem("isLight")) {
     localStorage.setItem("isLight", "false");
   }
