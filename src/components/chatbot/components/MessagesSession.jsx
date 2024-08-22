@@ -24,7 +24,7 @@ const MessagesSession = ({
 }) => {
   const [messages, setMessages] = useState("");
   const [messageLength, setMessageLength] = useState(0);
-  const [socket, setSocket] = useState(0);
+  const [socket, setSocket] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const endRef = useRef();
   const containerRef = useRef();
@@ -35,11 +35,22 @@ const MessagesSession = ({
     borderImageSource: "linear-gradient(90deg, #079485 0%, #115588 100%)",
   };
 
+  function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+
   function scrollToEnd() {
     endRef?.current?.scrollIntoView({
       behavior: "smooth",
     });
   }
+
+  const debouncedScrollToEnd = debounce(scrollToEnd, 100);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,8 +71,10 @@ const MessagesSession = ({
   }, []);
 
   useEffect(() => {
-    scrollToEnd();
-  }, [chatArray]);
+    if (!scrolled) {
+      debouncedScrollToEnd();
+    }
+  }, [chatArray, scrolled]);
 
   useEffect(() => {
     const socket = io(socketUrl, {
@@ -77,21 +90,20 @@ const MessagesSession = ({
     });
 
     socket.on("done", (msg) => {
+      if (scrolled) {
+        setMessageLength((prevLength) => prevLength + 1);
+      }
+
       if (msg?.chat_completed && msg?.sentence) {
-        if (!msg?.fine_tuning) {
-          setChatArray((prevDataSets) => [
-            ...prevDataSets,
-            {
-              type: "bot",
-              content: msg?.sentence,
-              created_on: botTime,
-            },
-          ]);
-          setChatLoad(false);
-          if (scrolled) {
-            setMessageLength((prevLength) => prevLength + 1);
-          }
-        }
+        setChatArray((prevDataSets) => [
+          ...prevDataSets,
+          {
+            type: "bot",
+            content: msg?.sentence,
+            created_on: botTime,
+          },
+        ]);
+        setChatLoad(false);
       }
     });
 
@@ -131,6 +143,7 @@ const MessagesSession = ({
 
   const sendMessage = (e) => {
     e.preventDefault();
+    debouncedScrollToEnd();
 
     if (!messages?.trim()) {
       return;
@@ -226,7 +239,7 @@ const MessagesSession = ({
         {chatLoad && (
           <div className={`loader ${isToggled ? "light" : ""}`}></div>
         )}
-        <div ref={endRef}></div>
+        <div ref={endRef} />
       </div>
       <InputField
         style={inputFieldStyle}

@@ -46,9 +46,9 @@ const ChatbotButton = ({ apiKey }) => {
           {isOpen && <Chatbot />}
           <div className={"circle_button"} onClick={toggleChat}>
             {isOpen ? (
-              <img className="close_icon" alt="" src={Dropdown} />
+              <img className="widget close_icon" alt="" src={Dropdown} />
             ) : (
-              <img className="open_icon" alt="" src={Widget} />
+              <img className="widget open_icon" alt="" src={Widget} />
             )}
           </div>
         </div>
