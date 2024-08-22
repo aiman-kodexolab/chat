@@ -23,9 +23,9 @@ const MessagesSession = ({
   sessionLoader,
 }) => {
   const [messages, setMessages] = useState("");
-  const [messageLength, setMessageLength] = useState(0);
   const [socket, setSocket] = useState();
   const [scrolled, setScrolled] = useState(false);
+  const [newMessages, setNewMessages] = useState([]);
   const endRef = useRef();
   const containerRef = useRef();
   const botTime = formatTime();
@@ -48,7 +48,6 @@ const MessagesSession = ({
     endRef?.current?.scrollIntoView({
       behavior: "smooth",
     });
-    setMessageLength(0);
   }
 
   const debouncedScrollToEnd = debounce(scrollToEnd, 100);
@@ -57,6 +56,7 @@ const MessagesSession = ({
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
       if (scrollHeight - (scrollTop + clientHeight) < 200) {
+        setNewMessages([]);
         setScrolled(false);
       } else {
         setScrolled(true);
@@ -99,9 +99,14 @@ const MessagesSession = ({
             created_on: botTime,
           },
         ]);
-        if (scrolled) {
-          setMessageLength((prevLength) => prevLength + 1);
-        }
+        setNewMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            type: "bot",
+            content: msg?.sentence,
+            created_on: botTime,
+          },
+        ]);
         setChatLoad(false);
       }
     });
@@ -223,7 +228,7 @@ const MessagesSession = ({
           chatArray?.map((item, index) => {
             if (item?.type === "user") {
               return (
-                <TextBlock key={index} isUser={true} time={item?.created_on}>
+                <TextBlock key={item._id} isUser={true} time={item?.created_on}>
                   {item?.content}
                 </TextBlock>
               );
@@ -252,9 +257,8 @@ const MessagesSession = ({
       />
       {scrolled && (
         <>
-          {console.log("messageLength", messageLength)}
-          {messageLength > 0 && (
-            <div className="unread_message">{messageLength}</div>
+          {newMessages?.length > 0 && (
+            <div className="unread_message">{newMessages?.length}</div>
           )}
           <div className="scroll_container" onClick={scrollToEnd}>
             <img className="scroll" alt="" src={Dropdown} />
