@@ -57,7 +57,6 @@ const MessagesSession = ({
       const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
       if (scrollHeight - (scrollTop + clientHeight) < 200) {
         setScrolled(false);
-        setMessageLength(0);
       } else {
         setScrolled(true);
       }
@@ -73,6 +72,7 @@ const MessagesSession = ({
   useEffect(() => {
     if (!scrolled) {
       debouncedScrollToEnd();
+      setMessageLength(0);
     }
   }, [chatArray, scrolled]);
 
@@ -90,10 +90,6 @@ const MessagesSession = ({
     });
 
     socket.on("done", (msg) => {
-      if (scrolled) {
-        setMessageLength((prevLength) => prevLength + 1);
-      }
-
       if (msg?.chat_completed && msg?.sentence) {
         setChatArray((prevDataSets) => [
           ...prevDataSets,
@@ -103,6 +99,9 @@ const MessagesSession = ({
             created_on: botTime,
           },
         ]);
+        if (scrolled) {
+          setMessageLength((prevLength) => prevLength + 1);
+        }
         setChatLoad(false);
       }
     });
@@ -253,6 +252,7 @@ const MessagesSession = ({
       />
       {scrolled && (
         <>
+          {console.log("messageLength", messageLength)}
           {messageLength > 0 && (
             <div className="unread_message">{messageLength}</div>
           )}

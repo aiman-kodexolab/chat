@@ -32,6 +32,44 @@ code {
   position: relative;
 }
 
+.unread_message {
+  font-size: 8px;
+  background: linear-gradient(180deg, #079485 0%, #115588 100%);
+  position: absolute;
+  color: white;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  bottom: 120px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-width: 1;
+}
+
+.scroll {
+  width: 8px;
+  height: 8px;
+  object-fit: contain;
+}
+
+.scroll_container {
+  position: absolute;
+  background-color: #007bff;
+  background: linear-gradient(180deg, #079485 0%, #115588 100%);
+  border-radius: 50%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 100px;
+  right: 12px;
+  cursor: pointer;
+}
+
 .width-80 {
   width: 80%;
 }
@@ -1043,7 +1081,9 @@ input:-webkit-autofill:not(:focus) {
   }
 }
 
-*, :after, :before {
+*,
+:after,
+:before {
   box-sizing: border-box;
 }
 .chatbot_wrapper {
@@ -1083,21 +1123,18 @@ input:-webkit-autofill:not(:focus) {
   font-size: 24px;
 }
 .open_icon {
-  object-fit: cover;
+  object-fit: contain;
+}
+
+.widget {
   width: 65px;
   height: 65px;
 }
-.open_icon.disabled {
-  object-fit: cover;
-  width: 65px;
-  height: 65px;
-  filter: invert(50%) grayscale(100%);
-}
+
 .close_icon {
-  width: 65px;
-  height: 65px;
   object-fit: none;
 }
+
 .App {
   text-align: center;
 }
