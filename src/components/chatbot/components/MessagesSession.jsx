@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Dropdown } from "../../../assets";
 
 const MessagesSession = ({
   status,
@@ -22,8 +23,11 @@ const MessagesSession = ({
   sessionLoader,
 }) => {
   const [messages, setMessages] = useState("");
+  const [messageLength, setMessageLength] = useState(0);
   const [socket, setSocket] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const endRef = useRef();
+  const containerRef = useRef();
   const botTime = formatTime();
   const customizedChatData = useSelector((state) => state.state.chatData);
   const inputFieldStyle = {
@@ -31,13 +35,46 @@ const MessagesSession = ({
     borderImageSource: "linear-gradient(90deg, #079485 0%, #115588 100%)",
   };
 
+  function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+
   function scrollToEnd() {
     endRef?.current?.scrollIntoView({
       behavior: "smooth",
     });
   }
 
-  useEffect(scrollToEnd, [chatArray]);
+  const debouncedScrollToEnd = debounce(scrollToEnd, 100);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+      if (scrollHeight - (scrollTop + clientHeight) < 200) {
+        setScrolled(false);
+      } else {
+        setScrolled(true);
+      }
+    };
+
+    containerRef?.current?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      containerRef?.current?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!scrolled) {
+      debouncedScrollToEnd();
+      setMessageLength(0);
+    }
+  }, [chatArray, scrolled]);
 
   useEffect(() => {
     const socket = io(socketUrl, {
@@ -54,17 +91,18 @@ const MessagesSession = ({
 
     socket.on("done", (msg) => {
       if (msg?.chat_completed && msg?.sentence) {
-        if (!msg?.fine_tuning) {
-          setChatArray((prevDataSets) => [
-            ...prevDataSets,
-            {
-              type: "bot",
-              content: msg?.sentence,
-              created_on: botTime,
-            },
-          ]);
-          setChatLoad(false);
+        setChatArray((prevDataSets) => [
+          ...prevDataSets,
+          {
+            type: "bot",
+            content: msg?.sentence,
+            created_on: botTime,
+          },
+        ]);
+        if (scrolled) {
+          setMessageLength((prevLength) => prevLength + 1);
         }
+        setChatLoad(false);
       }
     });
 
@@ -104,6 +142,7 @@ const MessagesSession = ({
 
   const sendMessage = (e) => {
     e.preventDefault();
+    debouncedScrollToEnd();
 
     if (!messages?.trim()) {
       return;
@@ -139,8 +178,11 @@ const MessagesSession = ({
   };
 
   return (
-    <>
-      <div className={`chat-container ${status ? "expanded" : "collapsed"}`}>
+    <div style={{ position: "relative" }}>
+      <div
+        ref={containerRef}
+        className={`chat-container ${status ? "expanded" : "collapsed"}`}
+      >
         {chatHistoryLoader && (
           <Skeleton
             height={40}
@@ -177,7 +219,6 @@ const MessagesSession = ({
             duration={3}
           />
         )}
-
         {Array.isArray(chatArray) &&
           chatArray?.map((item, index) => {
             if (item?.type === "user") {
@@ -197,7 +238,7 @@ const MessagesSession = ({
         {chatLoad && (
           <div className={`loader ${isToggled ? "light" : ""}`}></div>
         )}
-        <div ref={endRef}></div>
+        <div ref={endRef} />
       </div>
       <InputField
         style={inputFieldStyle}
@@ -209,7 +250,18 @@ const MessagesSession = ({
         isToggled={isToggled}
         theme={isToggled}
       />
-    </>
+      {scrolled && (
+        <>
+          {console.log("messageLength", messageLength)}
+          {messageLength > 0 && (
+            <div className="unread_message">{messageLength}</div>
+          )}
+          <div className="scroll_container" onClick={scrollToEnd}>
+            <img className="scroll" alt="" src={Dropdown} />
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
