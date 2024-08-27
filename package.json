@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npx webpack --mode production",
     "test": "react-scripts test",
     "build-webpack": "npx webpack --mode production",
     "copy-bundle": "cp dist/chatbot.bundle.js docs/",
