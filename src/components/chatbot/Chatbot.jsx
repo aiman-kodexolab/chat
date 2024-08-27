@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Widget } from "../../assets";
 import "./style.css";
 import ChatHeader from "./components/ChatHeader";
@@ -10,6 +10,7 @@ import {
   formatTime,
   phoneRegex,
   playNotificationSound,
+  socketUrl,
 } from "../../utils/constant";
 import {
   useCreateSessionMutation,
@@ -17,11 +18,13 @@ import {
   useGetSessionsQuery,
   useSessionDetailsMutation,
 } from "../../redux/api";
+import io from "socket.io-client"
 
 const Chatbot = () => {
   const [chat, setChat] = useState(true);
   const [isFormActive, setIsFormActive] = useState(false);
   const [goBackForm, setGoBackForm] = useState(false);
+  const socket = useRef(null)
   const [values, setValues] = useState({
     userName: "",
     email: "",
@@ -82,8 +85,18 @@ const Chatbot = () => {
         system_id: systemId,
         created_on: sessionCreated,
         user_id: "",
+        business_id: JSON.parse(localStorage.getItem("business_id")),
       });
-      setSessionId(response?.data?.data?.session_id);
+
+      setSessionId(() => response?.data?.data?.session_id);
+
+      socket.current.emit("join", {
+        "session_id": response?.data?.data?.session_id
+      })
+      const userSession = {
+        _id: response?.data?.data?.session_id,
+      };
+      localStorage.setItem("currentSession", JSON.stringify(userSession));
       setIsFormActive(true);
     } catch (e) {
       console.log("Error starting session:", e);
@@ -97,14 +110,17 @@ const Chatbot = () => {
         email: values.email,
         phone_number: values.phone_number,
         session_id: sessionId,
+        business_id: JSON.parse(localStorage.getItem("business_id")),
         user_id: "",
       };
       const result = await sessionDetail(apiBody);
       const userSession = {
         is_form_filled: result?.data?.data?.is_form_filled,
-        session_id: result?.data?.data?._id,
+        _id: result?.data?.data?.session_id,
         status: result?.data?.data?.status,
       };
+      setSessionId(() => result?.data?.data?.session_id)
+
       localStorage.setItem("currentSession", JSON.stringify(userSession));
     } catch (e) {
       console.log("This error", e);
@@ -122,13 +138,32 @@ const Chatbot = () => {
   const handleDeleteChat = async () => {
     try {
       setChatArray([]);
-      const response = await deleteChat({
+      await deleteChat({
         session_id: sessionId,
       });
     } catch (e) {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    const sio = io(socketUrl, {
+      transports: ["websocket"],
+    })
+
+    sio.on("connect", (data) => {
+      console.log("client connected")
+    })
+
+    sio.on("client connected", (data) => {
+      console.log("data", data)
+    })
+
+    socket.current = sio
+    return () => {
+      sio.disconnect()
+    }
+  }, [])
 
   const validate = () => {
     const newErrors = { userName: "", email: "", phone_number: "" };
@@ -258,18 +293,21 @@ const Chatbot = () => {
       setChat(true);
       setMessagesSession(true);
       await playNotificationSound();
-      setSessionId(item?._id);
       setEmail(item?.email);
       localStorage.setItem("currentSession", JSON.stringify(userSession));
     } else {
       setIsFormActive(true);
-      setSessionId(item?._id);
     }
     if (item?.status === "closed") {
       setStatus(false);
     } else {
       setStatus(true);
     }
+    setSessionId(() => item?._id);
+
+    socket.current.emit("join", {
+      "session_id": item?._id
+    })
   };
 
   const resetForm = () => {

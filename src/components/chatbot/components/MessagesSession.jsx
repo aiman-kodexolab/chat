@@ -22,9 +22,10 @@ const MessagesSession = ({
   sessionLoader,
 }) => {
   const [messages, setMessages] = useState("");
-  const [socket, setSocket] = useState(null);
   const endRef = useRef();
+  const socket = useRef(null)
   const botTime = formatTime();
+  const isHuman = useRef(false);
   const customizedChatData = useSelector((state) => state.state.chatData);
   const inputFieldStyle = {
     border: "1px solid",
@@ -40,19 +41,47 @@ const MessagesSession = ({
   useEffect(scrollToEnd, [chatArray]);
 
   useEffect(() => {
-    const socket = io(socketUrl, {
+
+    const sio = io(socketUrl, {
       transports: ["websocket"],
-    });
-    setSocket(socket);
-    socket.on("connect", () => {
-      console.log("WebSocket connected");
+    })
+
+    sio.on("connect", (data) => {
+      console.log("client connected")
+    })
+
+
+    sio.on("client connected", (data) => {
+      const currentSession = JSON.parse(localStorage.getItem("currentSession"))
+      if (typeof currentSession === "object" && currentSession?._id) {
+        sio.emit("join", {
+          session_id: currentSession?._id
+        })
+      }
+    })
+
+    sio.on("released", (data) => {
+      isHuman.current = false
+    })
+
+    sio.on("ai_chat_message", (msg) => {
+      const botTime = formatTime();
+      setChatArray((prevDataSets) => [
+        ...prevDataSets,
+        {
+          type: "bot",
+          content: msg?.sentence,
+          created_on: botTime,
+        },
+      ]);
+      setChatLoad(false);
+    })
+
+    sio.on("entered", (data) => {
+      isHuman.current = true
     });
 
-    socket.on("connect_error", (error) => {
-      console.log("WebSocket connection error:", error);
-    });
-
-    socket.on("done", (msg) => {
+    sio.on("done", (msg) => {
       if (msg?.chat_completed && msg?.sentence) {
         if (!msg?.fine_tuning) {
           setChatArray((prevDataSets) => [
@@ -68,13 +97,14 @@ const MessagesSession = ({
       }
     });
 
-    socket.on("disconnect", () => {
+    sio.on("disconnect", () => {
       console.log("WebSocket disconnected:");
     });
 
+    socket.current = sio
     return () => {
-      socket.disconnect();
-    };
+      sio.disconnect()
+    }
   }, []);
 
   const { isLoading: chatHistoryLoader, data: chatData } =
@@ -108,6 +138,11 @@ const MessagesSession = ({
     if (!messages?.trim()) {
       return;
     }
+    if (isHuman.current) {
+      setChatLoad(false);
+    } else {
+      setChatLoad(true);
+    }
 
     setChatArray((prevChat) => [
       ...prevChat,
@@ -124,16 +159,15 @@ const MessagesSession = ({
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
-      socket.emit("chat_message", {
+      socket.current?.emit("chat_message", {
         type: "user",
         content: sanitizedMessage,
         email: email,
-        session_id: sessionId,
-        is_joined: false,
+        session_id: JSON.parse(localStorage.getItem("currentSession"))?._id,
+        business_id: JSON.parse(localStorage.getItem("business_id")),
         agent_response: "",
         created_on: sessionCreated,
       });
-      setChatLoad(true);
       setMessages("");
     }
   };

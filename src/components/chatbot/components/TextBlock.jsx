@@ -13,7 +13,7 @@ function TextBlock({ isUser, children, time }) {
         />
       );
     } else {
-      return <Markdown markdown={content} />;
+      return <Markdown markdown={content ?? ""} />;
     }
   };
 
