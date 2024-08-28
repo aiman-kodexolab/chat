@@ -288,6 +288,7 @@ const Chatbot = () => {
       is_form_filled: item?.is_form_filled,
       _id: item?._id,
       status: item?.status,
+      is_joined: item?.is_joined
     };
     if (item?.is_form_filled) {
       setChat(true);

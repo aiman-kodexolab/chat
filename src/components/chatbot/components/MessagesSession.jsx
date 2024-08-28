@@ -90,10 +90,15 @@ const MessagesSession = ({
 
     sio.on("client connected", (data) => {
       const currentSession = JSON.parse(localStorage.getItem("currentSession"))
-      if (typeof currentSession === "object" && currentSession?._id) {
-        sio.emit("join", {
-          session_id: currentSession?._id
-        })
+      if (typeof currentSession === "object") {
+        if (currentSession?._id) {
+          sio.emit("join", {
+            session_id: currentSession?._id
+          })
+        }
+        if (currentSession?.is_joined) {
+          isHuman.current = currentSession?.is_joined
+        }
       }
     })
 
