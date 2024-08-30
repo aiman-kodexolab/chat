@@ -104,6 +104,14 @@ const MessagesSession = ({
 
     sio.on("released", (data) => {
       isHuman.current = false
+      setChatArray((prevDataSets) => [
+        ...prevDataSets,
+        {
+          type: "agent",
+          content: data?.message,
+          created_on: botTime,
+        },
+      ]);
     })
 
     sio.on("ai_chat_message", (msg) => {
@@ -121,6 +129,14 @@ const MessagesSession = ({
 
     sio.on("entered", (data) => {
       isHuman.current = true
+      setChatArray((prevDataSets) => [
+        ...prevDataSets,
+        {
+          type: "agent",
+          content: data?.message,
+          created_on: botTime,
+        },
+      ]);
     });
 
     sio.on("done", (msg) => {
@@ -276,6 +292,16 @@ const MessagesSession = ({
                 <TextBlock key={item._id} time={item?.created_on}>
                   {item?.content}
                 </TextBlock>
+              );
+            }
+            else if (item?.type === "agent") {
+              return (
+                <div className="agent">
+                  <div key={item.created_on} time={item?.created_on}>
+                    {item?.content}
+                  </div>
+                  <p className="agent-time">{item?.created_on}</p>
+                </div>
               );
             }
           })}

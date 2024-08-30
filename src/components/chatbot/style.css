@@ -794,3 +794,21 @@ input:-webkit-autofill:not(:focus) {
 .no_session_box.adjust_loader {
   transform: translate(150%, -122%);
 }
+
+
+.agent{
+  display: flex;
+  width: 100%;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  color: #0c7587;
+  font-size: 12px;
+}
+.agent-time{
+  font-size: 10px;
+    font-weight: 500;
+    color: gray;
+}
