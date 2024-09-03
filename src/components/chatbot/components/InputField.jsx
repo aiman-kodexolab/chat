@@ -56,9 +56,11 @@ function InputField({
   };
 
   const handleSubmit = (event) => {
+    if (disabled) return
     sendMessage(event);
     setRows(1);
     setLimit(false);
+    inputRef.current.focus()
   };
 
   function hasLineBreaks(text) {
@@ -100,13 +102,11 @@ function InputField({
           <textarea
             ref={inputRef}
             style={{ caretColor: theme ? "#141718" : "white" }}
-            className={`input-textarea ${theme && "theme"} ${
-              limit ? "text-limit" : ""
-            }`}
+            className={`input-textarea ${theme && "theme"} ${limit ? "text-limit" : ""
+              }`}
             placeholder={disabled ? waitingMessage : "Type a message"}
             value={value}
             onChange={handleInputChange}
-            disabled={disabled}
             onPaste={handlePaste}
             onKeyDown={handleKeyPress}
             rows={rows}

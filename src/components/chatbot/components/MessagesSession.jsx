@@ -97,7 +97,22 @@ const MessagesSession = ({
           })
         }
         if (currentSession?.is_joined) {
+          sio.emit("rejoin", {
+            session_id: currentSession?._id
+          })
           isHuman.current = currentSession?.is_joined
+        }
+      }
+    })
+
+    sio.on("rejoined", (data) => {
+      if (data?.session_detail) {
+        const isJoinedByHuman = data?.session_detail?.is_joined
+        if (isJoinedByHuman) {
+          isHuman.current = true
+        } else {
+          isHuman.current = false
+
         }
       }
     })
