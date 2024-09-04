@@ -91,7 +91,7 @@ const MessagesSession = ({
     sio.on("client connected", (data) => {
       const currentSession = JSON.parse(localStorage.getItem("currentSession"))
       if (typeof currentSession === "object") {
-        if (currentSession?._id) {
+        if (!currentSession?.is_joined) {
           sio.emit("join", {
             session_id: currentSession?._id
           })
@@ -112,9 +112,9 @@ const MessagesSession = ({
           isHuman.current = true
         } else {
           isHuman.current = false
-
         }
       }
+      localStorage.setItem("currentSession", JSON.stringify(data?.session_detail))
     })
 
     sio.on("released", (data) => {
@@ -127,6 +127,8 @@ const MessagesSession = ({
           created_on: botTime,
         },
       ]);
+      localStorage.setItem("currentSession", JSON.stringify(data?.session_detail))
+
     })
 
     sio.on("ai_chat_message", (msg) => {
@@ -152,6 +154,7 @@ const MessagesSession = ({
           created_on: botTime,
         },
       ]);
+      localStorage.setItem("currentSession", JSON.stringify(data?.session_detail))
     });
 
     sio.on("done", (msg) => {
@@ -228,14 +231,14 @@ const MessagesSession = ({
       ...prevChat,
       {
         type: "user",
-        content: messages,
+        content: messages.trim(),
         email: email,
         created_on: sessionCreated,
       },
     ]);
 
     if (messages !== "") {
-      const sanitizedMessage = messages
+      const sanitizedMessage = messages.trim()
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
