@@ -11,7 +11,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Dropdown } from "../../../assets";
 
 const MessagesSession = ({
-  status,
   sessionId,
   chatLoad,
   setChatLoad,
@@ -23,8 +22,10 @@ const MessagesSession = ({
   sessionLoader,
 }) => {
   const [messages, setMessages] = useState("");
+  const sessionStatus =
+    localStorage.getItem("status") === "true" ? true : false;
   const endRef = useRef();
-  const socket = useRef(null)
+  const socket = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [newMessages, setNewMessages] = useState([]);
   const containerRef = useRef();
@@ -78,47 +79,48 @@ const MessagesSession = ({
   }, [chatArray, scrolled]);
 
   useEffect(() => {
-
     const sio = io(socketUrl, {
       transports: ["websocket"],
-    })
+    });
 
     sio.on("connect", (data) => {
-      console.log("client connected")
-    })
-
+      console.log("client connected");
+    });
 
     sio.on("client connected", (data) => {
-      const currentSession = JSON.parse(localStorage.getItem("currentSession"))
+      const currentSession = JSON.parse(localStorage.getItem("currentSession"));
       if (typeof currentSession === "object") {
         if (!currentSession?.is_joined) {
           sio.emit("join", {
-            session_id: currentSession?._id
-          })
+            session_id: currentSession?._id,
+          });
         }
         if (currentSession?.is_joined) {
           sio.emit("rejoin", {
-            session_id: currentSession?._id
-          })
-          isHuman.current = currentSession?.is_joined
+            session_id: currentSession?._id,
+          });
+          isHuman.current = currentSession?.is_joined;
         }
       }
-    })
+    });
 
     sio.on("rejoined", (data) => {
       if (data?.session_detail) {
-        const isJoinedByHuman = data?.session_detail?.is_joined
+        const isJoinedByHuman = data?.session_detail?.is_joined;
         if (isJoinedByHuman) {
-          isHuman.current = true
+          isHuman.current = true;
         } else {
-          isHuman.current = false
+          isHuman.current = false;
         }
       }
-      localStorage.setItem("currentSession", JSON.stringify(data?.session_detail))
-    })
+      localStorage.setItem(
+        "currentSession",
+        JSON.stringify(data?.session_detail)
+      );
+    });
 
     sio.on("released", (data) => {
-      isHuman.current = false
+      isHuman.current = false;
       setChatArray((prevDataSets) => [
         ...prevDataSets,
         {
@@ -127,9 +129,11 @@ const MessagesSession = ({
           created_on: botTime,
         },
       ]);
-      localStorage.setItem("currentSession", JSON.stringify(data?.session_detail))
-
-    })
+      localStorage.setItem(
+        "currentSession",
+        JSON.stringify(data?.session_detail)
+      );
+    });
 
     sio.on("ai_chat_message", (msg) => {
       const botTime = formatTime();
@@ -142,10 +146,10 @@ const MessagesSession = ({
         },
       ]);
       setChatLoad(false);
-    })
+    });
 
     sio.on("entered", (data) => {
-      isHuman.current = true
+      isHuman.current = true;
       setChatArray((prevDataSets) => [
         ...prevDataSets,
         {
@@ -154,7 +158,10 @@ const MessagesSession = ({
           created_on: botTime,
         },
       ]);
-      localStorage.setItem("currentSession", JSON.stringify(data?.session_detail))
+      localStorage.setItem(
+        "currentSession",
+        JSON.stringify(data?.session_detail)
+      );
     });
 
     sio.on("done", (msg) => {
@@ -183,10 +190,10 @@ const MessagesSession = ({
       console.log("WebSocket disconnected:");
     });
 
-    socket.current = sio
+    socket.current = sio;
     return () => {
-      sio.disconnect()
-    }
+      sio.disconnect();
+    };
   }, []);
 
   const { isLoading: chatHistoryLoader, data: chatData } =
@@ -238,7 +245,8 @@ const MessagesSession = ({
     ]);
 
     if (messages !== "") {
-      const sanitizedMessage = messages.trim()
+      const sanitizedMessage = messages
+        .trim()
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
@@ -259,7 +267,9 @@ const MessagesSession = ({
     <div style={{ position: "relative" }}>
       <div
         ref={containerRef}
-        className={`chat-container ${status ? "expanded" : "collapsed"}`}
+        className={`chat-container ${
+          sessionStatus ? "expanded" : "collapsed"
+        } `}
       >
         {chatHistoryLoader && (
           <Skeleton
@@ -298,7 +308,7 @@ const MessagesSession = ({
           />
         )}
         {Array.isArray(chatArray) &&
-          chatArray?.map((item, index) => {
+          chatArray?.map((item) => {
             if (item?.type === "user") {
               return (
                 <TextBlock key={item._id} isUser={true} time={item?.created_on}>
@@ -311,8 +321,7 @@ const MessagesSession = ({
                   {item?.content}
                 </TextBlock>
               );
-            }
-            else if (item?.type === "agent") {
+            } else if (item?.type === "agent") {
               return (
                 <div className="agent">
                   <div key={item.created_on} time={item?.created_on}>
@@ -328,22 +337,29 @@ const MessagesSession = ({
         )}
         <div ref={endRef} />
       </div>
-      <InputField
-        style={inputFieldStyle}
-        disabled={chatHistoryLoader || chatLoad || sessionLoader}
-        sendMessage={sendMessage}
-        value={messages}
-        setValue={setMessages}
-        waitingMessage={"Waiting for message"}
-        isToggled={isToggled}
-        theme={isToggled}
-      />
+      {sessionStatus && (
+        <InputField
+          style={inputFieldStyle}
+          disabled={chatHistoryLoader || chatLoad || sessionLoader}
+          sendMessage={sendMessage}
+          value={messages}
+          setValue={setMessages}
+          waitingMessage={"Waiting for message"}
+          isToggled={isToggled}
+          theme={isToggled}
+        />
+      )}
       {scrolled && (
         <>
           {newMessages?.length > 0 && (
             <div className="unread_message">{newMessages?.length}</div>
           )}
-          <div className="scroll_container" onClick={scrollToEnd}>
+          <div
+            className={`${
+              sessionStatus ? "scroll_container" : "scroll_container_collapsed"
+            }`}
+            onClick={scrollToEnd}
+          >
             <img className="scroll" alt="" src={Dropdown} />
           </div>
         </>

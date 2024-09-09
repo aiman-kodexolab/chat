@@ -18,13 +18,13 @@ import {
   useGetSessionsQuery,
   useSessionDetailsMutation,
 } from "../../redux/api";
-import io from "socket.io-client"
+import io from "socket.io-client";
 
 const Chatbot = () => {
   const [chat, setChat] = useState(true);
   const [isFormActive, setIsFormActive] = useState(false);
   const [goBackForm, setGoBackForm] = useState(false);
-  const socket = useRef(null)
+  const socket = useRef(null);
   const [values, setValues] = useState({
     userName: "",
     email: "",
@@ -47,7 +47,6 @@ const Chatbot = () => {
   const systemId = useVisitorId();
   const sessionCreated = formatTime();
   const [sessionId, setSessionId] = useState("");
-  const [status, setStatus] = useState(true);
   const [email, setEmail] = useState("");
   const [chatLoad, setChatLoad] = useState(false);
   const [isToggled, setIsToggled] = useState(
@@ -91,8 +90,8 @@ const Chatbot = () => {
       setSessionId(() => response?.data?.data?.session_id);
 
       socket.current.emit("join", {
-        "session_id": response?.data?.data?.session_id
-      })
+        session_id: response?.data?.data?.session_id,
+      });
       const userSession = {
         _id: response?.data?.data?.session_id,
       };
@@ -119,7 +118,7 @@ const Chatbot = () => {
         _id: result?.data?.data?.session_id,
         status: result?.data?.data?.status,
       };
-      setSessionId(() => result?.data?.data?.session_id)
+      setSessionId(() => result?.data?.data?.session_id);
 
       localStorage.setItem("currentSession", JSON.stringify(userSession));
     } catch (e) {
@@ -149,21 +148,21 @@ const Chatbot = () => {
   useEffect(() => {
     const sio = io(socketUrl, {
       transports: ["websocket"],
-    })
+    });
 
     sio.on("connect", (data) => {
-      console.log("client connected")
-    })
+      console.log("client connected");
+    });
 
     sio.on("client connected", (data) => {
-      console.log("data", data)
-    })
+      console.log("data", data);
+    });
 
-    socket.current = sio
+    socket.current = sio;
     return () => {
-      sio.disconnect()
-    }
-  }, [])
+      sio.disconnect();
+    };
+  }, []);
 
   const validate = () => {
     const newErrors = { userName: "", email: "", phone_number: "" };
@@ -288,7 +287,7 @@ const Chatbot = () => {
       is_form_filled: item?.is_form_filled,
       _id: item?._id,
       status: item?.status,
-      is_joined: item?.is_joined
+      is_joined: item?.is_joined,
     };
     if (item?.is_form_filled) {
       setChat(true);
@@ -300,15 +299,15 @@ const Chatbot = () => {
       setIsFormActive(true);
     }
     if (item?.status === "closed") {
-      setStatus(false);
+      localStorage.setItem("status", false);
     } else {
-      setStatus(true);
+      localStorage.setItem("status", true);
     }
     setSessionId(() => item?._id);
 
     socket.current.emit("join", {
-      "session_id": item?._id
-    })
+      session_id: item?._id,
+    });
   };
 
   const resetForm = () => {
@@ -370,7 +369,6 @@ const Chatbot = () => {
               email={email}
               sessionCreated={sessionCreated}
               sessionId={sessionId}
-              status={status}
               chatArray={chatArray}
               setChatArray={setChatArray}
               chatLoad={chatLoad}

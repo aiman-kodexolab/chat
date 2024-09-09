@@ -32,7 +32,10 @@ const ChatbotButton = ({ apiKey }) => {
   useEffect(() => {
     if (clientBusinessData?.data) {
       dispatch(setChat(clientBusinessData?.data.chat_customization));
-      localStorage.setItem("business_id", JSON.stringify(clientBusinessData?.data?.business_profile?.business_id))
+      localStorage.setItem(
+        "business_id",
+        JSON.stringify(clientBusinessData?.data?.business_profile?.business_id)
+      );
     }
   }, [clientBusinessData?.data]);
 
