@@ -183,6 +183,7 @@ const Chatbot = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    localStorage.setItem("status", true);
     const userData = {
       userName: values.userName,
       email: values.email,
