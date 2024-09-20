@@ -10,10 +10,10 @@ export default function Markdown({ markdown }) {
   };
 
   return (
-    <div className="container">
+    <div className={"container"}>
       <div
         dangerouslySetInnerHTML={renderMarkdown(markdown)}
-        className="content-messages"
+        className={"content-messages"}
         style={{
           wordBreak: "break-word",
         }}

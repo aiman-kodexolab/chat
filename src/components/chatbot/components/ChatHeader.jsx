@@ -1,6 +1,6 @@
 import React from "react";
 import "../style.css";
-import { DeleteIcon, GoBack, Hamburger, Widget, darkMode, lightMode } from "../../../assets";
+import { DeleteIcon, GoBack, darkMode, lightMode } from "../../../assets";
 
 export default function ChatHeader({
   messagesSession,
@@ -15,25 +15,37 @@ export default function ChatHeader({
     <>
       <div className="window_header">
         <div className="icon_header">
-          <div className="back" onClick={messageSessionBack}>
+          <button
+            className="back"
+            disabled={chatLoad}
+            onClick={messageSessionBack}
+          >
             {messagesSession && (
               <img
-                className={`${!chatLoad ? `go-back-icon ${isToggled ? "light" : ""}` : "grey_back_icon"}`}
-                src={GoBack}
+                className={`${
+                  !chatLoad
+                    ? `go-back-icon ${isToggled ? "light" : ""}`
+                    : "grey_back_icon"
+                }`}
+                src={GoBack} alt=""
               />
             )}
-          </div>
+          </button>
 
           <div>
             {messagesSession && (
               <button
                 disabled={isDisabled ? false : true}
-                className="hamburger"
+                className={"hamburger"}
                 onClick={handleDeleteChat}
               >
                 <img
-                  className={`${isDisabled ? `delete_chat_icon ${isToggled ? "light" : ""}` : "grey_image"}`}
-                  src={DeleteIcon}
+                  className={`${
+                    isDisabled
+                      ? `delete_chat_icon ${isToggled ? "light" : ""}`
+                      : "grey_image"
+                  }`}
+                  src={DeleteIcon} alt=""
                 />
               </button>
             )}
@@ -43,20 +55,17 @@ export default function ChatHeader({
             >
               <div className="toggle-image-container">
                 <div className="wrapper">
-                  <img className="toggle_icon" src={isToggled ? lightMode : darkMode} />
+                  <img
+                    className="toggle_icon"
+                    src={isToggled ? lightMode : darkMode} alt=""
+                  />
                 </div>
               </div>
             </div>
-            {/* <div
-              className={`toggle-button ${isToggled ? "toggled" : ""}`}
-              onClick={handleToggle}
-            >
-              <img className="toggle_icon" src={Hamburger} />
-            </div> */}
           </div>
         </div>
       </div>
-      <hr className="line_break"></hr>
+      <hr className={"line_break"}></hr>
     </>
   );
 }

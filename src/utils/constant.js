@@ -1,3 +1,5 @@
+import { notification } from "../assets";
+
 export const formatTime = () => {
   const now = new Date();
 
@@ -35,7 +37,25 @@ export const formatTime = () => {
   return `${formattedDate} . ${formattedTime}`;
 };
 
+export async function playNotificationSound() {
+  try {
+    const audio = new Audio(notification);
+    await audio.play();
+  } catch (e) {
+    console.log("eee", e);
+  }
+}
+
+export const apiUrl = "https://chatbot-api.kodexolabs.ai/";
+
+export const socketUrl = "chatbot-api.kodexolabs.ai/";
+
 export const replaceTags = (text) => {
   const word = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return word;
 };
+
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const phoneRegex =
+  /^(\+?\d{1,4}?[-.\s]?)?(\(?\d{1,4}?\)?[-.\s]?)?[\d\s.-]{10}$/;

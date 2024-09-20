@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../style.css";
 import NewConversationBtn from "./NewConverationBtn";
 import { GoBack, SendMsg } from "../../../assets";
 import TransitionInput from "../../transitionInput/TransitionInput";
-import { getUserSession } from "../../../API/api";
 import SessionContainer from "./SessionContainer";
 
 export default function ChatbotContent({
   values,
-  chat,
   isFormActive,
-  goBackForm,
   errors,
-  systemId,
   startSession,
   handleSubmit,
   handleChange,
   goBack,
   touched,
   conversationList,
-  sessionOnClick,
+  onSessionClick,
   isToggled,
   isFormLoading,
   isFormSubmitLoading,
-  isConversationListLoading,
 }) {
   return (
     <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
@@ -44,7 +39,7 @@ export default function ChatbotContent({
                 <SessionContainer
                   key={index}
                   item={item}
-                  onClick={sessionOnClick}
+                  onClick={onSessionClick}
                   isToggled={isToggled}
                 />
               ))}
@@ -56,23 +51,19 @@ export default function ChatbotContent({
                   className="start_session"
                   onClick={startSession}
                   isFormLoading={isFormLoading}
-                  isConversationListLoading={isConversationListLoading}
                 />
               </div>
             </>
           ) : (
             <div
               className={`no_session_box ${
-                isFormLoading || isConversationListLoading
-                  ? "adjust_loader"
-                  : ""
+                isFormLoading ? "adjust_loader" : ""
               }`}
             >
               <NewConversationBtn
                 className="no_session"
                 onClick={startSession}
                 isFormLoading={isFormLoading}
-                isConversationListLoading={isConversationListLoading}
               />
             </div>
           )}
@@ -119,6 +110,11 @@ export default function ChatbotContent({
                   value={values.phone_number}
                   theme={isToggled}
                   onChange={handleChange("phone_number")}
+                  error={
+                    touched?.phone_number && errors?.phone_number
+                      ? errors?.phone_number
+                      : null
+                  }
                 />
               </div>
               <div className="form-footer">
@@ -127,14 +123,8 @@ export default function ChatbotContent({
                   disabled={isFormSubmitLoading}
                   className="submit-button"
                 >
-                  {isFormSubmitLoading ? (
-                    <div className="new-conversation-loader"></div>
-                  ) : (
-                    <>
-                      <img src={SendMsg} alt="" className="send-icon" />
-                      <p className="submit-text">New Chat</p>
-                    </>
-                  )}
+                  <img src={SendMsg} alt="" className="send-icon" />
+                  <p className="submit-text">New Chat</p>
                 </button>
               </div>
             </form>

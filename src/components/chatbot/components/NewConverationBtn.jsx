@@ -2,26 +2,17 @@ import React from "react";
 import { SendMsg } from "../../../assets";
 import "../style.css";
 
-const NewConversationBtn = ({
-  onClick,
-  isFormLoading,
-  buttonSize,
-  className,
-  style,
-  isConversationListLoading,
-}) => (
+const NewConversationBtn = ({ onClick, isFormLoading, className, style }) => (
   <button
     className={`${className} ${
-      (isFormLoading || isConversationListLoading) && className === "no_session"
-        ? "adjust_loader"
-        : ""
+      isFormLoading && className === "no_session" ? "adjust_loader" : ""
     }`}
     onClick={onClick}
-    disabled={isFormLoading || isConversationListLoading}
+    disabled={isFormLoading}
     style={style}
   >
     <>
-      {isConversationListLoading || isFormLoading ? (
+      {isFormLoading ? (
         <div className="new-conversation-loader"></div>
       ) : (
         <>

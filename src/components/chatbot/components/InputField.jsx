@@ -6,10 +6,9 @@ function InputField({
   style,
   disabled,
   sendMessage,
-  className,
+  className = "",
   value,
   waitingMessage,
-  text,
   setValue,
   theme,
   isToggled,
@@ -21,16 +20,13 @@ function InputField({
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
-    if (!text) {
-      if (inputValue?.length <= maxLength) {
-        setValue(inputValue);
-        setLimit(false);
-      } else {
-        setLimit(true);
-      }
-    } else {
+    if (inputValue?.length <= maxLength) {
       setValue(inputValue);
+      setLimit(false);
+    } else {
+      setLimit(true);
     }
+    setValue(inputValue);
     updateRows(e.target);
   };
 
@@ -60,9 +56,11 @@ function InputField({
   };
 
   const handleSubmit = (event) => {
+    if (disabled) return
     sendMessage(event);
     setRows(1);
     setLimit(false);
+    inputRef.current.focus()
   };
 
   function hasLineBreaks(text) {
@@ -85,31 +83,31 @@ function InputField({
     if (isNaN(lineHeight)) {
       lineHeight = 20;
     }
-    const padding = parseInt(computedStyle.paddingTop, 10) + parseInt(computedStyle.paddingBottom, 10);
-    const scrollHeight = textarea.scrollHeight - padding
+    const padding =
+      parseInt(computedStyle.paddingTop, 10) +
+      parseInt(computedStyle.paddingBottom, 10);
+    const scrollHeight = textarea.scrollHeight - padding;
     const newRows = Math.ceil(scrollHeight / lineHeight);
     setRows(newRows <= 3 ? newRows : 3);
     textarea.style.height = "";
   };
 
   return (
-    <div className="input-container">
+    <div className={"input-container"}>
       <div
         style={style}
         className={`input-wrapper ${limit ? "limit-reached" : ""} ${className}`}
       >
-        <form onSubmit={handleSubmit} className="input-form">
+        <form onSubmit={handleSubmit} className={"input-form"}>
           <textarea
             ref={inputRef}
             style={{ caretColor: theme ? "#141718" : "white" }}
-            className={`input-textarea ${theme && "theme"} ${
-              limit ? "text-limit" : ""
-            }`}
+            className={`input-textarea ${theme && "theme"} ${limit ? "text-limit" : ""
+              }`}
             placeholder={disabled ? waitingMessage : "Type a message"}
             value={value}
             onChange={handleInputChange}
-            disabled={disabled}
-            onPaste={text ? undefined : handlePaste}
+            onPaste={handlePaste}
             onKeyDown={handleKeyPress}
             rows={rows}
             type="text"
@@ -117,23 +115,20 @@ function InputField({
           <button
             type="submit"
             disabled={disabled || !value?.trim()}
-            className="message-submit-button"
+            className={"message-submit-button"}
           >
-            <img src={Send} alt="" className="message-send-icon" />
+            <img src={Send} alt="" className={"message-send-icon"} />
           </button>
         </form>
       </div>
-      {text ? (
-        <p className={`powered-by ${isToggled ? "light" : ""}`}>
-          Powered by
-          <span className="ai-text"> AI </span>
-          <span className="chatbot-text"> Chatbot</span>
-        </p>
-      ) : (
-        <div className={`char-counter ${limit ? "text-limit" : ""}`}>
-          {maxLength - (value?.length || 0)}/{maxLength}
-        </div>
-      )}
+      <p className={`powered-by ${isToggled ? "light" : ""}`}>
+        Powered by
+        <span className={"ai-text"}> AI </span>
+        <span className={"chatbot-text"}> Chatbot</span>
+      </p>
+      {/* <div className={`char-counter ${limit ? "text-limit" : ""}`}>
+        {maxLength - (value?.length || 0)}/{maxLength}
+      </div> */}
     </div>
   );
 }

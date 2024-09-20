@@ -1,219 +1,198 @@
-import React, { useRef } from "react";
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import React, { useEffect, useState, useRef } from "react";
 import { Widget } from "../../assets";
 import "./style.css";
 import ChatHeader from "./components/ChatHeader";
 import ChatbotContent from "./components/ChatbotContent";
 import { useVisitorId } from "../../hooks/useVisitorId";
-import {
-  createSession,
-  deleteChat,
-  getChatHistory,
-  getSessions,
-  sessionDetail,
-} from "../../API/api";
 import MessagesSession from "./components/MessagesSession";
-import InputField from "./components/InputField";
-import { formatTime } from "../../utils/constant";
+import {
+  emailRegex,
+  formatTime,
+  phoneRegex,
+  playNotificationSound,
+  socketUrl,
+} from "../../utils/constant";
+import {
+  useCreateSessionMutation,
+  useDeleteChatMutation,
+  useGetSessionsQuery,
+  useSessionDetailsMutation,
+} from "../../redux/api";
+import io from "socket.io-client";
 
 const Chatbot = () => {
-  const [messages, setMessages] = useState("");
-  const [input, setInput] = useState("");
-  const [sendData, setSendData] = useState({});
   const [chat, setChat] = useState(true);
   const [isFormActive, setIsFormActive] = useState(false);
   const [goBackForm, setGoBackForm] = useState(false);
-  const [socket, setSocket] = useState(null);
+  const socket = useRef(null);
   const [values, setValues] = useState({
     userName: "",
     email: "",
-    phoneNumber: "",
+    phone_number: "",
   });
   const [errors, setErrors] = useState({
     userName: "",
     email: "",
-    phoneNumber: "",
+    phone_number: "",
   });
   const [touched, setTouched] = useState({
     userName: false,
     email: false,
-    phoneNumber: false,
+    phone_number: false,
   });
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [messagesSession, setMessagesSession] = useState(false);
+  const isLight = localStorage.getItem("isLight");
   const [chatArray, setChatArray] = useState([]);
-  const inputRef = useRef();
-  const maxLength = 100;
-  const [limit, setLimit] = useState(false);
-  const [rows, setRows] = useState(1);
   const systemId = useVisitorId();
-  const [text, setText] = useState("hello");
-  const [conversationList, setConversationList] = useState([]);
   const sessionCreated = formatTime();
   const [sessionId, setSessionId] = useState("");
-  const [status, setStatus] = useState(true);
   const [email, setEmail] = useState("");
   const [chatLoad, setChatLoad] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
-  const [isFormLoading, setIsFormLoading] = useState(false);
+  const [isToggled, setIsToggled] = useState(
+    isLight === "false" ? false : true
+  );
   const [isFormSubmitLoading, setIsFormSubmitLoading] = useState(false);
-  const [isConversationListLoading, setIsConversationListLoading] =
-    useState(false);
+  const userObj =
+    localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
+  const currentSession =
+    localStorage.getItem("currentSession") &&
+    JSON.parse(localStorage.getItem("currentSession"));
 
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    if (!text) {
-      if (inputValue?.length <= maxLength) {
-        setMessages(inputValue);
-        setLimit(false);
-      } else {
-        setLimit(true);
-      }
-    } else {
-      setMessages(inputValue);
+  //APIs
+  const [createSession, { isLoading }] = useCreateSessionMutation();
+  const [deleteChat] = useDeleteChatMutation();
+  const { data, refetch } = useGetSessionsQuery(
+    {
+      system_id: systemId,
+    },
+    {
+      skip: !systemId,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
     }
-    updateRows(e.target);
-  };
+  );
+  const [sessionDetail, { isLoading: sessionLoader }] =
+    useSessionDetailsMutation();
 
-  const handlePaste = (event) => {
-    const pasteData = event.clipboardData.getData("text");
-    const existingData = messages || "";
-    const newText = existingData + pasteData;
-    setLimit(false);
-    if (hasLineBreaks(pasteData)) {
-      setRows(3);
-    }
-    if (newText.length > maxLength) {
-      event.preventDefault();
-      const truncatedText = newText.substring(0, maxLength);
-      setMessages(truncatedText);
-      setLimit(true);
-    } else {
-      updateRows({ value: newText });
-    }
-  };
+  //APIs
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      handleSubmitMessage(event);
-    }
-  };
-
-  const handleSubmitMessage = (event) => {
-    sendMessage(event);
-    setRows(1);
-    setLimit(false);
-  };
-
-  function hasLineBreaks(text) {
-    const lineBreakPattern = /\r?\n/;
-    return lineBreakPattern.test(text);
-  }
-
-  const updateRows = (textarea) => {
-    if (textarea.value.length === 0) {
-      setRows(1);
-      return;
-    }
-    textarea.style.height = "auto";
-    const rowHeight = parseInt(
-      window.getComputedStyle(textarea).lineHeight,
-      10
-    );
-    const newRows = Math.floor(textarea.scrollHeight / rowHeight);
-    setRows(newRows <= 3 ? newRows : 3);
-    textarea.style.height = "";
-  };
-  const sendMessage = (e) => {
-    e.preventDefault();
-
-    if (!messages?.trim()) {
-      return;
-    }
-    // setChatLoad(true);
-    setChatArray((prevChat) => [
-      ...prevChat,
-      {
-        type: "user",
-        content: messages,
-        email: values?.email,
-        created_on: sessionCreated,
-      },
-    ]);
-    if (messages !== "") {
-      const sanitizedMessage = messages
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-
-      socket.emit("chat_message", {
-        type: "user",
-        content: sanitizedMessage,
-        email: email,
-        session_id: sessionId,
-        is_joined: false,
-        agent_response: "",
-        created_on: sessionCreated,
-      });
-      setChatLoad(true);
-      setMessages("");
-    }
-  };
-
+  //Functions
   const startSession = async () => {
     try {
-      setIsFormLoading(true);
-      const data = {
+      const response = await createSession({
         system_id: systemId,
         created_on: sessionCreated,
         user_id: "",
+        business_id: JSON.parse(localStorage.getItem("business_id")),
+      });
+
+      setSessionId(() => response?.data?.data?.session_id);
+
+      socket.current.emit("join", {
+        session_id: response?.data?.data?.session_id,
+      });
+      const userSession = {
+        _id: response?.data?.data?.session_id,
       };
-      const result = await createSession("POST", data);
-      setIsFormLoading(false);
-      setSessionId(result?.data?.session_id);
+      localStorage.setItem("currentSession", JSON.stringify(userSession));
       setIsFormActive(true);
-      getAllSessions();
-    } catch (error) {
-      console.error("Error starting session:", error);
+    } catch (e) {
+      console.log("Error starting session:", e);
+    }
+  };
+
+  const sessionDetails = async () => {
+    try {
+      const apiBody = {
+        user_name: values.userName,
+        email: values.email,
+        phone_number: values.phone_number,
+        session_id: sessionId,
+        business_id: JSON.parse(localStorage.getItem("business_id")),
+        user_id: "",
+      };
+      const result = await sessionDetail(apiBody);
+      const userSession = {
+        is_form_filled: result?.data?.data?.is_form_filled,
+        _id: result?.data?.data?.session_id,
+        status: result?.data?.data?.status,
+      };
+      setSessionId(() => result?.data?.data?.session_id);
+
+      localStorage.setItem("currentSession", JSON.stringify(userSession));
+    } catch (e) {
+      console.log("This error", e);
     }
   };
 
   const handleChange = (field) => (event) => {
     setValues({ ...values, [field]: event.target.value });
-
     setTouched({ ...touched, [field]: true });
     if (!submitAttempted) {
       setSubmitAttempted(true);
     }
   };
 
-  const handleDeleteChat = async (field) => {
-    const data = {
-      session_id: sessionId,
-    };
-    await deleteChat("DELETE", data);
-    getAllSessions();
-    setChatArray([]);
+  const handleDeleteChat = async () => {
+    try {
+      setChatArray([]);
+      await deleteChat({
+        session_id: sessionId,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
+  useEffect(() => {
+    const sio = io(socketUrl, {
+      transports: ["websocket"],
+    });
+
+    sio.on("connect", (data) => {
+      console.log("client connected");
+    });
+
+    sio.on("client connected", (data) => {
+      console.log("data", data);
+    });
+
+    socket.current = sio;
+    return () => {
+      sio.disconnect();
+    };
+  }, []);
+
   const validate = () => {
-    const newErrors = { userName: "", email: "" };
+    const newErrors = { userName: "", email: "", phone_number: "" };
     if (!values.userName) {
       newErrors.userName = "Name is required";
     }
     if (!values.email) {
       newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    } else if (!emailRegex.test(values.email)) {
       newErrors.email = "Email is invalid";
     }
+    if (values.phone_number && !phoneRegex.test(values.phone_number)) {
+      newErrors.phone_number = "Phone number is invalid";
+    }
     setErrors(newErrors);
-    return !newErrors.userName && !newErrors.email;
+    return !newErrors.userName && !newErrors.email && !newErrors.phone_number;
   };
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const newErrors = { userName: "", email: "" };
+    localStorage.setItem("status", true);
+    const userData = {
+      userName: values.userName,
+      email: values.email,
+      phone_number: values.phone_number,
+    };
+    const userString = JSON.stringify(userData);
+    localStorage.setItem("user", userString);
+
+    const newErrors = { userName: "", email: "", phone_number: "" };
     let hasErrors = false;
 
     setSubmitAttempted(true);
@@ -227,11 +206,15 @@ const Chatbot = () => {
       newErrors.email = "Email is required";
       hasErrors = true;
     } else {
-      const emailFormat = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email);
+      const emailFormat = !emailRegex.test(values.email);
       if (emailFormat) {
         newErrors.email = "Email is invalid";
         hasErrors = true;
       }
+    }
+    if (values.phone_number && !phoneRegex.test(values.phone_number)) {
+      newErrors.phone_number = "Phone number is invalid";
+      hasErrors = true;
     }
 
     if (hasErrors) {
@@ -239,162 +222,137 @@ const Chatbot = () => {
       setTouched(newErrors);
     } else {
       setIsFormSubmitLoading(true);
-      const data = {
-        user_name: values.userName,
-        email: values.email,
-        phone_number: values.phoneNumber,
-        session_id: sessionId,
-        user_id: "",
-      };
-
-      const result = await sessionDetail("PUT", data);
-      if (result.status_code === 200) {
-        setIsFormSubmitLoading(false);
-        setEmail(values.email);
-        chatHistory(sessionId);
-        getAllSessions();
-        resetForm();
-        setMessagesSession(true);
-        setIsFormActive(false);
-      }
+      sessionDetails();
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userName: values.userName,
+          email: values.email,
+          phone_number: values.phone_number,
+        })
+      );
+      setIsFormSubmitLoading(false);
+      setEmail(values.email);
+      resetForm();
+      setMessagesSession(true);
+      await playNotificationSound();
+      setIsFormActive(false);
       setErrors({
         userName: "",
         email: "",
-        phoneNumber: "",
+        phone_number: "",
       });
       setTouched({
         userName: "",
         email: "",
-        phoneNumber: "",
+        phone_number: "",
       });
     }
   };
 
   const goBack = () => {
-    console.log("go back");
+    refetch();
     setIsFormActive(false);
     setGoBackForm(true);
-    setValues({
-      userName: "",
-      email: "",
-      phoneNumber: "",
-    });
-    setErrors({
-      userName: "",
-      email: "",
-      phoneNumber: "",
-    });
-    setTouched({
-      userName: "",
-      email: "",
-      phoneNumber: "",
-    });
-  };
-
-  useEffect(() => {
-    if (systemId) {
-      getAllSessions();
+    if (!userObj) {
+      setValues({
+        userName: "",
+        email: "",
+        phone_number: "",
+      });
+      setErrors({
+        userName: "",
+        email: "",
+        phone_number: "",
+      });
+      setTouched({
+        userName: "",
+        email: "",
+        phone_number: "",
+      });
     }
-  }, [systemId]);
-
-  useEffect(() => {
-    validate();
-  }, [values, touched]);
-
-  const getAllSessions = async () => {
-    setIsConversationListLoading(true);
-    const result = await getSessions("GET", systemId);
-    setConversationList(result.data);
-    setIsConversationListLoading(false);
   };
-
-  useEffect(() => {
-    const socket = io("d2ge2om10dy7dl.cloudfront.net", {
-      transports: ["websocket"],
-    });
-    setSocket(socket);
-    socket.on("connect", () => {
-      console.log("WebSocket connected");
-    });
-
-    socket.on("connect_error", (error) => {
-      console.log("WebSocket connection error:", error);
-    });
-
-    socket.on("done", (msg) => {
-      if (msg?.chat_completed && msg?.sentence) {
-        if (!msg?.fine_tuning) {
-          const botTime = formatTime();
-
-          setChatArray((prevDataSets) => [
-            ...prevDataSets,
-            {
-              type: "bot",
-              content: msg?.sentence,
-              created_on: botTime,
-            },
-          ]);
-          setChatLoad(false);
-        }
-      }
-    });
-
-    socket.on("disconnect", (reason) => {
-      console.log("WebSocket disconnected:", reason);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
 
   const messageSessionBack = () => {
+    localStorage.removeItem("currentSession");
     if (!chatLoad) {
       setMessagesSession(false);
-      setMessages("");
-      setChatArray([]);
     }
+    setSessionId("");
+    setChatArray([]);
+    refetch();
   };
 
-  const chatHistory = async (sessionId) => {
-    const result = await getChatHistory("GET", sessionId);
-    setChatArray(result.data);
-  };
-  const sessionOnClick = (item) => {
-    if (item?.is_form_filled === true) {
+  const onSessionClick = async (item) => {
+    const userSession = {
+      is_form_filled: item?.is_form_filled,
+      _id: item?._id,
+      status: item?.status,
+      is_joined: item?.is_joined,
+    };
+    if (item?.is_form_filled) {
       setChat(true);
       setMessagesSession(true);
-      setSessionId(item?._id);
-      chatHistory(item?._id);
+      await playNotificationSound();
       setEmail(item?.email);
+      localStorage.setItem("currentSession", JSON.stringify(userSession));
     } else {
       setIsFormActive(true);
-      setSessionId(item?._id);
     }
     if (item?.status === "closed") {
-      setStatus(false);
+      localStorage.setItem("status", false);
     } else {
-      setStatus(true);
+      localStorage.setItem("status", true);
     }
+    setSessionId(() => item?._id);
+
+    socket.current.emit("join", {
+      session_id: item?._id,
+    });
   };
 
   const resetForm = () => {
-    setValues({ userName: "", email: "", phoneNumber: "" });
-    setTouched({ userName: "", email: "", phoneNumber: "" });
-    setErrors({ userName: "", email: "", phoneNumber: "" });
+    setValues({ userName: "", email: "", phone_number: "" });
+    setTouched({ userName: "", email: "", phone_number: "" });
+    setErrors({ userName: "", email: "", phone_number: "" });
   };
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
   };
 
+  //Functions
+
+  //useEffetcs
+  useEffect(() => {
+    localStorage.setItem("isLight", isToggled);
+  }, [isToggled]);
+
+  useEffect(() => {
+    if (userObj) {
+      setValues(userObj);
+    }
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (currentSession?.is_form_filled) {
+      setSessionId(currentSession?._id);
+      setMessagesSession(true);
+    }
+  }, [currentSession]);
+
+  useEffect(() => {
+    validate();
+  }, [values, touched]);
+  //useEffetcs
+
   return (
     <>
-      <div className="window_wrap">
-        <div className="header">
-          <div className="rotated-half-circle"></div>
+      <div className={"window_wrap"}>
+        <div className={"header"}>
+          <div className={"rotated-half-circle"}></div>
           <div className={`avatar_wrap ${isToggled ? "light" : ""}`}>
-            <img src={Widget} />
+            <img src={Widget} alt="" />
           </div>
         </div>
         <div className={`window ${isToggled ? "light" : ""}`}>
@@ -407,52 +365,33 @@ const Chatbot = () => {
             handleToggle={handleToggle}
             isToggled={isToggled}
           />
-          {messagesSession ? (
-            <>
-              <MessagesSession
-                status={status}
-                chatArray={chatArray}
-                chatLoad={chatLoad}
-                isToggled={isToggled}
-              />
-              {status ? (
-                <InputField
-                  style={{
-                    border: "1px solid",
-                    borderImageSource:
-                      "linear-gradient(90deg, #079485 0%, #115588 100%)",
-                  }}
-                  disabled={chatLoad}
-                  sendMessage={sendMessage}
-                  className={"hello"}
-                  value={messages}
-                  setValue={setMessages}
-                  waitingMessage={"Waiting for message"}
-                  text={text}
-                  isToggled={isToggled}
-                  theme={isToggled}
-                />
-              ) : null}
-            </>
+          {messagesSession || currentSession?.is_form_filled ? (
+            <MessagesSession
+              email={email}
+              sessionCreated={sessionCreated}
+              sessionId={sessionId}
+              chatArray={chatArray}
+              setChatArray={setChatArray}
+              chatLoad={chatLoad}
+              setChatLoad={setChatLoad}
+              isToggled={isToggled}
+              sessionLoader={sessionLoader}
+            />
           ) : (
             <ChatbotContent
               values={values}
-              errors={errors}
-              chat={chat}
               isFormActive={isFormActive}
-              goBackForm={goBackForm}
-              systemId={systemId}
+              errors={errors}
               startSession={startSession}
               handleSubmit={onSubmit}
               handleChange={handleChange}
               goBack={goBack}
               touched={touched}
-              conversationList={conversationList}
-              sessionOnClick={sessionOnClick}
+              conversationList={data?.data}
+              onSessionClick={onSessionClick}
               isToggled={isToggled}
-              isFormLoading={isFormLoading}
+              isFormLoading={isLoading}
               isFormSubmitLoading={isFormSubmitLoading}
-              isConversationListLoading={isConversationListLoading}
             />
           )}
         </div>
