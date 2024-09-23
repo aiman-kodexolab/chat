@@ -117,11 +117,6 @@ function InputField({
           </button>
         </form>
       </div>
-      {/* <p className={`powered-by ${isToggled ? "light" : ""}`}>
-        Powered by
-        <span className={"ai-text"}> AI </span>
-        <span className={"chatbot-text"}> Chatbot</span>
-      </p> */}
       <div
         className={`char-counter ${isToggled ? "light" : ""} ${
           limit ? "text-limit" : ""

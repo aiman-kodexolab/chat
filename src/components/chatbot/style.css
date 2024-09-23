@@ -605,6 +605,7 @@
   transition: transform 0.3s;
   border: none;
   background: transparent;
+  cursor: pointer;
 }
 
 .message-submit-button:disabled {
