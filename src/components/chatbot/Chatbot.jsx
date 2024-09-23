@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Widget } from "../../assets";
 import "./style.css";
 import ChatHeader from "./components/ChatHeader";
 import ChatbotContent from "./components/ChatbotContent";
@@ -19,11 +18,12 @@ import {
   useSessionDetailsMutation,
 } from "../../redux/api";
 import io from "socket.io-client";
+import { BottomNavigation } from "./components/BottomNavigation/BottomNavigation";
+import { ConversationsScreen } from "./components/ConversationsScreen/ConversationsScreen";
 
 const Chatbot = () => {
-  const [chat, setChat] = useState(true);
+  const [setChat] = useState(true);
   const [isFormActive, setIsFormActive] = useState(false);
-  const [goBackForm, setGoBackForm] = useState(false);
   const socket = useRef(null);
   const [values, setValues] = useState({
     userName: "",
@@ -53,6 +53,7 @@ const Chatbot = () => {
     isLight === "false" ? false : true
   );
   const [isFormSubmitLoading, setIsFormSubmitLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("home");
   const userObj =
     localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
   const currentSession =
@@ -97,6 +98,7 @@ const Chatbot = () => {
       };
       localStorage.setItem("currentSession", JSON.stringify(userSession));
       setIsFormActive(true);
+      setActiveTab("form");
     } catch (e) {
       console.log("Error starting session:", e);
     }
@@ -237,29 +239,7 @@ const Chatbot = () => {
       setMessagesSession(true);
       await playNotificationSound();
       setIsFormActive(false);
-      setErrors({
-        userName: "",
-        email: "",
-        phone_number: "",
-      });
-      setTouched({
-        userName: "",
-        email: "",
-        phone_number: "",
-      });
-    }
-  };
-
-  const goBack = () => {
-    refetch();
-    setIsFormActive(false);
-    setGoBackForm(true);
-    if (!userObj) {
-      setValues({
-        userName: "",
-        email: "",
-        phone_number: "",
-      });
+      handleActiveTab("home");
       setErrors({
         userName: "",
         email: "",
@@ -297,6 +277,7 @@ const Chatbot = () => {
       setEmail(item?.email);
       localStorage.setItem("currentSession", JSON.stringify(userSession));
     } else {
+      handleActiveTab("form");
       setIsFormActive(true);
     }
     if (item?.status === "closed") {
@@ -346,25 +327,17 @@ const Chatbot = () => {
   }, [values, touched]);
   //useEffetcs
 
+  const handleActiveTab = (selectedTab) => {
+    if (activeTab === "form" || "home") {
+      setIsFormActive(false);
+    }
+    setActiveTab(selectedTab);
+  };
+
   return (
     <>
       <div className={"window_wrap"}>
-        <div className={"header"}>
-          <div className={"rotated-half-circle"}></div>
-          <div className={`avatar_wrap ${isToggled ? "light" : ""}`}>
-            <img src={Widget} alt="" />
-          </div>
-        </div>
         <div className={`window ${isToggled ? "light" : ""}`}>
-          <ChatHeader
-            messagesSession={messagesSession}
-            messageSessionBack={messageSessionBack}
-            handleDeleteChat={handleDeleteChat}
-            isDisabled={chatArray.length}
-            chatLoad={chatLoad}
-            handleToggle={handleToggle}
-            isToggled={isToggled}
-          />
           {messagesSession || currentSession?.is_form_filled ? (
             <MessagesSession
               email={email}
@@ -376,23 +349,58 @@ const Chatbot = () => {
               setChatLoad={setChatLoad}
               isToggled={isToggled}
               sessionLoader={sessionLoader}
+              messagesSession={messagesSession}
+              messageSessionBack={messageSessionBack}
+              handleDeleteChat={handleDeleteChat}
+              isDisabled={chatArray.length}
+              handleToggle={handleToggle}
             />
           ) : (
-            <ChatbotContent
-              values={values}
-              isFormActive={isFormActive}
-              errors={errors}
-              startSession={startSession}
-              handleSubmit={onSubmit}
-              handleChange={handleChange}
-              goBack={goBack}
-              touched={touched}
-              conversationList={data?.data}
-              onSessionClick={onSessionClick}
-              isToggled={isToggled}
-              isFormLoading={isLoading}
-              isFormSubmitLoading={isFormSubmitLoading}
-            />
+            <>
+              {activeTab === "home" || activeTab === "form" ? (
+                <>
+                  <ChatHeader
+                    isToggled={isToggled}
+                    handleToggle={handleToggle}
+                    activeTab={activeTab}
+                  />
+                  <ChatbotContent
+                    values={values}
+                    isFormActive={isFormActive}
+                    errors={errors}
+                    startSession={startSession}
+                    handleSubmit={onSubmit}
+                    handleChange={handleChange}
+                    touched={touched}
+                    conversationList={data?.data}
+                    onSessionClick={onSessionClick}
+                    isToggled={isToggled}
+                    isFormLoading={isLoading}
+                    isFormSubmitLoading={isFormSubmitLoading}
+                  />
+                </>
+              ) : (
+                <>
+                  <ChatHeader
+                    isToggled={isToggled}
+                    handleToggle={handleToggle}
+                    activeTab={activeTab}
+                  />
+                  <ConversationsScreen
+                    conversationList={data?.data}
+                    isToggled={isToggled}
+                    onSessionClick={onSessionClick}
+                    startSession={startSession}
+                  />
+                </>
+              )}
+
+              <BottomNavigation
+                isToggled={isToggled}
+                activeTab={activeTab}
+                handleActiveTab={handleActiveTab}
+              />
+            </>
           )}
         </div>
       </div>

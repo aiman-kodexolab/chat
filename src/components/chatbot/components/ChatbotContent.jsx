@@ -1,9 +1,9 @@
 import React from "react";
 import "../style.css";
-import NewConversationBtn from "./NewConverationBtn";
-import { GoBack, SendMsg } from "../../../assets";
+import { SendMsg, Widget } from "../../../assets";
 import TransitionInput from "../../transitionInput/TransitionInput";
-import SessionContainer from "./SessionContainer";
+import { Card } from "./Card/Card";
+import { Content } from "./Content/Content";
 
 export default function ChatbotContent({
   values,
@@ -12,125 +12,119 @@ export default function ChatbotContent({
   startSession,
   handleSubmit,
   handleChange,
-  goBack,
   touched,
   conversationList,
   onSessionClick,
   isToggled,
-  isFormLoading,
   isFormSubmitLoading,
 }) {
   return (
-    <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
-      {!isFormActive ? (
-        <div style={{ position: "relative" }}>
-          <div className="content-heading">
-            <p className={`chat-heading ${isToggled ? "light" : ""}`}>
-              Hi there
-            </p>
-            <p className={`chat-text ${isToggled ? "light" : ""}`}>
-              This tab is for checking if the chatbot is perfectly trained.
-            </p>
-          </div>
+    <>
+      <div className={`${isFormActive ? "form_content" : "chatbot_content"}`}>
+        {!isFormActive ? (
+          <div className="landing-page">
+            <div className="content-wrapper">
+              <div className={`circle-logo ${isToggled ? "light" : ""}`}>
+                <img src={Widget} alt="" style={{ padding: 8 }} />
+              </div>{" "}
+              <p className="chat-with-us">Chat with Us</p>
+              <p className="ask-help">You can count on us for help!</p>
+            </div>
 
-          <div className="conversations">
-            {Array.isArray(conversationList) &&
-              conversationList?.map((item, index) => (
-                <SessionContainer
-                  key={index}
-                  item={item}
-                  onClick={onSessionClick}
-                  isToggled={isToggled}
-                />
-              ))}
-          </div>
-          {Array.isArray(conversationList) && conversationList?.length ? (
-            <>
-              <div className="session_box">
-                <NewConversationBtn
-                  className="start_session"
-                  onClick={startSession}
-                  isFormLoading={isFormLoading}
-                />
+            <div className={`overlay-box ${isToggled ? "light" : ""}`}></div>
+            <div className="conversations-box">
+              <div className="conversations-inner-box">
+                <Card isToggled={isToggled}>
+                  <div onClick={startSession}>
+                    <Content
+                      logo={
+                        <img
+                          src={Widget}
+                          alt=""
+                          style={{ width: 30, height: 30 }}
+                        />
+                      }
+                      isToggled={isToggled}
+                      title={"Chat with us now"}
+                      textSize="25px"
+                      size="30px"
+                    />
+                  </div>
+                </Card>
+                {Array.isArray(conversationList) &&
+                  conversationList?.length &&
+                  conversationList?.slice(-2).map((item) => (
+                    <Card isToggled={isToggled}>
+                      <div onClick={() => onSessionClick(item)}>
+                        <Content
+                          heading={item?.email ?? item?.user_name}
+                          subHeading={item?.first_message}
+                          firstName={item?.user_name}
+                          isToggled={isToggled}
+                          textSize="25px"
+                          size="30px"
+                          onSessionClick={onSessionClick}
+                        />
+                      </div>
+                    </Card>
+                  ))}
               </div>
-            </>
-          ) : (
-            <div
-              className={`no_session_box ${
-                isFormLoading ? "adjust_loader" : ""
-              }`}
-            >
-              <NewConversationBtn
-                className="no_session"
-                onClick={startSession}
-                isFormLoading={isFormLoading}
-              />
             </div>
-          )}
-        </div>
-      ) : (
-        <>
-          <div className="form-container">
-            <div className="form-header">
-              <img
-                src={GoBack}
-                alt=""
-                className="go-back-icon"
-                onClick={goBack}
-              />
-              <p className="form-instruction">
-                Please provide your email address and phone number here in case
-                the live chat gets disconnected.
-              </p>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="form-body">
-                <TransitionInput
-                  label="Your Name"
-                  required
-                  value={values?.userName}
-                  onChange={handleChange("userName")}
-                  theme={isToggled}
-                  error={
-                    touched?.userName && errors?.userName
-                      ? errors?.userName
-                      : null
-                  }
-                />
-                <TransitionInput
-                  label="Your Email"
-                  required
-                  value={values?.email}
-                  theme={isToggled}
-                  onChange={handleChange("email")}
-                  error={touched?.email && errors?.email ? errors?.email : null}
-                />
-                <TransitionInput
-                  label="Your Phone Number"
-                  value={values.phone_number}
-                  theme={isToggled}
-                  onChange={handleChange("phone_number")}
-                  error={
-                    touched?.phone_number && errors?.phone_number
-                      ? errors?.phone_number
-                      : null
-                  }
-                />
-              </div>
-              <div className="form-footer">
-                <button
-                  type="submit"
-                  disabled={isFormSubmitLoading}
-                  className="submit-button"
-                >
-                  <img src={SendMsg} alt="" className="send-icon" />
-                  <p className="submit-text">New Chat</p>
-                </button>
-              </div>
-            </form>
           </div>
-        </>
-      )}
-    </div>
+        ) : (
+          <>
+            <div className="form-wrapper">
+              <form onSubmit={handleSubmit} className="session-form">
+                <div className="form-body">
+                  <TransitionInput
+                    label="Your Name"
+                    required
+                    value={values?.userName}
+                    onChange={handleChange("userName")}
+                    theme={isToggled}
+                    error={
+                      touched?.userName && errors?.userName
+                        ? errors?.userName
+                        : null
+                    }
+                  />
+                  <TransitionInput
+                    label="Your Email"
+                    required
+                    value={values?.email}
+                    theme={isToggled}
+                    onChange={handleChange("email")}
+                    error={
+                      touched?.email && errors?.email ? errors?.email : null
+                    }
+                  />
+                  <TransitionInput
+                    label="Enter Your Phone Number"
+                    value={values.phone_number}
+                    theme={isToggled}
+                    onChange={handleChange("phone_number")}
+                    error={
+                      touched?.phone_number && errors?.phone_number
+                        ? errors?.phone_number
+                        : null
+                    }
+                  />
+                </div>
+                <div className="form-footer">
+                  <button
+                    type="submit"
+                    disabled={isFormSubmitLoading}
+                    className="submit-button"
+                  >
+                    <p className="submit-text">Start Chat</p>
+                    <img src={SendMsg} alt="" className="send-icon" />
+                  </button>
+                </div>
+              </form>
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 }
