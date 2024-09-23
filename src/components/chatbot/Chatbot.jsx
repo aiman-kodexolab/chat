@@ -22,7 +22,7 @@ import { BottomNavigation } from "./components/BottomNavigation/BottomNavigation
 import { ConversationsScreen } from "./components/ConversationsScreen/ConversationsScreen";
 
 const Chatbot = () => {
-  const [,setChat] = useState(true);
+  const [, setChat] = useState(true);
   const [isFormActive, setIsFormActive] = useState(false);
   const socket = useRef(null);
   const [values, setValues] = useState({
@@ -328,7 +328,10 @@ const Chatbot = () => {
   //useEffetcs
 
   const handleActiveTab = (selectedTab) => {
-    if (activeTab === "form" || "home") {
+    if (selectedTab === "home" || selectedTab === "conversation") {
+      refetch();
+    }
+    if (activeTab === "form" || activeTab === "home") {
       setIsFormActive(false);
     }
     setActiveTab(selectedTab);
