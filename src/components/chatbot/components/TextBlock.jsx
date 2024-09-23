@@ -2,6 +2,7 @@ import React from "react";
 import Markdown from "../../Markdown";
 import "../style.css";
 import { replaceTags } from "../../../utils/constant";
+import moment from "moment";
 
 function TextBlock({ isUser, children, time }) {
   const renderContent = (content) => {
@@ -23,7 +24,9 @@ function TextBlock({ isUser, children, time }) {
         {renderContent(children)}
       </div>
       <div className={`header-text ${isUser ? "header-user" : "header-bot"}`}>
-        <p className={"time"}>{time}</p>
+        <p className={"time"}>
+          {moment(time, "Do MMMM YYYY . h:mm A").format("Do MMM YYYY . h:mm A")}
+        </p>
       </div>
     </div>
   );

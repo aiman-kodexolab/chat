@@ -5,9 +5,8 @@
 .input-container input[type="text"] {
   font-size: 15px;
   width: 100%;
-  border: none;
-  padding: 5px 0;
-  background-color: transparent;
+  border: 1px solid #fb5521;
+  padding: 10px 0;
   outline: none;
 }
 
@@ -29,28 +28,34 @@
 }
 
 .input-container .label {
-  position: absolute;
   top: 3;
   left: 0;
   transition: all 0.3s ease;
   pointer-events: none;
+  font-size: 16px;
+  font-weight: 400;
+  padding-left: 4px;
+  font-family: Poppins, sans-serif;
 }
 
 .input-container input[type="text"]:focus ~ .label,
 .input-container input[type="text"]:valid ~ .label {
   top: -20px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .input-container input[type="text"]:focus,
 .input-container input[type="text"]:valid {
   top: -20px;
-  font-size: 12px;
-  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
   transition: none;
+  padding-left: 12px;
+  padding-right: 12px;
 }
-.input-container input[type="text"]{
+.input-container input[type="text"] {
   top: -20px;
-  font-size: 12px;
+  font-size: 16px;
   color: white;
   transition: none;
 }
@@ -78,13 +83,15 @@
 }
 
 .text {
-  font-size: 12px;
+  font-size: 16px;
   font-style: italic;
   font-family: sans-serif;
+  padding-top: 2px;
 }
 
 .input-field {
   font-family: sans-serif;
+  border-radius: 10px;
 }
 
 .border-b-2 {
@@ -108,7 +115,7 @@
 }
 
 .text-seaGreen {
-  background: linear-gradient(90deg, #079485, #115588);
+  background-color: #fb5521;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

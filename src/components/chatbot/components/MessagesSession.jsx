@@ -8,7 +8,10 @@ import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Dropdown } from "../../../assets";
+import { Dropdown, Widget } from "../../../assets";
+import ChatHeader from "./ChatHeader";
+import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
+import { LuClipboardList } from "react-icons/lu";
 
 const MessagesSession = ({
   sessionId,
@@ -20,6 +23,10 @@ const MessagesSession = ({
   chatArray,
   setChatArray,
   sessionLoader,
+  messagesSession,
+  messageSessionBack,
+  handleDeleteChat,
+  handleToggle,
 }) => {
   const [messages, setMessages] = useState("");
   const sessionStatus =
@@ -31,7 +38,9 @@ const MessagesSession = ({
   const containerRef = useRef();
   const botTime = formatTime();
   const isHuman = useRef(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const customizedChatData = useSelector((state) => state.state.chatData);
+  const username = JSON.parse(localStorage.getItem("user")).userName?.charAt(0);
   const inputFieldStyle = {
     border: "1px solid",
     borderImageSource: "linear-gradient(90deg, #079485 0%, #115588 100%)",
@@ -263,8 +272,26 @@ const MessagesSession = ({
     }
   };
 
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setShowTooltip(true);
+      setTimeout(() => {
+        setShowTooltip(false);
+      }, 1000);
+    });
+  };
+
   return (
-    <div style={{ position: "relative" }}>
+    <>
+      <ChatHeader
+        messagesSession={messagesSession}
+        messageSessionBack={messageSessionBack}
+        handleDeleteChat={handleDeleteChat}
+        isDisabled={chatArray.length}
+        chatLoad={chatLoad}
+        handleToggle={handleToggle}
+        isToggled={isToggled}
+      />
       <div
         ref={containerRef}
         className={`chat-container ${
@@ -272,13 +299,7 @@ const MessagesSession = ({
         } `}
       >
         {chatHistoryLoader && (
-          <Skeleton
-            height={40}
-            width={"85%"}
-            baseColor="#01BFB726"
-            highlightColor="#10ddd3"
-            duration={3}
-          />
+          <Skeleton height={40} width={"85%"} duration={3} />
         )}
         {chatHistoryLoader && (
           <div
@@ -289,37 +310,61 @@ const MessagesSession = ({
               marginBottom: 5,
             }}
           >
-            <Skeleton
-              height={70}
-              containerClassName="width-80"
-              baseColor="#01BFB726"
-              highlightColor="#10ddd3"
-              duration={3}
-            />
+            <Skeleton height={70} containerClassName="width-80" duration={3} />
           </div>
         )}
         {chatHistoryLoader && (
-          <Skeleton
-            height={70}
-            width={"85%"}
-            baseColor="#01BFB726"
-            highlightColor="#10ddd3"
-            duration={3}
-          />
+          <Skeleton height={70} width={"85%"} duration={3} />
         )}
+
         {Array.isArray(chatArray) &&
           chatArray?.map((item) => {
             if (item?.type === "user") {
               return (
-                <TextBlock key={item._id} isUser={true} time={item?.created_on}>
-                  {item?.content}
-                </TextBlock>
+                <div className="message-container-user">
+                  <div
+                    className="text-block-wrapper-user"
+                    style={{ position: "relative" }}
+                  >
+                    <TextBlock
+                      key={item._id}
+                      isUser={true}
+                      time={item?.created_on}
+                    >
+                      {item?.content}
+                    </TextBlock>
+                    <div className="triangle-user" />
+                  </div>
+                  <div className="bot-avatar-user">
+                    {username.toUpperCase()}
+                  </div>
+                </div>
               );
             } else if (item?.type === "bot") {
               return (
-                <TextBlock key={item._id} time={item?.created_on}>
-                  {item?.content}
-                </TextBlock>
+                <div className="message-container-bot">
+                  <div
+                    className="text-block-wrapper"
+                    style={{ position: "relative" }}
+                  >
+                    <TextBlock key={item._id} time={item?.created_on}>
+                      {item?.content}
+                    </TextBlock>
+                    <div className="triangle" />
+                  </div>
+                  <div style={{ height: 0, width: 0 }}>
+                    <img src={Widget} alt="" className="bot-message-logo" />
+                  </div>
+                  <div className="actions-wrapper">
+                    <LuClipboardList
+                      color="white"
+                      onClick={() => copyToClipboard(item?.content)}
+                    />
+                    {showTooltip && <div className="tooltip">Copied!</div>}
+                    <FaRegThumbsUp color="white" />
+                    <FaRegThumbsDown color="white" />
+                  </div>
+                </div>
               );
             } else if (item?.type === "agent") {
               return (
@@ -364,7 +409,7 @@ const MessagesSession = ({
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

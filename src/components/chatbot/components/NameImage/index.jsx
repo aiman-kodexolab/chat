@@ -7,6 +7,8 @@ function NameImage({
   size = "38px",
   textSize = "18px",
   style,
+  logo,
+  isToggled,
 }) {
   const first = firstName?.charAt(0);
 
@@ -21,34 +23,40 @@ function NameImage({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage:
-          "linear-gradient(90.57deg,#079485 9.91%, #0c7586 50.24%, #115588 91.56%)",
+        backgroundColor: "#3E2248",
+        boxShadow: "0px 4px 4px 0px #00000040",
       }}
     >
-      <p
-      className={"first_text"}
-        style={{
-          fontSize: textSize,
-          color: "#ffffff",
-          fontFamily: "sans-serif",
-          fontWeight: 500,
-        }}
-      >
-        {first}
-      </p>
-      {last && (
-        <p
-        className={"last_text"}
-          style={{
-            fontSize: textSize,
-            color: "#ffffff",
-            fontFamily: "sans-serif",
-            fontWeight: 500,
-            marginLeft: "2px",
-          }}
-        >
-          {last}
-        </p>
+      {logo ? (
+        <div className={`circle ${isToggled ? "light" : ""}`}>{logo}</div>
+      ) : (
+        <>
+          <p
+            className={"first_text"}
+            style={{
+              fontSize: textSize,
+              color: "#ffffff",
+              fontFamily: "sans-serif",
+              fontWeight: 700,
+            }}
+          >
+            {first}
+          </p>
+          {last && (
+            <p
+              className={"last_text"}
+              style={{
+                fontSize: textSize,
+                color: "#ffffff",
+                fontFamily: "sans-serif",
+                fontWeight: 500,
+                marginLeft: "2px",
+              }}
+            >
+              {last}
+            </p>
+          )}
+        </>
       )}
     </div>
   );
