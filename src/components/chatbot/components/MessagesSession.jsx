@@ -29,6 +29,7 @@ const MessagesSession = ({
   handleDeleteChat,
   handleToggle,
 }) => {
+  const [copiedMessageId, setCopiedMessageId] = useState(null);
   const [messages, setMessages] = useState("");
   const sessionStatus =
     localStorage.getItem("status") === "true" ? true : false;
@@ -39,9 +40,10 @@ const MessagesSession = ({
   const containerRef = useRef();
   const botTime = formatTime();
   const isHuman = useRef(false);
-  const [showTooltip, setShowTooltip] = useState(false);
   const customizedChatData = useSelector((state) => state.state.chatData);
-  const username = userName ? userName : JSON.parse(localStorage.getItem("currentSession")).user_name?.charAt(0);
+  const username = userName
+    ? userName
+    : JSON.parse(localStorage.getItem("currentSession")).user_name?.charAt(0);
   const inputFieldStyle = {
     border: "1px solid",
     borderImageSource: "linear-gradient(90deg, #079485 0%, #115588 100%)",
@@ -273,11 +275,11 @@ const MessagesSession = ({
     }
   };
 
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text).then(() => {
-      setShowTooltip(true);
+      setCopiedMessageId(id);
       setTimeout(() => {
-        setShowTooltip(false);
+        setCopiedMessageId(null);
       }, 1000);
     });
   };
@@ -359,9 +361,11 @@ const MessagesSession = ({
                   <div className="actions-wrapper">
                     <LuClipboardList
                       color="white"
-                      onClick={() => copyToClipboard(item?.content)}
+                      onClick={() => copyToClipboard(item?.content, item.id)}
                     />
-                    {showTooltip && <div className="tooltip">Copied!</div>}
+                    {copiedMessageId === item.id && (
+                      <div className="tooltip">Copied!</div>
+                    )}{" "}
                     <FaRegThumbsUp color="white" />
                     <FaRegThumbsDown color="white" />
                   </div>
