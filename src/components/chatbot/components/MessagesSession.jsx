@@ -19,6 +19,7 @@ const MessagesSession = ({
   setChatLoad,
   isToggled,
   email,
+  userName,
   sessionCreated,
   chatArray,
   setChatArray,
@@ -40,7 +41,7 @@ const MessagesSession = ({
   const isHuman = useRef(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const customizedChatData = useSelector((state) => state.state.chatData);
-  const username = JSON.parse(localStorage.getItem("user")).userName?.charAt(0);
+  // const username = JSON.parse(localStorage.getItem("user")).userName?.charAt(0);
   const inputFieldStyle = {
     border: "1px solid",
     borderImageSource: "linear-gradient(90deg, #079485 0%, #115588 100%)",
@@ -336,7 +337,7 @@ const MessagesSession = ({
                     <div className="triangle-user" />
                   </div>
                   <div className="bot-avatar-user">
-                    {username.toUpperCase()}
+                    {userName.charAt(0).toUpperCase()}
                   </div>
                 </div>
               );

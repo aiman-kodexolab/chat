@@ -48,6 +48,7 @@ const Chatbot = () => {
   const sessionCreated = formatTime();
   const [sessionId, setSessionId] = useState("");
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [chatLoad, setChatLoad] = useState(false);
   const [isToggled, setIsToggled] = useState(
     isLight === "false" ? false : true
@@ -275,6 +276,7 @@ const Chatbot = () => {
       setMessagesSession(true);
       await playNotificationSound();
       setEmail(item?.email);
+      setUserName(item?.user_name);
       localStorage.setItem("currentSession", JSON.stringify(userSession));
     } else {
       handleActiveTab("form");
@@ -344,6 +346,7 @@ const Chatbot = () => {
           {messagesSession || currentSession?.is_form_filled ? (
             <MessagesSession
               email={email}
+              userName={userName}
               sessionCreated={sessionCreated}
               sessionId={sessionId}
               chatArray={chatArray}
