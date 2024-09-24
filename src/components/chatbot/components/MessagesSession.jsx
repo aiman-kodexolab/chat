@@ -361,13 +361,14 @@ const MessagesSession = ({
                   <div className="actions-wrapper">
                     <LuClipboardList
                       color="white"
+                      size={15}
                       onClick={() => copyToClipboard(item?.content, item.id)}
                     />
                     {copiedMessageId === item.id && (
                       <div className="tooltip">Copied!</div>
                     )}{" "}
-                    <FaRegThumbsUp color="white" />
-                    <FaRegThumbsDown color="white" />
+                    <FaRegThumbsUp color="white" size={15}/>
+                    <FaRegThumbsDown color="white" size={15}/>
                   </div>
                 </div>
               );
