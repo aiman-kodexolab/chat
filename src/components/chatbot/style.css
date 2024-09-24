@@ -964,3 +964,7 @@ input:-webkit-autofill:not(:focus) {
   right: 0;
   padding: 15px 10px 10px;
 }
+
+.message-container-bot {
+  padding-top: 8px;
+}
