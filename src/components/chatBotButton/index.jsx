@@ -8,7 +8,7 @@ import { setChat } from "../../redux/state.js";
 import { RxCross2 } from "react-icons/rx";
 
 const ChatbotButton = ({
-  apiKey = "cb-uE-23UZ69_mzowk5wPC21nSgjqUe6951NH2KLa2vuvKyWFUh",
+  apiKey = "cb-p0XgWI1Gc8fJfh1plN1NaVUe9x63KtFChvXyYFFY3DoNL5Ja",
 }) => {
   if (!localStorage.getItem("isLight")) {
     localStorage.setItem("isLight", "false");

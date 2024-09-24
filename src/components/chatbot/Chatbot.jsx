@@ -120,6 +120,7 @@ const Chatbot = () => {
         is_form_filled: result?.data?.data?.is_form_filled,
         _id: result?.data?.data?.session_id,
         status: result?.data?.data?.status,
+        user_name: values.userName,
       };
       setSessionId(() => result?.data?.data?.session_id);
 
@@ -236,6 +237,7 @@ const Chatbot = () => {
       );
       setIsFormSubmitLoading(false);
       setEmail(values.email);
+      setUserName(values.userName)
       resetForm();
       setMessagesSession(true);
       await playNotificationSound();
@@ -270,13 +272,14 @@ const Chatbot = () => {
       _id: item?._id,
       status: item?.status,
       is_joined: item?.is_joined,
+      user_name: item?.user_name
     };
     if (item?.is_form_filled) {
       setChat(true);
-      setMessagesSession(true);
-      await playNotificationSound();
       setEmail(item?.email);
       setUserName(item?.user_name);
+      setMessagesSession(true);
+      await playNotificationSound();
       localStorage.setItem("currentSession", JSON.stringify(userSession));
     } else {
       handleActiveTab("form");
