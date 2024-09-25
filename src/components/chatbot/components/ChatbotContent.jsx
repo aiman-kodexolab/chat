@@ -41,13 +41,14 @@ export default function ChatbotContent({
                         <img
                           src={Widget}
                           alt=""
-                          style={{ width: 30, height: 30 }}
+                          style={{ width: 35, height: 35, padding: 3 }}
                         />
                       }
                       isToggled={isToggled}
                       title={"Chat with us now"}
                       textSize="25px"
-                      size="30px"
+                      height={"30px"}
+                      width={"30px"}
                     />
                   </div>
                 </Card>
@@ -62,7 +63,8 @@ export default function ChatbotContent({
                           firstName={item?.user_name}
                           isToggled={isToggled}
                           textSize="25px"
-                          size="30px"
+                          height={"35px"}
+                          width={"35px"}
                           onSessionClick={onSessionClick}
                         />
                       </div>

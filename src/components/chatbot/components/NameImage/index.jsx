@@ -4,7 +4,8 @@ function NameImage({
   firstName,
   lastName,
   rounded,
-  size = "38px",
+  height = "38px",
+  width = "38px",
   textSize = "18px",
   style,
   logo,
@@ -17,8 +18,8 @@ function NameImage({
     <div
       style={{
         ...style,
-        height: size,
-        width: size,
+        height: height,
+        width: width,
         borderRadius: rounded ? "50px" : "20px",
         display: "flex",
         alignItems: "center",

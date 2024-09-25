@@ -9,7 +9,8 @@ const Content = ({
   logo,
   isToggled,
   textSize,
-  size,
+  height,
+  width,
   heading,
   subHeading,
 }) => {
@@ -17,7 +18,8 @@ const Content = ({
     <div className="content-container">
       <div className="content-wrap">
         <NameImage
-          size={size}
+          height={height}
+          width={width}
           textSize={textSize}
           rounded={true}
           firstName={firstName?.toUpperCase()}

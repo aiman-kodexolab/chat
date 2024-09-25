@@ -36,6 +36,8 @@
 
 .circle_button.button_open {
   background-color: #3e2248;
+  width: 60px;
+  height: 60px;
 }
 
 .disabled_button {
@@ -59,17 +61,11 @@
   height: 65px;
 }
 
-.close_icon {
-  width: 40px;
-  height: 40px;
-  object-fit: none;
-}
-
 .welcome_text_wrapper {
   background-color: white;
   box-shadow: 0px 0px 2px 2px #00000040;
   border-radius: 16px;
-  position: absolute; 
+  position: absolute;
   bottom: 100px;
   width: 400px;
   right: 0;

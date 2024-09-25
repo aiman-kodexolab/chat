@@ -6,6 +6,7 @@
 .no-conversation-text {
   text-align: center;
   color: white;
+  font-size: 16px;
 }
 
 .no-conversation-text.light {

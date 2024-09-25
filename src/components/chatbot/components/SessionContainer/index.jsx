@@ -21,7 +21,8 @@ function SessionContainer({ onClick, item, isToggled, name }) {
     >
       <div className={"item-container"}>
         <NameImage
-          size="40px"
+          height={"40px"}
+          width={"45px"}
           textSize="25px"
           rounded={true}
           firstName={item.user_name ? item.user_name[0]?.toUpperCase() : "?"}

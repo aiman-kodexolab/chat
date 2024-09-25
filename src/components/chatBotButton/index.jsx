@@ -71,7 +71,7 @@ const ChatbotButton = ({
             onClick={toggleChat}
           >
             {isOpen ? (
-              <RxCross2 className="widget close_icon" size={10} />
+              <RxCross2 size={22} strokeWidth={2} />
             ) : (
               <>
                 <div className="widget_wrap">

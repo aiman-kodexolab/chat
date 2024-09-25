@@ -330,13 +330,16 @@ const MessagesSession = ({
                     style={{ position: "relative" }}
                   >
                     <TextBlock
+                      isToggled={isToggled}
                       key={item._id}
                       isUser={true}
                       time={item?.created_on}
                     >
                       {item?.content}
                     </TextBlock>
-                    <div className="triangle-user" />
+                    <div
+                      className={`triangle-user ${isToggled ? "light" : ""}`}
+                    />
                   </div>
                   <div className="bot-avatar-user">
                     {username?.charAt(0)?.toUpperCase()}
@@ -350,7 +353,11 @@ const MessagesSession = ({
                     className="text-block-wrapper"
                     style={{ position: "relative" }}
                   >
-                    <TextBlock key={item._id} time={item?.created_on}>
+                    <TextBlock
+                      isToggled={isToggled}
+                      key={item._id}
+                      time={item?.created_on}
+                    >
                       {item?.content}
                     </TextBlock>
                     <div className="triangle" />
@@ -367,8 +374,8 @@ const MessagesSession = ({
                     {copiedMessageId === item.id && (
                       <div className="tooltip">Copied!</div>
                     )}{" "}
-                    <FaRegThumbsUp color="white" size={15}/>
-                    <FaRegThumbsDown color="white" size={15}/>
+                    <FaRegThumbsUp color="white" size={15} />
+                    <FaRegThumbsDown color="white" size={15} />
                   </div>
                 </div>
               );

@@ -4,13 +4,17 @@ import "../style.css";
 import { replaceTags } from "../../../utils/constant";
 import moment from "moment";
 
-function TextBlock({ isUser, children, time }) {
+function TextBlock({ isToggled, isUser, children, time }) {
   const renderContent = (content) => {
     if (isUser) {
       return (
         <div
           dangerouslySetInnerHTML={{ __html: replaceTags(content) }}
-          style={{ lineHeight: "16px", fontFamily: "Poppins, sans-serif" }}
+          style={{
+            lineHeight: "16px",
+            fontFamily: "Poppins, sans-serif",
+            color: isToggled ? "#444444" : "#000000",
+          }}
         />
       );
     } else {
@@ -20,7 +24,10 @@ function TextBlock({ isUser, children, time }) {
 
   return (
     <div className={`text-block ${isUser ? "user" : "bot"}`}>
-      <div className={"message"} style={{ whiteSpace: isUser && "pre-wrap" }}>
+      <div
+        className={`message ${isToggled ? "light" : ""}`}
+        style={{ whiteSpace: isUser && "pre-wrap" }}
+      >
         {renderContent(children)}
       </div>
       <div className={`header-text ${isUser ? "header-user" : "header-bot"}`}>
