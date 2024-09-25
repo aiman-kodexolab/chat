@@ -46,9 +46,11 @@ export async function playNotificationSound() {
   }
 }
 
-export const apiUrl = "https://chatbot-api.kodexolabs.ai/";
+export const apiUrl = "https://chatbot-admin-staging.kodexolabs.ai/";
+// export const apiUrl = "http://127.0.0.1:8000";
 
-export const socketUrl = "chatbot-api.kodexolabs.ai/";
+export const socketUrl = "chatbot-admin-staging.kodexolabs.ai";
+// export const socketUrl = "127.0.0.1:8000";
 
 export const replaceTags = (text) => {
   const word = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
