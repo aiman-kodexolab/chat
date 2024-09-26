@@ -40,9 +40,7 @@ const Content = ({
         )}
       </div>
 
-      <div className="right-arrow">
-        <FaArrowRightLong color="white" size={12} />
-      </div>
+      <FaArrowRightLong color="white" size={12} className="right-arrow" />
     </div>
   );
 };

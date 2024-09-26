@@ -72,8 +72,10 @@
 }
 
 .right-arrow {
-  width: fit-content;
-  background-color: #fb5521;
+  color: white;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  background: #fb5521;
   border-radius: 50%;
-  padding: 3px 5px;
 }
