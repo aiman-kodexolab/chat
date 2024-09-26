@@ -430,7 +430,7 @@
 }
 
 .text-block.user .message.light {
-  background-color: #DEE2E6;
+  background-color: #dee2e6;
 }
 
 .text-block.user .header-user {
@@ -490,7 +490,7 @@
 }
 
 .triangle-user.light {
-  border-bottom-color: #DEE2E6;
+  border-bottom-color: #dee2e6;
 }
 
 .text-block.bot .message {
@@ -798,7 +798,7 @@ input:-webkit-autofill:not(:focus) {
   align-items: center;
   flex-direction: column;
   text-align: center;
-  color: #0c7587;
+  color: #fb5521;
   font-size: 12px;
 }
 .agent-time {
