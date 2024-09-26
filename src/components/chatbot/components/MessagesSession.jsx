@@ -12,6 +12,7 @@ import { Dropdown, Widget } from "../../../assets";
 import ChatHeader from "./ChatHeader";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu";
+import { v4 as uuidv4 } from "uuid";
 
 const MessagesSession = ({
   sessionId,
@@ -41,6 +42,8 @@ const MessagesSession = ({
   const botTime = formatTime();
   const isHuman = useRef(false);
   const customizedChatData = useSelector((state) => state.state.chatData);
+  const [messageSelections, setMessageSelections] = useState({});
+
   const username = userName
     ? userName
     : JSON.parse(localStorage.getItem("currentSession")).user_name?.charAt(0);
@@ -152,6 +155,7 @@ const MessagesSession = ({
       setChatArray((prevDataSets) => [
         ...prevDataSets,
         {
+          id: uuidv4(),
           type: "bot",
           content: msg?.sentence,
           created_on: botTime,
@@ -181,6 +185,7 @@ const MessagesSession = ({
         setChatArray((prevDataSets) => [
           ...prevDataSets,
           {
+            id: uuidv4(),
             type: "bot",
             content: msg?.sentence,
             created_on: botTime,
@@ -189,6 +194,7 @@ const MessagesSession = ({
         setNewMessages((prevMessages) => [
           ...prevMessages,
           {
+            id: uuidv4(),
             type: "bot",
             content: msg?.sentence,
             created_on: botTime,
@@ -223,6 +229,7 @@ const MessagesSession = ({
     if (chatData?.data && !chatHistoryLoader) {
       setChatArray([
         {
+          id: uuidv4(),
           type: "bot",
           content:
             customizedChatData && customizedChatData?.current_welcome_message,
@@ -284,6 +291,20 @@ const MessagesSession = ({
     });
   };
 
+  const handleLikeClick = (id) => {
+    setMessageSelections((prevSelections) => ({
+      ...prevSelections,
+      [id]: prevSelections[id] === "like" ? null : "like", // Toggle like or null
+    }));
+  };
+
+  const handleDislikeClick = (id) => {
+    setMessageSelections((prevSelections) => ({
+      ...prevSelections,
+      [id]: prevSelections[id] === "dislike" ? null : "dislike", // Toggle dislike or null
+    }));
+  };
+
   return (
     <>
       <ChatHeader
@@ -322,6 +343,7 @@ const MessagesSession = ({
 
         {Array.isArray(chatArray) &&
           chatArray?.map((item) => {
+            const currentSelection = messageSelections[item.id];
             if (item?.type === "user") {
               return (
                 <div className="message-container-user">
@@ -374,8 +396,18 @@ const MessagesSession = ({
                     {copiedMessageId === item.id && (
                       <div className="tooltip">Copied!</div>
                     )}{" "}
-                    <FaRegThumbsUp color="white" size={15} />
-                    <FaRegThumbsDown color="white" size={15} />
+                    <FaRegThumbsUp
+                      color={currentSelection === "like" ? "black" : "white"} // Change color when liked
+                      size={15}
+                      onClick={() => handleLikeClick(item.id)} // Pass message ID
+                      style={{ cursor: "pointer" }}
+                    />
+                    <FaRegThumbsDown
+                      color={currentSelection === "dislike" ? "black" : "white"} // Change color when disliked
+                      size={15}
+                      onClick={() => handleDislikeClick(item.id)} // Pass message ID
+                      style={{ cursor: "pointer" }}
+                    />
                   </div>
                 </div>
               );

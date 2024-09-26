@@ -58,7 +58,7 @@ export default function ChatbotContent({
                     <Card isToggled={isToggled}>
                       <div onClick={() => onSessionClick(item)}>
                         <Content
-                          heading={item?.email ?? item?.user_name}
+                          heading={item?.user_name}
                           subHeading={item?.first_message}
                           firstName={item?.user_name}
                           isToggled={isToggled}
