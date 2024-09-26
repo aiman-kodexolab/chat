@@ -16,7 +16,7 @@ window.renderChatbot = async (containerId) => {
     const linkElement = document.createElement("link");
     linkElement.rel = "stylesheet";
     linkElement.href =
-      "https://main.d1usksvjihc2w.amplifyapp.com/chatbot.bundle.js/widgetStyles.css";
+      "https://main.d1usksvjihc2w.amplifyapp.com/widgetStyles.css";
     shadowRoot.appendChild(linkElement);
     const shadowContainer = document.createElement("div");
     shadowRoot.appendChild(shadowContainer);
