@@ -55,6 +55,7 @@
   white-space: nowrap;
   max-width: 150px;
   overflow: hidden !important;
+  padding-top: 2px;
 }
 
 .subheading-wrapper.light {
@@ -67,6 +68,7 @@
   white-space: nowrap;
   max-width: 150px;
   overflow: hidden !important;
+  padding-top: 2px;
 }
 
 .right-arrow {
