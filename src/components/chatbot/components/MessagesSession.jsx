@@ -10,7 +10,12 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Dropdown, Widget } from "../../../assets";
 import ChatHeader from "./ChatHeader";
-import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
+import {
+  FaRegThumbsDown,
+  FaRegThumbsUp,
+  FaThumbsDown,
+  FaThumbsUp,
+} from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu";
 import { v4 as uuidv4 } from "uuid";
 
@@ -396,18 +401,39 @@ const MessagesSession = ({
                     {copiedMessageId === item.id && (
                       <div className="tooltip">Copied!</div>
                     )}{" "}
-                    <FaRegThumbsUp
-                      color={currentSelection === "like" ? "black" : "white"} // Change color when liked
-                      size={15}
-                      onClick={() => handleLikeClick(item.id)} // Pass message ID
-                      style={{ cursor: "pointer" }}
-                    />
-                    <FaRegThumbsDown
-                      color={currentSelection === "dislike" ? "black" : "white"} // Change color when disliked
-                      size={15}
-                      onClick={() => handleDislikeClick(item.id)} // Pass message ID
-                      style={{ cursor: "pointer" }}
-                    />
+                    <>
+                      {currentSelection === "like" ? (
+                        <FaThumbsUp
+                          color="white"
+                          size={15}
+                          onClick={() => handleLikeClick(item.id)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      ) : (
+                        <FaRegThumbsUp
+                          color="white"
+                          size={15}
+                          onClick={() => handleLikeClick(item.id)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      )}
+
+                      {currentSelection === "dislike" ? (
+                        <FaThumbsDown
+                          color="white"
+                          size={15}
+                          onClick={() => handleDislikeClick(item.id)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      ) : (
+                        <FaRegThumbsDown
+                          color="white"
+                          size={15}
+                          onClick={() => handleDislikeClick(item.id)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      )}
+                    </>
                   </div>
                 </div>
               );
