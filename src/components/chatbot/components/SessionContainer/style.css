@@ -52,7 +52,7 @@
   color: #ffffff;
   overflow: hidden !important;
   text-overflow: ellipsis;
-  max-width: 180px;
+  max-width: 150px;
   white-space: nowrap;
   padding-top: 2px;
 }

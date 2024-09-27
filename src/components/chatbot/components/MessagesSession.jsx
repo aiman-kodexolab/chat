@@ -397,6 +397,7 @@ const MessagesSession = ({
                       color="white"
                       size={15}
                       onClick={() => copyToClipboard(item?.content, item.id)}
+                      style={{cursor: "pointer"}}
                     />
                     {copiedMessageId === item.id && (
                       <div className="tooltip">Copied!</div>
