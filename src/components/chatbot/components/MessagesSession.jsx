@@ -364,77 +364,80 @@ const MessagesSession = ({
                     >
                       {item?.content}
                     </TextBlock>
-                    <div
-                      className={`triangle-user ${isToggled ? "light" : ""}`}
-                    />
-                  </div>
-                  <div className="bot-avatar-user">
-                    {username?.charAt(0)?.toUpperCase()}
                   </div>
                 </div>
               );
             } else if (item?.type === "bot") {
               return (
                 <div className="message-container-bot">
-                  <div
-                    className="text-block-wrapper"
-                    style={{ position: "relative" }}
-                  >
-                    <TextBlock
-                      isToggled={isToggled}
-                      key={item._id}
-                      time={item?.created_on}
-                    >
-                      {item?.content}
-                    </TextBlock>
-                    <div className="triangle" />
-                  </div>
-                  <div style={{ height: 0, width: 0 }}>
-                    <img src={Widget} alt="" className="bot-message-logo" />
-                  </div>
-                  <div className="actions-wrapper">
-                    <LuClipboardList
-                      color="white"
-                      size={15}
-                      onClick={() => copyToClipboard(item?.content, item.id)}
-                      style={{cursor: "pointer"}}
-                    />
-                    {copiedMessageId === item.id && (
-                      <div className="tooltip">Copied!</div>
-                    )}{" "}
-                    <>
-                      {currentSelection === "like" ? (
-                        <FaThumbsUp
-                          color="white"
-                          size={15}
-                          onClick={() => handleLikeClick(item.id)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      ) : (
-                        <FaRegThumbsUp
-                          color="white"
-                          size={15}
-                          onClick={() => handleLikeClick(item.id)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      )}
+                  <div className="text-block-wrapper">
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <img src={Widget} alt="" className="bot-message-logo" />
 
-                      {currentSelection === "dislike" ? (
-                        <FaThumbsDown
+                      <TextBlock
+                        isToggled={isToggled}
+                        key={item._id}
+                        time={item?.created_on}
+                      >
+                        {item?.content}
+                      </TextBlock>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row-reverse",
+                        paddingBottom: 15,
+                        position: "relative",
+                      }}
+                    >
+                      <div className="actions-wrapper">
+                        <LuClipboardList
                           color="white"
                           size={15}
-                          onClick={() => handleDislikeClick(item.id)}
+                          onClick={() =>
+                            copyToClipboard(item?.content, item.id)
+                          }
                           style={{ cursor: "pointer" }}
                         />
-                      ) : (
-                        <FaRegThumbsDown
-                          color="white"
-                          size={15}
-                          onClick={() => handleDislikeClick(item.id)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      )}
-                    </>
+                        {copiedMessageId === item.id && (
+                          <div className="tooltip">Copied!</div>
+                        )}{" "}
+                        <>
+                          {currentSelection === "like" ? (
+                            <FaThumbsUp
+                              color="white"
+                              size={15}
+                              onClick={() => handleLikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <FaRegThumbsUp
+                              color="white"
+                              size={15}
+                              onClick={() => handleLikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          )}
+
+                          {currentSelection === "dislike" ? (
+                            <FaThumbsDown
+                              color="white"
+                              size={15}
+                              onClick={() => handleDislikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <FaRegThumbsDown
+                              color="white"
+                              size={15}
+                              onClick={() => handleDislikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          )}
+                        </>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );

@@ -26,15 +26,15 @@ function TextBlock({ isToggled, isUser, children, time }) {
     <div className={`text-block ${isUser ? "user" : "bot"}`}>
       <div
         className={`message ${isToggled ? "light" : ""}`}
-        style={{ whiteSpace: isUser && "pre-wrap" }}
+        style={{ whiteSpace: isUser && "pre-wrap", marginBottom: isUser && "10px" }}
       >
         {renderContent(children)}
       </div>
-      <div className={`header-text ${isUser ? "header-user" : "header-bot"}`}>
+      {/* <div className={`header-text ${isUser ? "header-user" : "header-bot"}`}>
         <p className={"time"}>
           {moment(time, "Do MMMM YYYY . h:mm A").format("Do MMM YYYY . h:mm A")}
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }
