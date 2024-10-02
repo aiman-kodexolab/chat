@@ -8,7 +8,16 @@ import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Dropdown } from "../../../assets";
+import { Dropdown, Widget } from "../../../assets";
+import ChatHeader from "./ChatHeader";
+import {
+  FaRegThumbsDown,
+  FaRegThumbsUp,
+  FaThumbsDown,
+  FaThumbsUp,
+} from "react-icons/fa";
+import { LuClipboardList } from "react-icons/lu";
+import { v4 as uuidv4 } from "uuid";
 
 const MessagesSession = ({
   sessionId,
@@ -16,11 +25,17 @@ const MessagesSession = ({
   setChatLoad,
   isToggled,
   email,
+  userName,
   sessionCreated,
   chatArray,
   setChatArray,
   sessionLoader,
+  messagesSession,
+  messageSessionBack,
+  handleDeleteChat,
+  handleToggle,
 }) => {
+  const [copiedMessageId, setCopiedMessageId] = useState(null);
   const [messages, setMessages] = useState("");
   const sessionStatus =
     localStorage.getItem("status") === "true" ? true : false;
@@ -32,6 +47,11 @@ const MessagesSession = ({
   const botTime = formatTime();
   const isHuman = useRef(false);
   const customizedChatData = useSelector((state) => state.state.chatData);
+  const [messageSelections, setMessageSelections] = useState({});
+
+  const username = userName
+    ? userName
+    : JSON.parse(localStorage.getItem("currentSession")).user_name?.charAt(0);
   const inputFieldStyle = {
     border: "1px solid",
     borderImageSource: "linear-gradient(90deg, #079485 0%, #115588 100%)",
@@ -140,6 +160,7 @@ const MessagesSession = ({
       setChatArray((prevDataSets) => [
         ...prevDataSets,
         {
+          id: uuidv4(),
           type: "bot",
           content: msg?.sentence,
           created_on: botTime,
@@ -169,6 +190,7 @@ const MessagesSession = ({
         setChatArray((prevDataSets) => [
           ...prevDataSets,
           {
+            id: uuidv4(),
             type: "bot",
             content: msg?.sentence,
             created_on: botTime,
@@ -177,6 +199,7 @@ const MessagesSession = ({
         setNewMessages((prevMessages) => [
           ...prevMessages,
           {
+            id: uuidv4(),
             type: "bot",
             content: msg?.sentence,
             created_on: botTime,
@@ -211,6 +234,7 @@ const MessagesSession = ({
     if (chatData?.data && !chatHistoryLoader) {
       setChatArray([
         {
+          id: uuidv4(),
           type: "bot",
           content:
             customizedChatData && customizedChatData?.current_welcome_message,
@@ -263,8 +287,40 @@ const MessagesSession = ({
     }
   };
 
+  const copyToClipboard = (text, id) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedMessageId(id);
+      setTimeout(() => {
+        setCopiedMessageId(null);
+      }, 1000);
+    });
+  };
+
+  const handleLikeClick = (id) => {
+    setMessageSelections((prevSelections) => ({
+      ...prevSelections,
+      [id]: prevSelections[id] === "like" ? null : "like", // Toggle like or null
+    }));
+  };
+
+  const handleDislikeClick = (id) => {
+    setMessageSelections((prevSelections) => ({
+      ...prevSelections,
+      [id]: prevSelections[id] === "dislike" ? null : "dislike", // Toggle dislike or null
+    }));
+  };
+
   return (
-    <div style={{ position: "relative" }}>
+    <>
+      <ChatHeader
+        messagesSession={messagesSession}
+        messageSessionBack={messageSessionBack}
+        handleDeleteChat={handleDeleteChat}
+        isDisabled={chatArray.length}
+        chatLoad={chatLoad}
+        handleToggle={handleToggle}
+        isToggled={isToggled}
+      />
       <div
         ref={containerRef}
         className={`chat-container ${
@@ -272,13 +328,7 @@ const MessagesSession = ({
         } `}
       >
         {chatHistoryLoader && (
-          <Skeleton
-            height={40}
-            width={"85%"}
-            baseColor="#01BFB726"
-            highlightColor="#10ddd3"
-            duration={3}
-          />
+          <Skeleton height={40} width={"85%"} duration={3} />
         )}
         {chatHistoryLoader && (
           <div
@@ -289,37 +339,107 @@ const MessagesSession = ({
               marginBottom: 5,
             }}
           >
-            <Skeleton
-              height={70}
-              containerClassName="width-80"
-              baseColor="#01BFB726"
-              highlightColor="#10ddd3"
-              duration={3}
-            />
+            <Skeleton height={70} containerClassName="width-80" duration={3} />
           </div>
         )}
         {chatHistoryLoader && (
-          <Skeleton
-            height={70}
-            width={"85%"}
-            baseColor="#01BFB726"
-            highlightColor="#10ddd3"
-            duration={3}
-          />
+          <Skeleton height={70} width={"85%"} duration={3} />
         )}
+
         {Array.isArray(chatArray) &&
           chatArray?.map((item) => {
+            const currentSelection = messageSelections[item.id];
             if (item?.type === "user") {
               return (
-                <TextBlock key={item._id} isUser={true} time={item?.created_on}>
-                  {item?.content}
-                </TextBlock>
+                <div className="message-container-user">
+                  <div
+                    className="text-block-wrapper-user"
+                    style={{ position: "relative" }}
+                  >
+                    <TextBlock
+                      isToggled={isToggled}
+                      key={item._id}
+                      isUser={true}
+                      time={item?.created_on}
+                    >
+                      {item?.content}
+                    </TextBlock>
+                  </div>
+                </div>
               );
             } else if (item?.type === "bot") {
               return (
-                <TextBlock key={item._id} time={item?.created_on}>
-                  {item?.content}
-                </TextBlock>
+                <div className="message-container-bot">
+                  <div className="text-block-wrapper">
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <img src={Widget} alt="" className="bot-message-logo" />
+
+                      <TextBlock
+                        isToggled={isToggled}
+                        key={item._id}
+                        time={item?.created_on}
+                      >
+                        {item?.content}
+                      </TextBlock>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row-reverse",
+                        paddingBottom: 15,
+                        position: "relative",
+                      }}
+                    >
+                      <div className="actions-wrapper">
+                        <LuClipboardList
+                          color="white"
+                          size={15}
+                          onClick={() =>
+                            copyToClipboard(item?.content, item.id)
+                          }
+                          style={{ cursor: "pointer" }}
+                        />
+                        {copiedMessageId === item.id && (
+                          <div className="tooltip">Copied!</div>
+                        )}{" "}
+                        <>
+                          {currentSelection === "like" ? (
+                            <FaThumbsUp
+                              color="white"
+                              size={15}
+                              onClick={() => handleLikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <FaRegThumbsUp
+                              color="white"
+                              size={15}
+                              onClick={() => handleLikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          )}
+
+                          {currentSelection === "dislike" ? (
+                            <FaThumbsDown
+                              color="white"
+                              size={15}
+                              onClick={() => handleDislikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <FaRegThumbsDown
+                              color="white"
+                              size={15}
+                              onClick={() => handleDislikeClick(item.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          )}
+                        </>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               );
             } else if (item?.type === "agent") {
               return (
@@ -364,7 +484,7 @@ const MessagesSession = ({
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

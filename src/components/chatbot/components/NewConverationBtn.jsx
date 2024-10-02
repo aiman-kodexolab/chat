@@ -16,13 +16,13 @@ const NewConversationBtn = ({ onClick, isFormLoading, className, style }) => (
         <div className="new-conversation-loader"></div>
       ) : (
         <>
+          <p className="new-conversation-text">New Conversation</p>
           <img
             src={SendMsg}
             alt=""
             className="send-msg-icon"
             style={{ width: "15px", height: "15px" }}
           />
-          <p className="new-conversation-text">New Conversation</p>
         </>
       )}
     </>

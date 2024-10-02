@@ -1,0 +1,21 @@
+.circle {
+  width: fit-content;
+  border-radius: 50%;
+  background-color: black;
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+.circle.light {
+  background-color: white;
+}
+
+.card-wrapper {
+  background-color: #232627;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.card-wrapper.light {
+  background-color: white;
+  box-shadow: 0px 4px 4px 0px #00000040;
+}

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Send } from "../../../assets";
+import { VscSend } from "react-icons/vsc";
 import "../style.css";
 
 function InputField({
@@ -26,7 +26,6 @@ function InputField({
     } else {
       setLimit(true);
     }
-    setValue(inputValue);
     updateRows(e.target);
   };
 
@@ -44,7 +43,7 @@ function InputField({
       setValue(truncatedText);
       setLimit(true);
     } else {
-      updateRows({ value: newText });
+      updateRows(event.target);
     }
   };
 
@@ -56,18 +55,17 @@ function InputField({
   };
 
   const handleSubmit = (event) => {
-    if (disabled) return
+    if (disabled) return;
     sendMessage(event);
     setRows(1);
     setLimit(false);
-    inputRef.current.focus()
+    inputRef.current.focus();
   };
 
   function hasLineBreaks(text) {
     const lineBreakPattern = /\r?\n/;
     return lineBreakPattern.test(text);
   }
-
   const updateRows = (textarea) => {
     if (!textarea) return;
     if (textarea.value.length === 0) {
@@ -78,22 +76,17 @@ function InputField({
     textarea.style.height = "auto";
 
     const computedStyle = window.getComputedStyle(textarea);
-    let lineHeight = parseInt(computedStyle.lineHeight, 10) || 20;
-
-    if (isNaN(lineHeight)) {
-      lineHeight = 20;
-    }
     const padding =
       parseInt(computedStyle.paddingTop, 10) +
       parseInt(computedStyle.paddingBottom, 10);
     const scrollHeight = textarea.scrollHeight - padding;
-    const newRows = Math.ceil(scrollHeight / lineHeight);
+    const textareaRowHeight = textarea.offsetHeight / textarea.rows;
+    const newRows = Math.ceil(scrollHeight / textareaRowHeight);
     setRows(newRows <= 3 ? newRows : 3);
     textarea.style.height = "";
   };
-
   return (
-    <div className={"input-container"}>
+    <footer className={`footer-input-container ${isToggled ? "light" : ""}`}>
       <div
         style={style}
         className={`input-wrapper ${limit ? "limit-reached" : ""} ${className}`}
@@ -101,10 +94,13 @@ function InputField({
         <form onSubmit={handleSubmit} className={"input-form"}>
           <textarea
             ref={inputRef}
-            style={{ caretColor: theme ? "#141718" : "white" }}
-            className={`input-textarea ${theme && "theme"} ${limit ? "text-limit" : ""
-              }`}
-            placeholder={disabled ? waitingMessage : "Type a message"}
+            style={{ caretColor: "black" }}
+            className={`input-textarea ${theme && "theme"} ${
+              limit ? "text-limit" : ""
+            }`}
+            placeholder={
+              disabled ? waitingMessage : "Type your message here..."
+            }
             value={value}
             onChange={handleInputChange}
             onPaste={handlePaste}
@@ -117,19 +113,18 @@ function InputField({
             disabled={disabled || !value?.trim()}
             className={"message-submit-button"}
           >
-            <img src={Send} alt="" className={"message-send-icon"} />
+            <VscSend color="#FB5521" size={30} />
           </button>
         </form>
       </div>
-      <p className={`powered-by ${isToggled ? "light" : ""}`}>
-        Powered by
-        <span className={"ai-text"}> AI </span>
-        <span className={"chatbot-text"}> Chatbot</span>
-      </p>
-      {/* <div className={`char-counter ${limit ? "text-limit" : ""}`}>
+      <div
+        className={`char-counter ${isToggled ? "light" : ""} ${
+          limit ? "text-limit" : ""
+        }`}
+      >
         {maxLength - (value?.length || 0)}/{maxLength}
-      </div> */}
-    </div>
+      </div>
+    </footer>
   );
 }
 
