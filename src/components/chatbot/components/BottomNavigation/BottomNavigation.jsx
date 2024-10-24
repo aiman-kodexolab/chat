@@ -16,7 +16,7 @@ const BottomNavigation = ({ isToggled, activeTab, handleActiveTab }) => {
           onClick={() => handleActiveTab("home")}
           style={{
             "--active-color":
-              activeTab === "home" ? customizedChatData?.theme_color || "" : "",
+              activeTab === "home" ? customizedChatData?.theme_color || "#fb5521" : "#fb5521",
           }}
         >
           <GoHomeFill size={25} />
@@ -30,8 +30,8 @@ const BottomNavigation = ({ isToggled, activeTab, handleActiveTab }) => {
           style={{
             "--active-color":
               activeTab === "conversation" || activeTab === "form"
-                ? customizedChatData?.theme_color || ""
-                : "",
+                ? customizedChatData?.theme_color || "#fb5521"
+                : "#fb5521",
           }}
         >
           <BiConversation size={25} />
