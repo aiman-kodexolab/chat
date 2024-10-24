@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../style.css";
 import { DeleteIcon, Widget, logo } from "../../../assets";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { Toggle } from "./toggle/Toggle";
+import { useSelector } from "react-redux";
+import { s3Url } from "../../../utils/constant";
 
 export default function ChatHeader({
   messagesSession = null,
@@ -14,11 +16,26 @@ export default function ChatHeader({
   isToggled,
   activeTab,
 }) {
+  const customizedChatData = useSelector((state) => state.state.chatData);
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    if (customizedChatData.avatar_picture) {
+      const newImage = `${s3Url}/${customizedChatData.avatar_picture}`;
+      setImage(newImage);
+    }
+  }, [customizedChatData]);
+
   return (
     <>
       {activeTab !== "home" ? (
         <>
-          <div className="window_header">
+          <div
+            className="window_header"
+            style={{
+              backgroundColor: customizedChatData?.header_color || "#3e2248",
+            }}
+          >
             <div className="icon_header">
               <div>
                 {messagesSession && (
@@ -34,9 +51,11 @@ export default function ChatHeader({
                   </button>
                 )}
 
-                <div className={`circle ${isToggled ? "light" : ""}`}>
-                  <img src={Widget} alt="" />
-                </div>
+                <img
+                  className={`circle ${isToggled ? "light" : ""}`}
+                  src={image ? image : Widget}
+                  alt=""
+                />
                 {messagesSession && (
                   <div>
                     <img className="logo_wrapper" src={logo} alt="" />

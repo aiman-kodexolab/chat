@@ -3,7 +3,7 @@ import "../style.css";
 import TextBlock from "./TextBlock";
 import InputField from "./InputField";
 import { useGetChatHistoryQuery } from "../../../redux/api";
-import { formatTime, socketUrl } from "../../../utils/constant";
+import { formatTime, s3Url, socketUrl } from "../../../utils/constant";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
@@ -236,8 +236,7 @@ const MessagesSession = ({
         {
           id: uuidv4(),
           type: "bot",
-          content:
-            customizedChatData && customizedChatData?.current_welcome_message,
+          content: customizedChatData && customizedChatData?.welcome_message,
           created_on: botTime,
         },
         ...chatData.data,
@@ -299,14 +298,14 @@ const MessagesSession = ({
   const handleLikeClick = (id) => {
     setMessageSelections((prevSelections) => ({
       ...prevSelections,
-      [id]: prevSelections[id] === "like" ? null : "like", // Toggle like or null
+      [id]: prevSelections[id] === "like" ? null : "like",
     }));
   };
 
   const handleDislikeClick = (id) => {
     setMessageSelections((prevSelections) => ({
       ...prevSelections,
-      [id]: prevSelections[id] === "dislike" ? null : "dislike", // Toggle dislike or null
+      [id]: prevSelections[id] === "dislike" ? null : "dislike",
     }));
   };
 
@@ -372,8 +371,15 @@ const MessagesSession = ({
                 <div className="message-container-bot">
                   <div className="text-block-wrapper">
                     <div style={{ display: "flex", gap: 10 }}>
-                      <img src={Widget} alt="" className="bot-message-logo" />
-
+                      {customizedChatData?.avatar_picture ? (
+                        <img
+                          src={`${s3Url}/${customizedChatData?.avatar_picture}`}
+                          alt=""
+                          className="bot-message-logo"
+                        />
+                      ) : (
+                        <img src={Widget} alt="" className="bot-message-logo" />
+                      )}
                       <TextBlock
                         isToggled={isToggled}
                         key={item._id}
@@ -391,7 +397,13 @@ const MessagesSession = ({
                         position: "relative",
                       }}
                     >
-                      <div className="actions-wrapper">
+                      <div
+                        className="actions-wrapper"
+                        style={{
+                          backgroundColor:
+                            customizedChatData?.theme_color || "#fb5521",
+                        }}
+                      >
                         <LuClipboardList
                           color="white"
                           size={15}

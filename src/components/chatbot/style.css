@@ -1,3 +1,7 @@
+.EmojiPickerReact {
+  --epr-emoji-size: 20px !important;
+}
+
 .window_wrap {
   width: 350px;
   height: 550px;
@@ -47,8 +51,7 @@
 
 .scroll_container_collapsed {
   position: absolute;
-  background-color: #007bff;
-  background: linear-gradient(180deg, #079485 0%, #115588 100%);
+  background: #3e2248;
   border-radius: 50%;
   padding: 10px;
   display: flex;
@@ -361,6 +364,7 @@
   letter-spacing: 0px;
   text-transform: none;
   overflow: hidden !important;
+  padding-right: 4px;
 }
 /* conversation */
 .conversations {
@@ -966,6 +970,7 @@ input:-webkit-autofill:not(:focus) {
 .bot-message-logo {
   border-radius: 50%;
   height: 30px;
+  width: 30px;
   background-color: white;
   box-shadow: 0px 4px 4px 0px #00000040;
 }

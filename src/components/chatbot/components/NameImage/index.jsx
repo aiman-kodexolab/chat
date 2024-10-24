@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 function NameImage({
   firstName,
@@ -12,8 +13,8 @@ function NameImage({
   isToggled,
 }) {
   const first = firstName?.charAt(0);
-
   const last = lastName?.charAt(0);
+  const customizedChatData = useSelector((state) => state.state.chatData);
   return (
     <div
       style={{
@@ -24,12 +25,18 @@ function NameImage({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#3E2248",
+        backgroundColor: customizedChatData?.header_color ? customizedChatData?.header_color :"#3E2248",
         boxShadow: "0px 4px 4px 0px #00000040",
       }}
     >
       {logo ? (
-        <div className={`circle ${isToggled ? "light" : ""}`}>{logo}</div>
+        <div className={`circle ${isToggled ? "light" : ""}`}>
+          <img
+            src={logo}
+            alt=""
+            className={`circle ${isToggled ? "light" : ""}`}
+          />
+        </div>
       ) : (
         <>
           <p

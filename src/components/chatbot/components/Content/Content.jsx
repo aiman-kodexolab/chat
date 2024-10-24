@@ -2,6 +2,7 @@ import React from "react";
 import NameImage from "../NameImage";
 import "./style.css";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 const Content = ({
   title,
@@ -14,6 +15,7 @@ const Content = ({
   heading,
   subHeading,
 }) => {
+  const customizedChatData = useSelector((state) => state.state.chatData);
   return (
     <div className="content-container">
       <div className="content-wrap">
@@ -40,7 +42,14 @@ const Content = ({
         )}
       </div>
 
-      <FaArrowRightLong color="white" size={12} className="right-arrow" />
+      <FaArrowRightLong
+        color="white"
+        size={12}
+        className="right-arrow"
+        style={{
+          backgroundColor: customizedChatData?.theme_color || "#fb5521",
+        }}
+      />
     </div>
   );
 };

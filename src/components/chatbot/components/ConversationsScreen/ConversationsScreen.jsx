@@ -2,6 +2,7 @@ import React from "react";
 import "./style.css";
 import NewConversationBtn from "../NewConverationBtn";
 import SessionContainer from "../SessionContainer";
+import { useSelector } from "react-redux";
 
 const ConversationsScreen = ({
   conversationList,
@@ -9,6 +10,7 @@ const ConversationsScreen = ({
   onSessionClick,
   startSession,
 }) => {
+  const customizedChatData = useSelector((state) => state.state.chatData);
   return (
     <div className="conversations-wrapper">
       <div className="conversations">
@@ -32,7 +34,13 @@ const ConversationsScreen = ({
       </div>
 
       <div className="session_box">
-        <NewConversationBtn className="start_session" onClick={startSession} />
+        <NewConversationBtn
+          className="start_session"
+          onClick={startSession}
+          style={{
+            backgroundColor: customizedChatData?.theme_color || "#fb5521",
+          }}
+        />
       </div>
     </div>
   );

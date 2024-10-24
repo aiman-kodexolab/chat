@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
 import { VscSend } from "react-icons/vsc";
+import { BsEmojiSmile } from "react-icons/bs";
+import EmojiPicker from "emoji-picker-react";
 import "../style.css";
 
 function InputField({
@@ -17,6 +19,7 @@ function InputField({
   const maxLength = 100;
   const [limit, setLimit] = useState(false);
   const [rows, setRows] = useState(1);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
@@ -68,22 +71,34 @@ function InputField({
   }
   const updateRows = (textarea) => {
     if (!textarea) return;
-    if (textarea.value.length === 0) {
-      setRows(1);
-      return;
-    }
 
     textarea.style.height = "auto";
+    const scrollHeight = textarea.scrollHeight;
+    const maxRows = 3;
 
-    const computedStyle = window.getComputedStyle(textarea);
-    const padding =
-      parseInt(computedStyle.paddingTop, 10) +
-      parseInt(computedStyle.paddingBottom, 10);
-    const scrollHeight = textarea.scrollHeight - padding;
-    const textareaRowHeight = textarea.offsetHeight / textarea.rows;
-    const newRows = Math.ceil(scrollHeight / textareaRowHeight);
-    setRows(newRows <= 3 ? newRows : 3);
-    textarea.style.height = "";
+    if (textarea.value.length === 0) {
+      setRows(1);
+    } else {
+      const newRows = Math.min(Math.ceil(scrollHeight / 24), maxRows);
+      setRows(newRows);
+    }
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
+  const onEmojiClick = (emojiObject) => {
+    const emoji = emojiObject.emoji;
+    const newValue = value + emoji;
+    if (newValue.length <= maxLength) {
+      updateRows(inputRef.current);
+      setValue(newValue);
+      setLimit(false);
+    } else {
+      setLimit(true);
+    }
+    setShowEmojiPicker(false);
   };
   return (
     <footer className={`footer-input-container ${isToggled ? "light" : ""}`}>
@@ -108,6 +123,12 @@ function InputField({
             rows={rows}
             type="text"
           ></textarea>
+          <BsEmojiSmile
+            size={30}
+            color="#636363"
+            onClick={toggleEmojiPicker}
+            style={{ cursor: "pointer", position: "relative", paddingLeft: 4 }}
+          />
           <button
             type="submit"
             disabled={disabled || !value?.trim()}
@@ -124,6 +145,17 @@ function InputField({
       >
         {maxLength - (value?.length || 0)}/{maxLength}
       </div>
+      {showEmojiPicker && (
+        <div style={{ position: "absolute", bottom: 105 }}>
+          <EmojiPicker
+            onEmojiClick={onEmojiClick}
+            height={320}
+            width={300}
+            skinTonesDisabled
+            lazyLoadEmojis={true}
+          />
+        </div>
+      )}
     </footer>
   );
 }

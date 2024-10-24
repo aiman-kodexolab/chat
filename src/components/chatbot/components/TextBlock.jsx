@@ -2,9 +2,11 @@ import React from "react";
 import Markdown from "../../Markdown";
 import "../style.css";
 import { replaceTags } from "../../../utils/constant";
-import moment from "moment";
+import { useSelector } from "react-redux";
 
 function TextBlock({ isToggled, isUser, children, time }) {
+  const customizedChatData = useSelector((state) => state.state.chatData);
+
   const renderContent = (content) => {
     if (isUser) {
       return (
@@ -21,20 +23,21 @@ function TextBlock({ isToggled, isUser, children, time }) {
       return <Markdown markdown={content ?? ""} />;
     }
   };
-
   return (
     <div className={`text-block ${isUser ? "user" : "bot"}`}>
       <div
         className={`message ${isToggled ? "light" : ""}`}
-        style={{ whiteSpace: isUser && "pre-wrap", marginBottom: isUser && "10px" }}
+        style={{
+          whiteSpace: isUser && "pre-wrap",
+          marginBottom: isUser && "10px",
+          color: customizedChatData?.font_color || "white",
+          backgroundColor: !isUser
+            ? customizedChatData?.theme_color || "#fb5521"
+            : "",
+        }}
       >
         {renderContent(children)}
       </div>
-      {/* <div className={`header-text ${isUser ? "header-user" : "header-bot"}`}>
-        <p className={"time"}>
-          {moment(time, "Do MMMM YYYY . h:mm A").format("Do MMM YYYY . h:mm A")}
-        </p>
-      </div> */}
     </div>
   );
 }

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Chatbot from "../chatbot/Chatbot.jsx";
 import "./style.css";
 import { Widget, darkLogo } from "../../assets";
 import { useGetProfileQuery, useVerifyKeyQuery } from "../../redux/api.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setChat } from "../../redux/state.js";
 import { RxCross2 } from "react-icons/rx";
+import { s3Url } from "../../utils/constant.js";
 
 const ChatbotButton = ({
-  apiKey = "cb-BbSJBVGpd0ObNfHZ_tIQEDAzFCwIjD85mS07REOEZFeV2DEI",
+  apiKey = "cb-JnYD017p2RgbY4Gzi70ppptImT4u2vgKpKnvhgjG6bGdzv8U",
 }) => {
   if (!localStorage.getItem("isLight")) {
     localStorage.setItem("isLight", "false");
@@ -58,6 +59,13 @@ const ChatbotButton = ({
     setIsOpen(!isOpen);
     closeWelcome();
   };
+  const customizedChatData = useSelector((state) => state.state.chatData);
+
+  const imageUrl = useMemo(() => {
+    return customizedChatData.avatar_picture
+      ? `${s3Url}/${customizedChatData.avatar_picture}`
+      : "";
+  }, [customizedChatData]);
 
   return (
     <>
@@ -68,6 +76,13 @@ const ChatbotButton = ({
             className={`circle_button ${isLight === "true" ? "light" : ""} ${
               isOpen ? "button_open" : ""
             }`}
+            style={{
+              backgroundColor: isOpen
+                ? customizedChatData?.header_color
+                : isLight === "true"
+                ? "white"
+                : "black",
+            }}
             onClick={toggleChat}
           >
             {isOpen ? (
@@ -75,7 +90,11 @@ const ChatbotButton = ({
             ) : (
               <>
                 <div className="widget_wrap">
-                  <img className="widget open_icon" alt="" src={Widget} />
+                  <img
+                    className="widget open_icon"
+                    alt=""
+                    src={imageUrl ? imageUrl : Widget}
+                  />
                   <div
                     className={`online_status ${
                       isLight === "true" ? "light" : ""

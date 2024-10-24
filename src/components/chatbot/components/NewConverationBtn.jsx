@@ -1,32 +1,40 @@
 import React from "react";
-import { SendMsg } from "../../../assets";
 import "../style.css";
+import { VscSend } from "react-icons/vsc";
+import { useSelector } from "react-redux";
 
-const NewConversationBtn = ({ onClick, isFormLoading, className, style }) => (
-  <button
-    className={`${className} ${
-      isFormLoading && className === "no_session" ? "adjust_loader" : ""
-    }`}
-    onClick={onClick}
-    disabled={isFormLoading}
-    style={style}
-  >
-    <>
-      {isFormLoading ? (
-        <div className="new-conversation-loader"></div>
-      ) : (
-        <>
-          <p className="new-conversation-text">New Conversation</p>
-          <img
-            src={SendMsg}
-            alt=""
-            className="send-msg-icon"
-            style={{ width: "15px", height: "15px" }}
-          />
-        </>
-      )}
-    </>
-  </button>
-);
+const NewConversationBtn = ({ onClick, isFormLoading, className, style }) => {
+  const customizedChatData = useSelector((state) => state.state.chatData);
+  const fontColor = customizedChatData?.font_color || "white";
+
+  return (
+    <button
+      className={`${className} ${
+        isFormLoading && className === "no_session" ? "adjust_loader" : ""
+      }`}
+      onClick={onClick}
+      disabled={isFormLoading}
+      style={style}
+    >
+      <>
+        {isFormLoading ? (
+          <div className="new-conversation-loader"></div>
+        ) : (
+          <>
+            <p
+              className="new-conversation-text"
+              style={{
+                color: fontColor,
+              }}
+            >
+              New Conversation
+            </p>
+            <VscSend color={fontColor} />
+          </>
+        )}
+      </>
+    </button>
+  );
+};
 
 export default NewConversationBtn;

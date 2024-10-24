@@ -60,7 +60,7 @@
   font-size: 16px;
 }
 .nav-item.active {
-  color: #fb5521;
+  color: var(--active-color);
 }
 .nav-item.active::after {
   content: "";
@@ -69,6 +69,6 @@
   left: 0;
   right: 0;
   height: 2px;
-  background-color: #fb5521;
+  background-color: var(--active-color);
   width: 100%;
 }
