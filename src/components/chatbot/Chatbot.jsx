@@ -152,6 +152,7 @@ const Chatbot = () => {
   useEffect(() => {
     const sio = io(socketUrl, {
       transports: ["websocket"],
+      query: { business_id: JSON.parse(localStorage.getItem("business_id")) },
     });
 
     sio.on("connect", (data) => {
@@ -237,7 +238,7 @@ const Chatbot = () => {
       );
       setIsFormSubmitLoading(false);
       setEmail(values.email);
-      setUserName(values.userName)
+      setUserName(values.userName);
       resetForm();
       setMessagesSession(true);
       await playNotificationSound();
@@ -272,7 +273,7 @@ const Chatbot = () => {
       _id: item?._id,
       status: item?.status,
       is_joined: item?.is_joined,
-      user_name: item?.user_name
+      user_name: item?.user_name,
     };
     if (item?.is_form_filled) {
       setChat(true);

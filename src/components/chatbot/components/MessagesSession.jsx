@@ -101,6 +101,7 @@ const MessagesSession = ({
   useEffect(() => {
     const sio = io(socketUrl, {
       transports: ["websocket"],
+      query: { business_id: JSON.parse(localStorage.getItem("business_id")) },
     });
 
     sio.on("connect", (data) => {
