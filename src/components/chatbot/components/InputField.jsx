@@ -91,6 +91,7 @@ function InputField({
   const onEmojiClick = (emojiObject) => {
     const emoji = emojiObject.emoji;
     const newValue = value + emoji;
+    inputRef.current.focus();
     if (newValue.length <= maxLength) {
       updateRows(inputRef.current);
       setValue(newValue);
