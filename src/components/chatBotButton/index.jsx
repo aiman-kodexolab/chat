@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Chatbot from "../chatbot/Chatbot.jsx";
+import Chatbot from "../chatbot";
 import "./style.css";
 import { Widget, darkLogo } from "../../assets";
 import { useGetProfileQuery, useVerifyKeyQuery } from "../../redux/api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setChat } from "../../redux/state.js";
-import { RxCross2 } from "react-icons/rx";
+import { RxCross2 } from "../Icon";
 import { s3Url } from "../../utils/constant.js";
 
 const ChatbotButton = ({
@@ -91,7 +91,9 @@ const ChatbotButton = ({
               <>
                 <div className="widget_wrap">
                   <img
-                    className="widget open_icon"
+                    className={`circle_button open_icon ${
+                      isLight === "true" ? "light" : ""
+                    }`}
                     alt=""
                     src={imageUrl ? imageUrl : Widget}
                   />
