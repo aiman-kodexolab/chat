@@ -1,0 +1,24 @@
+.content-messages ul,
+.content-messages ol {
+  list-style-type: disc;
+  margin-left: 20px;
+  padding-left: 0;
+  font-family: Poppins, sans-serif;
+  line-height: 18px;
+}
+
+.content-messages li {
+  margin-bottom: 5px;
+  font-family: Poppins, sans-serif;
+  line-height: 18px;
+}
+
+.content-messages p {
+  overflow: hidden !important;
+  line-height: 18px;
+  font-family: Poppins, sans-serif;
+}
+
+.content-messages {
+  overflow-wrap: break-word;
+}
