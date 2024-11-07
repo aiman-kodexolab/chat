@@ -52,6 +52,8 @@ export const apiUrl = "https://bot-api-stag.kodexia.ai/";
 export const socketUrl = "bot-api-stag.kodexia.ai";
 // export const socketUrl = "127.0.0.1:8000";
 
+export const s3Url = "https://internal-chatbot-media.s3.us-west-1.amazonaws.com";
+
 export const replaceTags = (text) => {
   const word = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return word;
