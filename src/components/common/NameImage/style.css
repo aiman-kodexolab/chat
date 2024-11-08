@@ -1,0 +1,28 @@
+.initial {
+  color: #ffffff;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+}
+
+.name-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  border-radius: 50px;
+  flex-shrink: 0;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: black;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  flex-shrink: 0;
+}
+
+.circle.light {
+  background-color: white;
+}
