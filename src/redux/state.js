@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: {},
-  business: {},
   chatData: {},
 };
 
@@ -10,12 +8,6 @@ const slice = createSlice({
   name: "state",
   initialState: initialState,
   reducers: {
-    setBusiness: (state, { payload }) => {
-      state.business = payload;
-    },
-    setUser: (state, { payload }) => {
-      state.user = payload;
-    },
     setChat: (state, { payload }) => {
       state.chatData = payload;
     },
@@ -24,4 +16,4 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export const { setUser, setBusiness, setChat } = slice.actions;
+export const { setChat } = slice.actions;
