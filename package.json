@@ -12,6 +12,7 @@
     "cssnano": "^7.0.4",
     "dompurify": "^3.1.5",
     "dotenv": "^16.4.5",
+    "emoji-picker-react": "^4.12.0",
     "marked": "^13.0.1",
     "mini-css-extract-plugin": "^2.9.0",
     "moment": "^2.30.1",
@@ -30,8 +31,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "npx webpack --mode production",
+    "start": "node init && react-scripts start",
+    "build": "node init && npx webpack --mode production",
     "test": "react-scripts test",
     "build-webpack": "npx webpack --mode production",
     "copy-bundle": "cp dist/chatbot.bundle.js docs/",
