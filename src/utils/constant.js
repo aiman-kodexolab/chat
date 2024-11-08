@@ -46,10 +46,10 @@ export async function playNotificationSound() {
   }
 }
 
-export const apiUrl = "https://bot-api-stag.kodexia.ai/";
+export const apiUrl = "https://bot-api.kodexia.ai/";
 // export const apiUrl = "http://127.0.0.1:8000";
 
-export const socketUrl = "bot-api-stag.kodexia.ai";
+export const socketUrl = "bot-api.kodexia.ai";
 // export const socketUrl = "127.0.0.1:8000";
 
 export const replaceTags = (text) => {
