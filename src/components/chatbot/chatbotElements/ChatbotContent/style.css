@@ -1,0 +1,106 @@
+.form_content {
+  height: 100%;
+  border-radius: 9px;
+  overflow: auto;
+}
+
+.chatbot_content {
+  height: calc(550px - 104px);
+  overflow: hidden;
+}
+
+.landing-page {
+  height: 100%;
+  flex-direction: column;
+  display: flex;
+}
+
+.content-wrapper {
+  padding: 20px 25px 50px;
+  background: #3e2248;
+}
+
+.circle-logo.light {
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  width: 60px;
+  height: 60px;
+}
+
+.circle-logo {
+  border-radius: 50%;
+  background-color: black;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  width: 60px;
+  height: 60px;
+}
+
+.chat-with-us {
+  font-family: Poppins;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  padding-top: 10px;
+}
+
+.ask-help {
+  font-family: Poppins;
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+}
+
+.overlay-box {
+  padding: 10px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  margin-top: -14px;
+  background: black;
+}
+
+.overlay-box.light {
+  background: white;
+}
+
+.conversations-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 34px;
+  flex: 1 1 0%;
+  overflow: auto;
+  background: transparent;
+  margin-top: -55px;
+}
+
+.conversations-inner-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 0%;
+  overflow: auto;
+  padding-bottom: 5px;
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.session-form {
+  overflow-y: auto;
+}
+
+.form-body {
+  padding: 20px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 40px;
+}
