@@ -1,0 +1,112 @@
+.footer-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background-color: #232627;
+}
+
+.footer-input-container.light {
+  background: white;
+  box-shadow: 0px -4px 16px 0px #00000014;
+}
+.input-wrapper {
+  border-radius: 12px;
+  width: 315px;
+}
+
+.input-wrapper.limit-reached {
+  border-color: red;
+}
+.input-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #e8ebf0;
+}
+.input-textarea {
+  width: 92%;
+  background-color: transparent;
+  color: #444444;
+  font-size: 18px;
+  font-family: sans-serif;
+  font-weight: medium;
+  border: none;
+  outline: none;
+  padding: 0px;
+  transition: none;
+  resize: none;
+  caret-color: black;
+}
+.input-textarea.theme {
+  color: #141718;
+}
+.input-textarea.theme:focus {
+  color: #141718;
+}
+
+.input-textarea::placeholder {
+  color: #708090;
+}
+
+.input-textarea.text-limit {
+  color: red;
+}
+
+.input-textarea:focus {
+  background-color: transparent;
+  border-style: none;
+  border-color: none;
+  color: #444444;
+}
+.emoji-icon {
+  cursor: pointer;
+  position: relative;
+  padding-left: 4px;
+}
+
+.message-submit-button {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid;
+  transition: transform 0.3s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.message-submit-button:disabled {
+  opacity: 0.6;
+}
+
+.message-submit-button:not(:disabled):hover {
+  transform: scale(1.1);
+}
+
+.char-counter {
+  font-size: 10px;
+  color: white;
+  transform: translateY(-7px);
+}
+
+.char-counter.light {
+  color: black;
+}
+
+.char-counter.text-limit {
+  color: red;
+}
+
+.emoji-picker-wrapper {
+  position: absolute;
+  bottom: 105px;
+}
+.EmojiPickerReact {
+  --epr-emoji-size: 20px !important;
+}

@@ -40,20 +40,8 @@
   height: 60px;
 }
 
-.disabled_button {
-  width: 65px;
-  height: 65px;
-  background: #cccccc;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: white;
-  font-size: 24px;
-}
 .open_icon {
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .widget {
